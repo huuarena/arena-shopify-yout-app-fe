@@ -1,0 +1,57 @@
+.widgets-management {
+    .subtitle {
+        margin: 20px 0;
+    }
+
+    .empty-data {
+        text-align: center;
+    }
+    .table-block {
+        width: 100%;
+        overflow-x: scroll;
+    }
+
+    .table-block::-webkit-scrollbar {
+        display: none;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+            background-color: #f1f4f7;
+            color: #9eafc4;
+            text-transform: uppercase;
+            font-size: 0.8125em;
+
+            th {
+                text-align: left;
+                font-weight: 500;
+                padding: 20px;
+            }
+        }
+
+        tbody {
+            tr {
+                border-bottom: 1px solid #efefef;
+
+                td {
+                    padding: 20px;
+                }
+            }
+
+            tr:hover {
+                background-color: #fafafa;
+            }
+        }
+    }
+
+    .widget-name {
+        font-weight: 500;
+    }
+
+    .widget-status {
+        font-weight: 500;
+    }
+}

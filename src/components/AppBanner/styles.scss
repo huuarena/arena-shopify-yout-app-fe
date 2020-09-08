@@ -1,0 +1,23 @@
+.app-banner {
+    .Polaris-Card {
+        border-top: solid 3px #ff4734;
+        background-image: linear-gradient(to right, #fffefe, #f1e4e5);
+    }
+
+    .banner-icon {
+        width: 60px;
+        height: 60px;
+        padding: 10px;
+        border-radius: 50%;
+        background-color: #f5c6c2;
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff;
+            background-image: url('./alert.svg');
+            background-size: 40px;
+        }
+    }
+}

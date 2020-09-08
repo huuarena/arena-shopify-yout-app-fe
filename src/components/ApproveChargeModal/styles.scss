@@ -1,0 +1,37 @@
+.approve-charge-modal-title {
+    font-weight: 500;
+}
+
+.approve-charge-modal-body {
+    .approve-charge-modal-sub-title {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .cards {
+        margin: 40px 0;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: baseline;
+        -ms-flex-align: baseline;
+        align-items: stretch;
+    }
+
+    .later-button {
+        margin: 0 10px;
+        padding: 20px;
+        background-color: #fafafa;
+        text-align: center;
+        color: #808d9b;
+        border-radius: 2px;
+        font-weight: 500;
+    }
+
+    .later-button:hover {
+        background-color: #f1f1f1;
+    }
+}
