@@ -5,11 +5,7 @@ import Actions from './../../actions';
 import { DisplayText, Stack, Button, Card } from '@shopify/polaris';
 import './styles.scss';
 import formatDateTime from '../../utils/formatDateTime';
-import {
-    EditMajorMonotone,
-    DuplicateMinor,
-    DeleteMajorMonotone,
-} from '@shopify/polaris-icons';
+import { EditMajorMonotone, DuplicateMinor, DeleteMajorMonotone } from '@shopify/polaris-icons';
 import Switch from 'react-switch';
 
 function mapStateToProps(state) {
@@ -28,12 +24,23 @@ class WidgetsManagement extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            enabled: false,
+            widgets: {},
         };
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if (props.widgets.data.length > 0 && Object.keys(state.widgets).length === 0) {
+            return {
+                widgets: props.widgets,
+            };
+        }
+
+        return null;
+    }
+
     renderTableBody = () => {
-        const { widgets, actions, redirectPage } = this.props;
+        const { actions, redirectToPage } = this.props;
+        const { widgets } = this.state;
 
         return (
             <tbody>
@@ -47,9 +54,7 @@ class WidgetsManagement extends Component {
                                 Install
                             </Button>
                         </td>
-                        <td>
-                            {formatDateTime(item.updated_at, 'Month DD, YYYY')}
-                        </td>
+                        <td>{formatDateTime(item.updated_at, 'Month DD, YYYY')}</td>
                         <td>
                             <Stack>
                                 <Button
@@ -57,7 +62,7 @@ class WidgetsManagement extends Component {
                                     icon={EditMajorMonotone}
                                     onClick={() => {
                                         actions.editWidgetAction(item);
-                                        redirectPage();
+                                        redirectToPage('WidgetsCreate');
                                     }}
                                 >
                                     Edit
@@ -75,16 +80,16 @@ class WidgetsManagement extends Component {
                                 <Switch
                                     height={20}
                                     width={46}
-                                    onChange={() =>
-                                        this.setState({
-                                            enabled: !this.state.enabled,
-                                        })
-                                    }
-                                    checked={this.state.enabled}
+                                    onChange={() => {
+                                        if (widgets.selected !== item.id) {
+                                            let newWidgets = { ...widgets };
+                                            newWidgets.selected = item.id;
+                                            this.setState({ widgets: newWidgets });
+                                        }
+                                    }}
+                                    checked={widgets.selected === item.id}
                                 />
-                                <div className="widget-status">
-                                    {this.state.enabled ? 'On' : 'Off'}
-                                </div>
+                                <div className="widget-status">{this.state.enabled ? 'On' : 'Off'}</div>
                             </Stack>
                         </td>
                     </tr>
@@ -93,14 +98,12 @@ class WidgetsManagement extends Component {
         );
     };
 
-    render() {
-        const { redirectPage, widgets, actions } = this.props;
-
-        console.log('this.props', this.props);
+    renderWidgetsTable = () => {
+        const { redirectToPage, actions } = this.props;
 
         return (
-            <div className="widgets-management">
-                <Card.Section>
+            <Card.Section>
+                <div className="title">
                     <Stack alignment="center">
                         <DisplayText>Widgets</DisplayText>
                         <Button
@@ -108,46 +111,74 @@ class WidgetsManagement extends Component {
                             size="slim"
                             onClick={() => {
                                 actions.editWidgetAction({});
-                                redirectPage();
+                                redirectToPage('WidgetsCreate');
                             }}
                         >
                             Create widget
                         </Button>
                     </Stack>
+                </div>
 
-                    <div className="subtitle">
-                        Create, edit or remove your widgets. Press install to
-                        place them on the required page.
+                <div className="subtitle">
+                    Create, edit or remove your widgets. Press install to place them on the required page.
+                </div>
+
+                <div className="table-block">
+                    <table>
+                        <thead className="">
+                            <tr>
+                                <th>NAME</th>
+                                <th>INSTALLATION</th>
+                                <th>LAST UPDATED</th>
+                                <th>ACTIONS</th>
+                                <th>ENABLED</th>
+                            </tr>
+                        </thead>
+
+                        {this.renderTableBody()}
+                    </table>
+                </div>
+            </Card.Section>
+        );
+    };
+
+    renderWidgetWelcome = () => {
+        const { redirectToPage, actions } = this.props;
+
+        return (
+            <Card.Section>
+                <div className="widget-welcome">
+                    <DisplayText size="extraLarge">Welcome to YouTube Gallery</DisplayText>
+                    <DisplayText size="small">Display YouTube channels and videos on your website.</DisplayText>
+
+                    <div className="action">
+                        <DisplayText size="small">Let’s create your first widget!</DisplayText>
                     </div>
 
-                    <div className="table-block">
-                        <table>
-                            <thead className="">
-                                <tr>
-                                    <th>NAME</th>
-                                    <th>INSTALLATION</th>
-                                    <th>LAST UPDATED</th>
-                                    <th>ACTIONS</th>
-                                    <th>ENABLED</th>
-                                </tr>
-                            </thead>
+                    <Button
+                        primary
+                        onClick={() => {
+                            actions.editWidgetAction({});
+                            redirectToPage('WidgetsCreate');
+                        }}
+                    >
+                        Create widget
+                    </Button>
+                </div>
+            </Card.Section>
+        );
+    };
 
-                            {widgets.data.length > 0 ? (
-                                this.renderTableBody()
-                            ) : (
-                                <tbody>
-                                    <tr>
-                                        <td colSpan="5">
-                                            <div className="empty-data">
-                                                You have no data
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            )}
-                        </table>
-                    </div>
-                </Card.Section>
+    render() {
+        const { widgets } = this.state;
+
+        console.log('widgets', widgets);
+
+        return (
+            <div className="widgets-management">
+                {Object.keys(widgets).length > 0 && widgets.data.length > 0
+                    ? this.renderWidgetsTable()
+                    : this.renderWidgetWelcome()}
             </div>
         );
     }

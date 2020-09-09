@@ -1,18 +1,36 @@
 .widgets-management {
+    .widget-welcome {
+        padding-top: 80px;
+        padding-bottom: 120px;
+        padding-left: 40px;
+        padding-right: 40px;
+        text-align: center;
+
+        p {
+            margin-bottom: 5px;
+        }
+
+        .Polaris-DisplayText--sizeExtraLarge {
+            margin-bottom: 20px;
+        }
+
+        .action {
+            margin-bottom: 20px;
+
+            p {
+                font-weight: 500;
+            }
+        }
+    }
+
+    .title,
     .subtitle {
         margin: 20px 0;
     }
 
-    .empty-data {
-        text-align: center;
-    }
     .table-block {
         width: 100%;
         overflow-x: scroll;
-    }
-
-    .table-block::-webkit-scrollbar {
-        display: none;
     }
 
     table {
@@ -28,7 +46,7 @@
             th {
                 text-align: left;
                 font-weight: 500;
-                padding: 20px;
+                padding: 15px 20px;
             }
         }
 
@@ -47,10 +65,7 @@
         }
     }
 
-    .widget-name {
-        font-weight: 500;
-    }
-
+    .widget-name,
     .widget-status {
         font-weight: 500;
     }

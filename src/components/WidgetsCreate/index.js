@@ -100,7 +100,7 @@ class WidgetsCreate extends Component {
     };
 
     render() {
-        const { redirectPage, widgets } = this.props;
+        const { redirectToPage, widgets } = this.props;
         const { sidebarOpen } = this.state;
 
         console.log('widgets.selected :>> ', widgets.selected);
@@ -114,7 +114,7 @@ class WidgetsCreate extends Component {
                             plain
                             icon={ChevronLeftMinor}
                             size="slim"
-                            onClick={() => redirectPage()}
+                            onClick={() => redirectToPage("WidgetsManagement")}
                         >
                             <div className="page-breadcrumbs-label">
                                 Back to list

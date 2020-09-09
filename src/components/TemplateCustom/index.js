@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Card, Caption, TextField, Button } from '@shopify/polaris';
+import { Tabs, Card, Caption, TextField, Button, Select, Collapsible } from '@shopify/polaris';
 import './styles.scss';
 import Switch from 'react-switch';
 
@@ -88,6 +88,20 @@ class TemplateCustom extends Component {
                 }
                 break;
 
+            case 'silde_switch_speed':
+                if (parseInt(value) > 0) {
+                    newWidgetSelected.template.layout.slider_settings.silde_switch_speed = parseInt(value);
+                    this.setState({ widgetSelected: newWidgetSelected });
+                }
+                break;
+
+            case 'autoplay_speed':
+                if (parseInt(value) > 0) {
+                    newWidgetSelected.template.layout.slider_settings.autoplay_speed = parseInt(value);
+                    this.setState({ widgetSelected: newWidgetSelected });
+                }
+                break;
+
             default:
                 break;
         }
@@ -134,7 +148,10 @@ class TemplateCustom extends Component {
 
                 <div className="form-group">
                     <div className="label">SOURCE GROUPS</div>
-                    <div className="btn-source-group-add">+ Add</div>
+                    <div className="btn-source-group-add">
+                        <div className="icon-add" />
+                        <div>ADD</div>
+                    </div>
                 </div>
             </div>
         );
@@ -435,7 +452,141 @@ class TemplateCustom extends Component {
     };
 
     renderLayoutSliderSettings = () => {
-        return <div></div>;
+        const { widgetSelected } = this.state;
+
+        return (
+            <div>
+                <div className="form-group">
+                    <div className="label">DIRECTION</div>
+                    <div className="btn-group">
+                        {widgetSelected.template.layout.slider_settings.direction.data.map((item, index) => (
+                            <div
+                                className={
+                                    widgetSelected.template.layout.slider_settings.direction.selected === index
+                                        ? 'btn btn-selected'
+                                        : 'btn'
+                                }
+                                key={index}
+                                onClick={() => {
+                                    if (widgetSelected.template.layout.slider_settings.direction.selected !== index) {
+                                        let newWidgetSelected = { ...widgetSelected };
+                                        newWidgetSelected.template.layout.slider_settings.direction.selected = index;
+                                        this.setState({ widgetSelected: newWidgetSelected });
+                                    }
+                                }}
+                            >
+                                {item}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {Object.keys(widgetSelected.template.layout.slider_settings.elements).map(objKey => (
+                    <div className="form-group" key={objKey}>
+                        <div className="label">
+                            {widgetSelected.template.layout.slider_settings.elements[objKey].label}
+                        </div>
+                        <Switch
+                            height={20}
+                            width={46}
+                            onChange={() => {
+                                let newWidgetSelected = { ...widgetSelected };
+                                newWidgetSelected.template.layout.slider_settings.elements[
+                                    objKey
+                                ].show = !widgetSelected.template.layout.slider_settings.elements[objKey].show;
+                                this.setState({
+                                    widgetSelected: newWidgetSelected,
+                                });
+                            }}
+                            checked={widgetSelected.template.layout.slider_settings.elements[objKey].show}
+                        />
+                    </div>
+                ))}
+
+                <div className="divider" />
+
+                <div className="form-group">
+                    <div className="label">SLIDE SWITCH SPEED (MS)</div>
+                    <TextField
+                        type="number"
+                        placeholder=""
+                        value={`${widgetSelected.template.layout.slider_settings.silde_switch_speed}`}
+                        onChange={value => this.handleChange('silde_switch_speed', value)}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <div className="label">SLIDE SWITCH EFFECT</div>
+                    <select
+                        value={widgetSelected.template.layout.slider_settings.slide_switch_effect.selected}
+                        onChange={e => {
+                            if (
+                                parseInt(e.target.value) !==
+                                widgetSelected.template.layout.slider_settings.slide_switch_effect.selected
+                            ) {
+                                let newWidgetSelected = { ...widgetSelected };
+                                newWidgetSelected.template.layout.slider_settings.slide_switch_effect.selected = parseInt(
+                                    e.target.value,
+                                );
+                                this.setState({ widgetSelected: newWidgetSelected });
+                            }
+                        }}
+                    >
+                        {widgetSelected.template.layout.slider_settings.slide_switch_effect.data.map((item, index) => (
+                            <option key={index} value={index}>
+                                {item}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <div className="label">FREE MODE</div>
+                    <Switch
+                        height={20}
+                        width={46}
+                        onChange={() => {
+                            let newWidgetSelected = { ...widgetSelected };
+                            newWidgetSelected.template.layout.slider_settings.free_mode = !widgetSelected.template
+                                .layout.slider_settings.free_mode;
+                            this.setState({
+                                widgetSelected: newWidgetSelected,
+                            });
+                        }}
+                        checked={widgetSelected.template.layout.slider_settings.free_mode}
+                    />
+                </div>
+
+                <div className="divider" />
+
+                <div className="form-group">
+                    <div className="label">AUTOPLAY SPEED (MS)</div>
+                    <TextField
+                        type="number"
+                        placeholder=""
+                        value={`${widgetSelected.template.layout.slider_settings.autoplay_speed}`}
+                        onChange={value => this.handleChange('autoplay_speed', value)}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <div className="label">PAUSE AUTOPLAY ON HOVER</div>
+                    <Switch
+                        height={20}
+                        width={46}
+                        onChange={() => {
+                            let newWidgetSelected = { ...widgetSelected };
+                            newWidgetSelected.template.layout.slider_settings.pause_autoplay_on_hover = !widgetSelected
+                                .template.layout.slider_settings.pause_autoplay_on_hover;
+                            this.setState({
+                                widgetSelected: newWidgetSelected,
+                            });
+                        }}
+                        checked={widgetSelected.template.layout.slider_settings.pause_autoplay_on_hover}
+                    />
+                </div>
+            </div>
+        );
     };
 
     renderLayout = () => {
