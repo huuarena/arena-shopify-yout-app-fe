@@ -7,8 +7,6 @@ import {
     DisplayText,
     Card,
     TextField,
-    Layout,
-    Heading,
     Icon,
     Stack,
 } from '@shopify/polaris';
@@ -18,6 +16,7 @@ import {
     SettingsMajorMonotone,
     ChevronRightMinor,
 } from '@shopify/polaris-icons';
+import TemplateCustom from '../TemplateCustom';
 
 function mapStateToProps(state) {
     return {
@@ -42,7 +41,7 @@ class WidgetsCreate extends Component {
     static getDerivedStateFromProps(props, state) {
         if (
             Object.keys(props.widgets.selected).length > 0 &&
-            JSON.stringify(state.widgetSelected) === '{}'
+            Object.keys(state.widgetSelected).length === 0
         ) {
             return {
                 widgetSelected: props.widgets.selected,
@@ -53,31 +52,39 @@ class WidgetsCreate extends Component {
     }
 
     renderLeftContent = () => {
-        const { widgets, templates } = this.props;
+        const { templates } = this.props;
+        const { widgetSelected } = this.state;
+
+        console.log('widgetSelected :>> ', widgetSelected);
 
         return (
-            <div className="left-content">
-                <div className="scroll-view-block">
-                    <div className="left-content-title">
-                        <Heading>Select a template to start with</Heading>
-                    </div>
+            <div className="cards-select">
+                <div className="title">
+                    <DisplayText size="small">
+                        Select a template to start with
+                    </DisplayText>
+                </div>
 
-                    <div className="cards-block">
-                        {templates.length > 0 &&
-                            templates.map(item => (
-                                <div key={item.id} className="widget-card">
-                                    <div className="widget-card-body">
-                                        <img
-                                            alt={item.label}
-                                            src={item.avatar}
-                                        />
-                                        <div className="widget-card-label">
-                                            {item.label}
-                                        </div>
+                <div className="cards-block">
+                    {templates.length > 0 &&
+                        templates.map(item => (
+                            <div
+                                key={item.id}
+                                className="widget-card"
+                                className={`widget-card${
+                                    widgetSelected.template === item.id
+                                        ? ` widget-card-selected`
+                                        : ``
+                                }`}
+                            >
+                                <div className="widget-card-body">
+                                    <img alt={item.label} src={item.avatar} />
+                                    <div className="widget-card-label">
+                                        {item.label}
                                     </div>
                                 </div>
-                            ))}
-                    </div>
+                            </div>
+                        ))}
                 </div>
 
                 <div className="footer-actions">
@@ -163,20 +170,24 @@ class WidgetsCreate extends Component {
                     </div>
 
                     {/* Desktop section */}
-                    <div className="create-widget-body">
+                    <div className="widget-create-body">
                         <div className="left-content">
-                            {this.renderLeftContent()}
+                            {/* {this.renderLeftContent()} */}
+                            <TemplateCustom />
                         </div>
                         <div className="right-content"></div>
 
-                        <Sidebar
-                            sidebar={this.renderLeftContent()}
-                            open={sidebarOpen}
-                            onSetOpen={() =>
-                                this.setState({ sidebarOpen: !sidebarOpen })
-                            }
-                            styles={{ sidebar: { background: 'white' } }}
-                        />
+                        <div className="sidebar">
+                            <Sidebar
+                                sidebar={<div>{this.renderLeftContent()}</div>}
+                                open={sidebarOpen}
+                                onSetOpen={() =>
+                                    this.setState({ sidebarOpen: !sidebarOpen })
+                                }
+                            >
+                                <div></div>
+                            </Sidebar>
+                        </div>
                     </div>
                 </Card.Section>
 

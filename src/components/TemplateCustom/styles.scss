@@ -1,0 +1,156 @@
+.template-custom {
+  flex: 1;
+  background-color: #38393a;
+  font-size: 13px !important;
+
+  .tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+    cursor: pointer;
+    border-bottom: 1px solid #303131;
+
+    .tab {
+      color: #fff;
+      font-weight: 500;
+      padding-bottom: 2px;
+      background-color: #38393a;
+      text-transform: uppercase;
+
+      .tab-body {
+        padding: 20px 5px 10px;
+        background-color: #38393a;
+      }
+    }
+
+    .tab-selected {
+      color: #ff6161;
+      background: linear-gradient(to right, #fa3274 0%, #fd3462 25%, #ffa863 100%);
+    }
+
+    .tab:hover {
+      background: #fff;
+    }
+  }
+
+  .template-custom-body {
+    color: #fff;
+    padding: 20px;
+
+    .btn-source-group-add {
+      padding: 10px;
+      background-color: #404141;
+      font-weight: 500;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+
+      .label {
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        color: #b2b4b7;
+      }
+
+      .form-control {
+        padding: 5px 0;
+      }
+
+      .form-control-checkbox {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .btn-upload {
+        padding: 5px 10px;
+        background-color: #3f4141;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        .icon-upload {
+          width: 12px;
+          height: 12px;
+          background-image: url('./upload.svg');
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 12px;
+          margin-right: 10px;
+        }
+      }
+
+      .btn-upload:hover {
+        background-color: #474848;
+      }
+
+      input.Polaris-TextField__Input,
+      textarea.Polaris-TextField__Input {
+        background-color: #303131;
+        color: #fff;
+      }
+
+      input[type='checkbox'] {
+        margin-right: 10px;
+        cursor: pointer;
+      }
+    }
+
+    .btn-collapse {
+      background-color: #404141;
+      color: #fff;
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 2px;
+      margin-bottom: 10px;
+      cursor: pointer;
+
+      .icon {
+        width: 10px;
+        height: 10px;
+        background-image: url('./next.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 10px;
+      }
+
+      .icon-down {
+        background-image: url('./down-arrow.svg');
+      }
+    }
+
+    .collapse-block {
+      padding-left: 20px;
+    }
+
+    .btn-group {
+      background-color: #303131;
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+
+      .btn {
+        padding: 8px 12px;
+        flex: 1;
+        text-align: center;
+      }
+
+      .btn-selected {
+        background-color: #fff;
+        color: #303131;
+        margin: -2px;
+        border-radius: 2px;
+      }
+    }
+  }
+}
