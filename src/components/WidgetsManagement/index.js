@@ -5,8 +5,14 @@ import Actions from './../../actions';
 import { DisplayText, Stack, Button, Card } from '@shopify/polaris';
 import './styles.scss';
 import formatDateTime from '../../utils/formatDateTime';
-import { EditMajorMonotone, DuplicateMinor, DeleteMajorMonotone } from '@shopify/polaris-icons';
+import {
+    EditMajorMonotone,
+    DuplicateMinor,
+    DeleteMajorMonotone,
+} from '@shopify/polaris-icons';
 import Switch from 'react-switch';
+import { getWidgets } from '../../apis/widgets';
+import { getTemplates } from '../../apis/templates';
 
 function mapStateToProps(state) {
     return {
@@ -28,8 +34,26 @@ class WidgetsManagement extends Component {
         };
     }
 
+    _getWidgets = async () => {
+        const res = await getWidgets();
+        console.log('getWidgets res :>> ', res);
+    };
+
+    _getTemplates = async () => {
+        const res = await getTemplates();
+        console.log('getTemplates res :>> ', res);
+    };
+
+    componentDidMount() {
+        this._getWidgets();
+        this._getTemplates();
+    }
+
     static getDerivedStateFromProps(props, state) {
-        if (props.widgets.data.length > 0 && Object.keys(state.widgets).length === 0) {
+        if (
+            props.widgets.data.length > 0 &&
+            Object.keys(state.widgets).length === 0
+        ) {
             return {
                 widgets: props.widgets,
             };
@@ -44,7 +68,7 @@ class WidgetsManagement extends Component {
 
         return (
             <tbody>
-                {widgets.data.map(item => (
+                {widgets.data.map((item) => (
                     <tr key={item.id}>
                         <td>
                             <div className="widget-name">{item.name}</div>
@@ -54,7 +78,9 @@ class WidgetsManagement extends Component {
                                 Install
                             </Button>
                         </td>
-                        <td>{formatDateTime(item.updated_at, 'Month DD, YYYY')}</td>
+                        <td>
+                            {formatDateTime(item.updated_at, 'Month DD, YYYY')}
+                        </td>
                         <td>
                             <Stack>
                                 <Button
@@ -84,12 +110,16 @@ class WidgetsManagement extends Component {
                                         if (widgets.selected !== item.id) {
                                             let newWidgets = { ...widgets };
                                             newWidgets.selected = item.id;
-                                            this.setState({ widgets: newWidgets });
+                                            this.setState({
+                                                widgets: newWidgets,
+                                            });
                                         }
                                     }}
                                     checked={widgets.selected === item.id}
                                 />
-                                <div className="widget-status">{this.state.enabled ? 'On' : 'Off'}</div>
+                                <div className="widget-status">
+                                    {this.state.enabled ? 'On' : 'Off'}
+                                </div>
                             </Stack>
                         </td>
                     </tr>
@@ -120,7 +150,8 @@ class WidgetsManagement extends Component {
                 </div>
 
                 <div className="subtitle">
-                    Create, edit or remove your widgets. Press install to place them on the required page.
+                    Create, edit or remove your widgets. Press install to place
+                    them on the required page.
                 </div>
 
                 <div className="table-block">
@@ -148,11 +179,17 @@ class WidgetsManagement extends Component {
         return (
             <Card.Section>
                 <div className="widget-welcome">
-                    <DisplayText size="extraLarge">Welcome to YouTube Gallery</DisplayText>
-                    <DisplayText size="small">Display YouTube channels and videos on your website.</DisplayText>
+                    <DisplayText size="extraLarge">
+                        Welcome to YouTube Gallery
+                    </DisplayText>
+                    <DisplayText size="small">
+                        Display YouTube channels and videos on your website.
+                    </DisplayText>
 
                     <div className="action">
-                        <DisplayText size="small">Let’s create your first widget!</DisplayText>
+                        <DisplayText size="small">
+                            Let’s create your first widget!
+                        </DisplayText>
                     </div>
 
                     <Button
