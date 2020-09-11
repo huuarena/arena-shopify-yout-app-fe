@@ -1,11 +1,7 @@
 // @flow
 import moment from 'moment';
 
-const formatDateTime = (
-    datetime: string,
-    type?: string,
-    // zone?: string = "Europe/London"
-) => {
+const formatDateTime = (datetime: string, type?: string) => {
     const newDate = new Date(datetime);
     const yyyy = newDate.getFullYear();
     const yyyyStr = `${yyyy}`;

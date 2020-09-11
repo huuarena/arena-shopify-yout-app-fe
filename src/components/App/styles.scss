@@ -1,12 +1,14 @@
+@import './../Templates/styles.scss';
+
 .app-main {
     font-size: 15px !important;
     color: #555555 !important;
 
-    .app-body > .Polaris-Page > .Polaris-Page__Content {
+    .app-body .Polaris-Frame__Content > .Polaris-Page > .Polaris-Page__Content {
         margin-top: 0px;
     }
 
-    .app-body > .Polaris-Page > .Polaris-Page__Content > .Polaris-Card {
+    .app-body .Polaris-Frame__Content > .Polaris-Page > .Polaris-Page__Content > .Polaris-Card {
         border-top-left-radius: 0px;
         border-top-right-radius: 0px;
     }

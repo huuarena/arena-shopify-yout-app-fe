@@ -57,18 +57,14 @@
     }
 
     .Polaris-Page__Content {
-        margin: 0;
-
         .header-tabs-block {
             background-color: #fff;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
 
-            -webkit-box-shadow: inset 0 3px 0 0 #fff, inset 0 0 0 0 transparent,
-                0 0 0 1px rgba(63, 63, 68, 0.05),
+            -webkit-box-shadow: inset 0 3px 0 0 #fff, inset 0 0 0 0 transparent, 0 0 0 1px rgba(63, 63, 68, 0.05),
                 0 1px 3px 0 rgba(63, 63, 68, 0.15);
-            box-shadow: inset 0 3px 0 0 #fff, inset 0 0 0 0 transparent,
-                0 0 0 1px rgba(63, 63, 68, 0.05),
+            box-shadow: inset 0 3px 0 0 #fff, inset 0 0 0 0 transparent, 0 0 0 1px rgba(63, 63, 68, 0.05),
                 0 1px 3px 0 rgba(63, 63, 68, 0.15);
 
             .Polaris-Tabs__Tab:focus {
@@ -92,4 +88,8 @@
             }
         }
     }
+}
+
+.app-header > .Polaris-Page > .Polaris-Page__Content {
+    margin: 0;
 }

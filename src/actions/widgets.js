@@ -1,16 +1,16 @@
 // @flow
 import type { WidgetsActions } from '../types/widgets';
 
-export const changeWidgetsAction = (widgets: object): WidgetsActions => {
+export const changeWidgetsAction = (payload: object): WidgetsActions => {
     return {
         type: 'CHANGE_WIDGETS',
-        widgets,
+        payload,
     };
 };
 
-export const editWidgetAction = (widget: object): WidgetsActions => {
+export const editWidgetAction = (payload: object): WidgetsActions => {
     return {
         type: 'EDIT_WIDGET',
-        widget,
+        payload,
     };
 };

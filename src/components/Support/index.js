@@ -1,28 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 
-function mapStateToProps(state) {
-    return {
-
-    };
+function Support(props) {
+    return <div></div>;
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-
-    };
-}
-
-class Support extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        );
-    }
-}
-
-export default connect(
-    mapStateToProps,
-)(Support);
+export default Support;

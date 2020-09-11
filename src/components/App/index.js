@@ -8,13 +8,13 @@ import AppBanner from '../AppBanner';
 import Widgets from '../Widgets';
 import Preferences from '../Preferences';
 import Support from '../Support';
-import { Page, Card } from '@shopify/polaris';
+import { Page, Card, Frame } from '@shopify/polaris';
 import './styles.scss';
 
 function mapStateToProps(state) {
     return {
         store: state,
-        current_page: state.page_tabs.current_page,
+        pages: state.pages,
     };
 }
 
@@ -25,10 +25,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 class App extends Component {
-    componentDidMount() {
-        console.log('App this.props', this.props);
-    }
-
     renderComponent = index => {
         switch (index) {
             case 0:
@@ -46,7 +42,9 @@ class App extends Component {
     };
 
     render() {
-        const { current_page } = this.props;
+        const { pages, store } = this.props;
+
+        console.log('App store :>> ', store);
 
         return (
             <div className="app-main">
@@ -54,9 +52,11 @@ class App extends Component {
                 <AppHeader />
 
                 <div className="app-body">
-                    <Page>
-                        <Card>{this.renderComponent(current_page)}</Card>
-                    </Page>
+                    <Frame>
+                        <Page>
+                            <Card>{this.renderComponent(pages.selected)}</Card>
+                        </Page>
+                    </Frame>
                 </div>
             </div>
         );

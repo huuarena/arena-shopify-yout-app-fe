@@ -11,4 +11,4 @@ export type TemplatesState = {
 };
 
 // App Data Action
-export type TemplatesAction = { type: 'CHANGE_TEMPLATES', +templates: object }; // | Another Action
+export type TemplatesAction = { type: 'CHANGE_TEMPLATES', +payload: object }; // | Another Action

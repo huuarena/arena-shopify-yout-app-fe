@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Card, Caption, TextField, Button, Select, Collapsible } from '@shopify/polaris';
+import { TextField } from '@shopify/polaris';
 import './styles.scss';
 import Switch from 'react-switch';
 
@@ -39,9 +39,9 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {};
-}
+// function mapDispatchToProps(dispatch) {
+//     return {};
+// }
 
 class TemplateCustom extends Component {
     constructor(props) {
@@ -618,7 +618,31 @@ class TemplateCustom extends Component {
     };
 
     renderColors = () => {
-        return <div></div>;
+        const { widgetSelected } = this.state;
+
+        return (
+            <div>
+                <div className="form-group">
+                    <div className="label">SLIDE SWITCH EFFECT</div>
+                    <select
+                        value={widgetSelected.template.colors.scheme.selected}
+                        onChange={e => {
+                            if (parseInt(e.target.value) !== widgetSelected.template.colors.scheme.selected) {
+                                let newWidgetSelected = { ...widgetSelected };
+                                newWidgetSelected.template.colors.scheme.selected = parseInt(e.target.value);
+                                this.setState({ widgetSelected: newWidgetSelected });
+                            }
+                        }}
+                    >
+                        {widgetSelected.template.colors.scheme.data.map((item, index) => (
+                            <option key={index} value={index}>
+                                {item}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+        );
     };
 
     renderAdvanced = () => {
@@ -629,7 +653,7 @@ class TemplateCustom extends Component {
         const { tabSelected, widgetSelected } = this.state;
         const tabs = ['Source', 'Layout', 'Colors', 'Advanced'];
 
-        console.log('widgetSelected :>> ', widgetSelected);
+        console.log('TemplateCustom state widgetSelected :>> ', widgetSelected);
 
         return (
             <div className="template-custom">

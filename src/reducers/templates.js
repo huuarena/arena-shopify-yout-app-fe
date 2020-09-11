@@ -7,7 +7,7 @@ export default (state: TemplatesData = [], action: Action): TemplatesData => {
         case 'CHANGE_TEMPLATES':
             return {
                 ...state,
-                templates: action.templates,
+                templates: action.payload,
             };
         default:
             return state;

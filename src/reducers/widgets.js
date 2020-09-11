@@ -1,20 +1,20 @@
 // @flow
-import type { Action } from '../types'
-import type { WidgetsData } from '../types/widget'
+import type { Action } from '../types';
+import type { WidgetsData } from '../types/widget';
 
 export default (state: WidgetsData = [], action: Action): WidgetsData => {
     switch (action.type) {
         case 'CHANGE_WIDGETS':
             return {
                 ...state,
-                ...action.widgets,
-            }
+                ...action.payload,
+            };
         case 'EDIT_WIDGET':
             return {
                 ...state,
-                selected: action.widget,
-            }
+                selected: action.payload,
+            };
         default:
-            return state
+            return state;
     }
-}
+};

@@ -1,29 +1,19 @@
 // @flow
-
 import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
 
 import type { AppState, AppDataAction } from './app_data';
 import type { AppSettingState, AppSettingAction } from './app_settings';
-import type { PageTabsState, PageTabsAction } from './page_tabs';
+import type { PagesState, PagesAction } from './pages';
 import type { WidgetsState, WidgetsAction } from './widgets';
 import type { TemplatesState, TemplatesAction } from './templates';
 
 export type ReduxInitAction = { type: '@@INIT' };
 
 // APP STATE TYPE
-export type State = AppState &
-    AppSettingState &
-    PageTabsState &
-    WidgetsState &
-    TemplatesState; // & AnotherStateData
+export type State = AppState & AppSettingState & PagesState & WidgetsState & TemplatesState; // & AnotherStateData
 
 // APP ACTION TYPE
-export type Action =
-    | AppDataAction
-    | AppSettingAction
-    | PageTabsAction
-    | WidgetsAction
-    | TemplatesAction; // | AnotherAction
+export type Action = AppDataAction | AppSettingAction | PagesAction | WidgetsAction | TemplatesAction; // | AnotherAction
 
 // APP STORE
 export type Store = ReduxStore<State, Action>;

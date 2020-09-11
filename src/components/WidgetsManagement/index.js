@@ -172,8 +172,6 @@ class WidgetsManagement extends Component {
     render() {
         const { widgets } = this.state;
 
-        console.log('widgets', widgets);
-
         return (
             <div className="widgets-management">
                 {Object.keys(widgets).length > 0 && widgets.data.length > 0

@@ -1,28 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 
-function mapStateToProps(state) {
-    return {
-
-    };
+function Preferences(props) {
+    return <div></div>;
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-
-    };
-}
-
-class Preferences extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        );
-    }
-}
-
-export default connect(
-    mapStateToProps,
-)(Preferences);
+export default Preferences;

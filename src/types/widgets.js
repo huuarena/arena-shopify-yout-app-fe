@@ -12,4 +12,4 @@ export type WidgetsState = {
 };
 
 // App Data Action
-export type WidgetsAction = { type: 'CHANGE_WIDGETS', +widgets: object }; // | Another Action
+export type WidgetsAction = { type: 'CHANGE_WIDGETS', +payload: object }; // | Another Action

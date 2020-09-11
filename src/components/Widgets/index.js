@@ -13,8 +13,6 @@ class Widgets extends Component {
     renderComponent = () => {
         const { page } = this.state;
 
-        console.log('page', page);
-
         switch (page) {
             case 'WidgetsManagement':
                 return <WidgetsManagement redirectToPage={value => this.setState({ page: value })} />;

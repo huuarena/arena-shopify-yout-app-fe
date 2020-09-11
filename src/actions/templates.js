@@ -1,9 +1,9 @@
 // @flow
 import type { TemplatesActions } from '../types/templates';
 
-export const changeTemplatesActions = (templates: object): TemplatesActions => {
+export const changeTemplatesActions = (payload: object): TemplatesActions => {
     return {
         type: 'CHANGE_TEMPLATES',
-        templates,
+        payload,
     };
 };
