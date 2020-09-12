@@ -2,17 +2,25 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Actions from './../../actions';
-import { DisplayText, Stack, Button, Card } from '@shopify/polaris';
+import { DisplayText, Stack, Button, Card, Toast } from '@shopify/polaris';
 import './styles.scss';
 import formatDateTime from '../../utils/formatDateTime';
-import {
-    EditMajorMonotone,
-    DuplicateMinor,
-    DeleteMajorMonotone,
-} from '@shopify/polaris-icons';
+import { EditMajorMonotone, DuplicateMinor, DeleteMajorMonotone } from '@shopify/polaris-icons';
 import Switch from 'react-switch';
-import { getWidgets } from '../../apis/widgets';
-import { getTemplates } from '../../apis/templates';
+import { getWidgets, updateWidgets } from '../../apis/widgets';
+import Preloader from '../common/Preloader';
+import ConfirmModal from '../common/ConfirmModal';
+
+const INITIAL_STATE = {
+    isReady: false,
+    isLoading: false,
+    toast: {
+        show: false,
+        content: '',
+        error: false,
+    },
+    widgetDeleted: '',
+};
 
 function mapStateToProps(state) {
     return {
@@ -29,46 +37,148 @@ function mapDispatchToProps(dispatch) {
 class WidgetsManagement extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            widgets: {},
-        };
-    }
-
-    _getWidgets = async () => {
-        const res = await getWidgets();
-        console.log('getWidgets res :>> ', res);
-    };
-
-    _getTemplates = async () => {
-        const res = await getTemplates();
-        console.log('getTemplates res :>> ', res);
-    };
-
-    componentDidMount() {
-        this._getWidgets();
-        this._getTemplates();
+        this.state = { ...INITIAL_STATE };
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (
-            props.widgets.data.length > 0 &&
-            Object.keys(state.widgets).length === 0
-        ) {
-            return {
-                widgets: props.widgets,
-            };
+        if (props.widgets.data.length > 0) {
+            return { isReady: true };
         }
 
         return null;
     }
 
+    _getWidgets = async () => {
+        const { actions } = this.props;
+
+        const res = await getWidgets();
+        if (res.success) {
+            actions.changeWidgetsAction(res.payload);
+        }
+    };
+
+    componentDidMount() {
+        const { isReady } = this.state;
+
+        if (!isReady) {
+            this._getWidgets();
+        }
+    }
+
+    renderWidgetWelcome = () => {
+        const { redirectToPage, actions, widgets } = this.props;
+
+        return (
+            <Card.Section>
+                <div className="widget-welcome">
+                    <DisplayText size="extraLarge">Welcome to YouTube Gallery</DisplayText>
+                    <DisplayText size="small">
+                        Display YouTube channels and videos on your website.
+                    </DisplayText>
+
+                    <div className="action">
+                        <DisplayText size="small">Let’s create your first widget!</DisplayText>
+                    </div>
+
+                    <Button
+                        primary
+                        onClick={async () => {
+                            let newWidgets = { ...widgets };
+                            newWidgets.selected = {};
+                            await actions.changeWidgetsAction(newWidgets);
+                            redirectToPage('WidgetsCreate');
+                        }}
+                    >
+                        Create widget
+                    </Button>
+                </div>
+            </Card.Section>
+        );
+    };
+
+    handleChangeWidgetStatus = async id => {
+        const { widgets, actions } = this.props;
+
+        if (widgets.selected.id !== id) {
+            let newWidgets = { ...widgets };
+
+            widgets.data.forEach(element => {
+                if (element.id === id) {
+                    newWidgets.selected = element;
+                }
+            });
+
+            const data_stringfy = JSON.stringify(newWidgets);
+            const res = await updateWidgets(data_stringfy);
+            if (res.success) {
+                this.setState({
+                    toast: {
+                        show: true,
+                        content: 'Update widgets successfully!',
+                        error: false,
+                    },
+                });
+                actions.changeWidgetsAction(newWidgets);
+            } else {
+                this.setState({
+                    toast: {
+                        show: true,
+                        content: 'Update widgets Failed. Retry',
+                        error: true,
+                    },
+                });
+            }
+        }
+    };
+
+    handleRemove = async () => {
+        this.setState({ isLoading: true });
+
+        const { widgets, actions } = this.props;
+        const { widgetDeleted } = this.state;
+
+        let newData = [];
+        widgets.data.forEach(element => {
+            if (element.id !== widgetDeleted) {
+                newData.push(element);
+            }
+        });
+
+        let newWidgets = {
+            data: newData,
+            selected: widgets.selected.id !== widgetDeleted ? widgets.selected : {},
+        };
+
+        const data_stringfy = JSON.stringify(newWidgets);
+        const res = await updateWidgets(data_stringfy);
+        if (res.success) {
+            this.setState({
+                toast: {
+                    show: true,
+                    content: 'Delete widget successfully!',
+                    error: false,
+                },
+            });
+            actions.changeWidgetsAction(newWidgets);
+        } else {
+            this.setState({
+                toast: {
+                    show: true,
+                    content: 'Delete widget Failed. Retry',
+                    error: true,
+                },
+            });
+        }
+
+        this.setState({ isLoading: false, widgetDeleted: '' });
+    };
+
     renderTableBody = () => {
-        const { actions, redirectToPage } = this.props;
-        const { widgets } = this.state;
+        const { widgets, actions, redirectToPage } = this.props;
 
         return (
             <tbody>
-                {widgets.data.map((item) => (
+                {widgets.data.map(item => (
                     <tr key={item.id}>
                         <td>
                             <div className="widget-name">{item.name}</div>
@@ -78,16 +188,16 @@ class WidgetsManagement extends Component {
                                 Install
                             </Button>
                         </td>
-                        <td>
-                            {formatDateTime(item.updated_at, 'Month DD, YYYY')}
-                        </td>
+                        <td>{formatDateTime(item.updated_at, 'Month DD, YYYY')}</td>
                         <td>
                             <Stack>
                                 <Button
                                     plain
                                     icon={EditMajorMonotone}
-                                    onClick={() => {
-                                        actions.editWidgetAction(item);
+                                    onClick={async () => {
+                                        let newWidgets = { ...widgets };
+                                        newWidgets.selected = item;
+                                        await actions.changeWidgetsAction(newWidgets);
                                         redirectToPage('WidgetsCreate');
                                     }}
                                 >
@@ -96,7 +206,11 @@ class WidgetsManagement extends Component {
                                 <Button plain icon={DuplicateMinor}>
                                     Duplicate
                                 </Button>
-                                <Button plain icon={DeleteMajorMonotone}>
+                                <Button
+                                    plain
+                                    icon={DeleteMajorMonotone}
+                                    onClick={() => this.setState({ widgetDeleted: item.id })}
+                                >
                                     Remove
                                 </Button>
                             </Stack>
@@ -106,16 +220,8 @@ class WidgetsManagement extends Component {
                                 <Switch
                                     height={20}
                                     width={46}
-                                    onChange={() => {
-                                        if (widgets.selected !== item.id) {
-                                            let newWidgets = { ...widgets };
-                                            newWidgets.selected = item.id;
-                                            this.setState({
-                                                widgets: newWidgets,
-                                            });
-                                        }
-                                    }}
-                                    checked={widgets.selected === item.id}
+                                    onChange={() => this.handleChangeWidgetStatus(item.id)}
+                                    checked={widgets.selected.id === item.id}
                                 />
                                 <div className="widget-status">
                                     {this.state.enabled ? 'On' : 'Off'}
@@ -129,7 +235,7 @@ class WidgetsManagement extends Component {
     };
 
     renderWidgetsTable = () => {
-        const { redirectToPage, actions } = this.props;
+        const { widgets, actions, redirectToPage } = this.props;
 
         return (
             <Card.Section>
@@ -139,8 +245,10 @@ class WidgetsManagement extends Component {
                         <Button
                             primary
                             size="slim"
-                            onClick={() => {
-                                actions.editWidgetAction({});
+                            onClick={async () => {
+                                let newWidgets = { ...widgets };
+                                newWidgets.selected = {};
+                                await actions.changeWidgetsAction(newWidgets);
                                 redirectToPage('WidgetsCreate');
                             }}
                         >
@@ -150,8 +258,8 @@ class WidgetsManagement extends Component {
                 </div>
 
                 <div className="subtitle">
-                    Create, edit or remove your widgets. Press install to place
-                    them on the required page.
+                    Create, edit or remove your widgets. Press install to place them on the required
+                    page.
                 </div>
 
                 <div className="table-block">
@@ -173,48 +281,38 @@ class WidgetsManagement extends Component {
         );
     };
 
-    renderWidgetWelcome = () => {
-        const { redirectToPage, actions } = this.props;
-
-        return (
-            <Card.Section>
-                <div className="widget-welcome">
-                    <DisplayText size="extraLarge">
-                        Welcome to YouTube Gallery
-                    </DisplayText>
-                    <DisplayText size="small">
-                        Display YouTube channels and videos on your website.
-                    </DisplayText>
-
-                    <div className="action">
-                        <DisplayText size="small">
-                            Let’s create your first widget!
-                        </DisplayText>
-                    </div>
-
-                    <Button
-                        primary
-                        onClick={() => {
-                            actions.editWidgetAction({});
-                            redirectToPage('WidgetsCreate');
-                        }}
-                    >
-                        Create widget
-                    </Button>
-                </div>
-            </Card.Section>
-        );
-    };
-
     render() {
-        const { widgets } = this.state;
+        const { widgets } = this.props;
+        const { isReady, toast, isLoading, widgetDeleted } = this.state;
 
-        return (
+        return isReady ? (
             <div className="widgets-management">
-                {Object.keys(widgets).length > 0 && widgets.data.length > 0
-                    ? this.renderWidgetsTable()
-                    : this.renderWidgetWelcome()}
+                {isLoading && <Preloader />}
+
+                {widgets.data.length > 0 ? this.renderWidgetsTable() : this.renderWidgetWelcome()}
+
+                {toast.show && (
+                    <Toast
+                        content={toast.content}
+                        error={toast.error}
+                        onDismiss={() =>
+                            this.setState({ toast: { show: false, content: '', error: false } })
+                        }
+                    />
+                )}
+
+                {widgetDeleted && (
+                    <ConfirmModal
+                        title="Confirm delete this widget?"
+                        content="Are you sure delete this widget?"
+                        onClose={() => this.setState({ widgetDeleted: '' })}
+                        onCancel={() => this.setState({ widgetDeleted: '' })}
+                        onConfirm={() => this.handleRemove()}
+                    />
+                )}
             </div>
+        ) : (
+            <Preloader />
         );
     }
 }

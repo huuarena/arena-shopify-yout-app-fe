@@ -1,11 +1,9 @@
 // @flow
 import axios from 'axios';
 
-export const callApi = async (
-    endpoint: string,
-    method: string = 'GET',
-    data: object,
-) => {
+export const callApi = async (endpoint: string, method: string = 'GET', data: object) => {
+    console.log('callApi :>> ', endpoint);
+
     try {
         const res = await axios({
             url: endpoint,

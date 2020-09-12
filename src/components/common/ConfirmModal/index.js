@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from '@shopify/polaris';
+import { Modal, TextContainer } from '@shopify/polaris';
 
 ConfirmModal.propTypes = {
-    onClose: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     onConfirm: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
 };
 
 function ConfirmModal(props) {
-    const { onClose, title, content, onConfirm, onCancel } = this.props;
+    const { onClose, title, content, onConfirm, onCancel } = props;
 
     return (
         <Modal

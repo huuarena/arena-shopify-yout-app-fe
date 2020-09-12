@@ -5,14 +5,21 @@ import Actions from './../../actions';
 import './styles.scss';
 import Sidebar from 'react-sidebar';
 import { Button, DisplayText, Card, TextField, Icon, Stack, Toast } from '@shopify/polaris';
-import { ChevronLeftMinor, ArrowRightMinor, SettingsMajorMonotone, ChevronRightMinor } from '@shopify/polaris-icons';
-import formatDateTime from '../../utils/formatDateTime';
+import {
+    ChevronLeftMinor,
+    ArrowRightMinor,
+    SettingsMajorMonotone,
+    ChevronRightMinor,
+} from '@shopify/polaris-icons';
 import TemplateCustom from '../TemplateCustom';
 import Templates from '../Templates';
+import { getTemplates } from './../../apis/templates';
+import Preloader from '../common/Preloader';
+import { updateWidgets } from '../../apis/widgets';
 
 const INITIAL_WIDGET = {
     id: `widget-${new Date().getTime()}`,
-    name: `Widget - ${formatDateTime(new Date().getTime(), 'Month DD, YYYY')}`,
+    name: `Widget-${new Date().getTime()}`,
     created_at: new Date().getTime(),
     updated_at: new Date().getTime(),
     enabled: false,
@@ -20,6 +27,8 @@ const INITIAL_WIDGET = {
 };
 
 const INITIAL_STATE = {
+    isReady: false,
+    isLoading: false,
     openSidebar: false,
     openTemplateCustom: false,
     toast: {
@@ -49,18 +58,40 @@ class WidgetsCreate extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (Object.keys(props.widgets.selected).length > 0 && props.widgets.selected.id !== state.widgetSelected.id) {
-            return {
-                widgetSelected: props.widgets.selected,
-            };
+        if (Object.keys(props.widgets.selected).length > 0 && props.templates.length > 0) {
+            return { isReady: true };
         }
 
         return null;
     }
 
+    _getTemplates = async () => {
+        const { actions } = this.props;
+
+        const res = await getTemplates();
+        if (res.success) {
+            actions.changeTemplatesAction(res.payload);
+        }
+    };
+
+    componentDidMount() {
+        const { widgets, actions } = this.props;
+        const { isReady } = this.state;
+
+        if (!isReady) {
+            this._getTemplates();
+        }
+
+        if (JSON.stringify(widgets.selected) === '{}') {
+            let newWidgets = { ...widgets };
+            newWidgets.selected = { ...INITIAL_WIDGET };
+            actions.changeWidgetsAction(newWidgets);
+        }
+    }
+
     renderLeftContent = () => {
-        const { templates, actions } = this.props;
-        const { widgetSelected, openTemplateCustom } = this.state;
+        const { widgets, templates, actions } = this.props;
+        const { openTemplateCustom } = this.state;
 
         return openTemplateCustom ? (
             <TemplateCustom />
@@ -77,13 +108,16 @@ class WidgetsCreate extends Component {
                                 <div
                                     key={item.id}
                                     className={`widget-card${
-                                        widgetSelected.template.id === item.id ? ` widget-card-selected` : ``
+                                        widgets.selected.template.id === item.id
+                                            ? ` widget-card-selected`
+                                            : ``
                                     }`}
                                     onClick={() => {
-                                        actions.editWidgetAction(widgetSelected);
-                                        let newWidgetSelected = { ...widgetSelected };
-                                        newWidgetSelected.template = item;
-                                        this.setState({ widgetSelected: newWidgetSelected });
+                                        if (widgets.selected.template.id !== item.id) {
+                                            let newWidgets = { ...widgets };
+                                            newWidgets.selected.template = item;
+                                            actions.changeWidgetsAction(newWidgets);
+                                        }
                                     }}
                                 >
                                     <div className="widget-card-body">
@@ -98,12 +132,15 @@ class WidgetsCreate extends Component {
                 <div className="footer-actions">
                     <button
                         onClick={() => {
-                            if (Object.keys(widgetSelected.template).length > 0) {
-                                actions.editWidgetAction(widgetSelected);
+                            if (Object.keys(widgets.selected.template).length > 0) {
                                 this.setState({ openTemplateCustom: true });
                             } else {
                                 this.setState({
-                                    toast: { show: true, content: 'You need to select template first', error: false },
+                                    toast: {
+                                        show: true,
+                                        content: 'You need to select template first',
+                                        error: false,
+                                    },
                                 });
                             }
                         }}
@@ -116,21 +153,80 @@ class WidgetsCreate extends Component {
         );
     };
 
+    indexOfWidgetExists = (array, item) => {
+        if (!array.length) {
+            return -1;
+        }
+
+        for (let i = 0; i < array.length; i++) {
+            if (array[i].id === item.id) {
+                return i;
+            }
+        }
+
+        return -1;
+    };
+
+    handleSaveWidgets = async () => {
+        this.setState({ isLoading: true });
+
+        const { actions, widgets, redirectToPage } = this.props;
+
+        let newWidgets = { ...widgets };
+
+        let index = this.indexOfWidgetExists(widgets.data, widgets.selected);
+        if (index >= 0) {
+            newWidgets.data[index] = widgets.selected;
+        } else {
+            newWidgets.data.push(widgets.selected);
+        }
+
+        const data_stringfy = JSON.stringify(newWidgets);
+        const res = await updateWidgets(data_stringfy);
+        if (res.success) {
+            this.setState({
+                toast: {
+                    show: true,
+                    content:
+                        index >= 0 ? 'Update widget successfully!' : 'Create widget successfully!',
+                    error: false,
+                },
+            });
+            await actions.changeWidgetsAction(newWidgets);
+            setTimeout(() => {
+                redirectToPage('WidgetsManagement');
+            }, 1000);
+        } else {
+            this.setState({
+                toast: {
+                    show: true,
+                    content: 'Create widgets Failed. Retry',
+                    error: true,
+                },
+            });
+        }
+
+        this.setState({ isLoading: false });
+    };
+
     render() {
-        const { redirectToPage, actions } = this.props;
-        const { openSidebar, widgetSelected, toast } = this.state;
+        const { redirectToPage, actions, widgets } = this.props;
+        const { openSidebar, toast, isReady, isLoading } = this.state;
 
-        console.log('WidgetCreate state widgetSelected :>> ', widgetSelected);
-
-        return (
+        return isReady ? (
             <div className="widget-create">
+                {isLoading && <Preloader />}
+
                 <Card.Section>
                     <div className="page-breadcrumbs">
                         <Button
                             plain
                             icon={ChevronLeftMinor}
                             size="slim"
-                            onClick={() => redirectToPage('WidgetsManagement')}
+                            onClick={() => {
+                                actions.changeWidgetsAction({ data: [], selected: {} });
+                                redirectToPage('WidgetsManagement');
+                            }}
                         >
                             <div className="page-breadcrumbs-label">Back to list</div>
                         </Button>
@@ -138,7 +234,9 @@ class WidgetsCreate extends Component {
 
                     <DisplayText>Create Widget</DisplayText>
 
-                    <div className="page-subtitle">Configure and save your widget. And then install it.</div>
+                    <div className="page-subtitle">
+                        Configure and save your widget. And then install it.
+                    </div>
                 </Card.Section>
 
                 <Card.Section>
@@ -150,14 +248,14 @@ class WidgetsCreate extends Component {
                         autoFocus
                         placeholder="Widget name"
                         type="Text"
-                        value={widgetSelected.name}
+                        value={widgets.selected.name}
                         onChange={value => {
-                            let newWidgetSelected = { ...widgetSelected };
-                            newWidgetSelected.name = value;
-                            this.setState({ widgetSelected: newWidgetSelected });
+                            let newWidgets = { ...widgets };
+                            newWidgets.selected.name = value;
+                            actions.changeWidgetsAction(newWidgets);
                         }}
                         helpText="Name your widget. The name will be displayed only in your admin panel."
-                        error={widgetSelected.name ? false : 'Widget name is required'}
+                        error={widgets.selected.name ? false : 'Widget name is required'}
                     />
                 </Card.Section>
 
@@ -167,7 +265,10 @@ class WidgetsCreate extends Component {
                     </div>
 
                     {/* Mobile section */}
-                    <div className="mobile-section-title" onClick={() => this.setState({ openSidebar: !openSidebar })}>
+                    <div
+                        className="mobile-section-title"
+                        onClick={() => this.setState({ openSidebar: !openSidebar })}
+                    >
                         <div className="title">
                             <div className="btn-icon">
                                 <Icon source={SettingsMajorMonotone} color="white" />
@@ -182,9 +283,7 @@ class WidgetsCreate extends Component {
                     {/* Desktop section */}
                     <div className="widget-create-body">
                         <div className="left-content">{this.renderLeftContent()}</div>
-                        <div className="right-content">
-                            <Templates />
-                        </div>
+                        <div className="right-content">{/* <Templates /> */}</div>
 
                         <div className="sidebar">
                             <Sidebar
@@ -202,14 +301,17 @@ class WidgetsCreate extends Component {
                     <Stack distribution="trailing">
                         <Button
                             onClick={() => {
-                                actions.editWidgetAction({});
-                                this.setState({ ...INITIAL_STATE });
+                                let newWidgets = { ...widgets };
+                                newWidgets.selected = {};
+                                actions.changeWidgetsAction(newWidgets);
                                 redirectToPage('WidgetsManagement');
                             }}
                         >
                             Cancel
                         </Button>
-                        <Button primary>Save and Exit</Button>
+                        <Button primary onClick={() => this.handleSaveWidgets()}>
+                            Save and Exit
+                        </Button>
                     </Stack>
                 </Card.Section>
 
@@ -217,10 +319,14 @@ class WidgetsCreate extends Component {
                     <Toast
                         content={toast.content}
                         error={toast.error}
-                        onDismiss={() => this.setState({ toast: { ...INITIAL_STATE.toast } })}
+                        onDismiss={() =>
+                            this.setState({ toast: { show: false, content: '', error: false } })
+                        }
                     />
                 )}
             </div>
+        ) : (
+            <Preloader />
         );
     }
 }

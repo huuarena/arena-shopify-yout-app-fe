@@ -45,6 +45,8 @@ class App extends Component {
         const { pages, store } = this.props;
 
         console.log('App store :>> ', store);
+        console.log('widgets.selected :>> ', store.widgets.selected);
+        console.log('widgets.selected.template :>> ', store.widgets.selected.template);
 
         return (
             <div className="app-main">

@@ -10,18 +10,23 @@ class Widgets extends Component {
         };
     }
 
+    _redirectToPage = page => {
+        console.log('_redirectToPage ' + page);
+        this.setState({ page });
+    };
+
     renderComponent = () => {
         const { page } = this.state;
 
         switch (page) {
             case 'WidgetsManagement':
-                return <WidgetsManagement redirectToPage={value => this.setState({ page: value })} />;
+                return <WidgetsManagement redirectToPage={value => this._redirectToPage(value)} />;
 
             case 'WidgetsCreate':
-                return <WidgetsCreate redirectToPage={value => this.setState({ page: value })} />;
+                return <WidgetsCreate redirectToPage={value => this._redirectToPage(value)} />;
 
             default:
-                return <WidgetsManagement redirectToPage={value => this.setState({ page: value })} />;
+                return <WidgetsManagement redirectToPage={value => this._redirectToPage(value)} />;
         }
     };
 

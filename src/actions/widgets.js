@@ -7,10 +7,3 @@ export const changeWidgetsAction = (payload: object): WidgetsActions => {
         payload,
     };
 };
-
-export const editWidgetAction = (payload: object): WidgetsActions => {
-    return {
-        type: 'EDIT_WIDGET',
-        payload,
-    };
-};
