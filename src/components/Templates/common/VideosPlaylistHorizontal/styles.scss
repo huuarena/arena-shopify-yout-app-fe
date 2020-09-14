@@ -1,0 +1,13 @@
+.yout-app-templates {
+    .template-videos-playlist-horizontal {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    // @media only screen and (max-width: 600px) {
+    //     .template-banner {
+    //         display: none;
+    //     }
+    // }
+}

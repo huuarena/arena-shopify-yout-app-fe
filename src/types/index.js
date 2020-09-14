@@ -6,14 +6,29 @@ import type { AppSettingState, AppSettingAction } from './app_settings';
 import type { PagesState, PagesAction } from './pages';
 import type { WidgetsState, WidgetsAction } from './widgets';
 import type { TemplatesState, TemplatesAction } from './templates';
+import type { YoutubeChannelState, YoutubeChannelAction } from './youtube_channel';
+import type { YoutubeApiState, YoutubeApiAction } from './youtube_api';
 
 export type ReduxInitAction = { type: '@@INIT' };
 
 // APP STATE TYPE
-export type State = AppState & AppSettingState & PagesState & WidgetsState & TemplatesState; // & AnotherStateData
+export type State = AppState &
+    AppSettingState &
+    PagesState &
+    WidgetsState &
+    TemplatesState &
+    YoutubeChannelState &
+    YoutubeApiState; // & AnotherStateData
 
 // APP ACTION TYPE
-export type Action = AppDataAction | AppSettingAction | PagesAction | WidgetsAction | TemplatesAction; // | AnotherAction
+export type Action =
+    | AppDataAction
+    | AppSettingAction
+    | PagesAction
+    | WidgetsAction
+    | TemplatesAction
+    | YoutubeApiAction
+    | YoutubeChannelAction; // | AnotherAction
 
 // APP STORE
 export type Store = ReduxStore<State, Action>;

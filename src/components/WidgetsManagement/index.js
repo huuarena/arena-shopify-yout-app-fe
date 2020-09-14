@@ -40,29 +40,23 @@ class WidgetsManagement extends Component {
         this.state = { ...INITIAL_STATE };
     }
 
-    static getDerivedStateFromProps(props, state) {
-        if (props.widgets.data.length > 0) {
-            return { isReady: true };
-        }
-
-        return null;
-    }
-
     _getWidgets = async () => {
         const { actions } = this.props;
 
         const res = await getWidgets();
         if (res.success) {
-            actions.changeWidgetsAction(res.payload);
+            await actions.changeWidgetsAction(res.payload);
         }
+
+        this.setState({ isReady: true });
     };
 
     componentDidMount() {
-        const { isReady } = this.state;
+        this._getWidgets();
+    }
 
-        if (!isReady) {
-            this._getWidgets();
-        }
+    componentWillUnmount() {
+        this.setState({ ...INITIAL_STATE });
     }
 
     renderWidgetWelcome = () => {
@@ -96,13 +90,13 @@ class WidgetsManagement extends Component {
         );
     };
 
-    handleChangeWidgetStatus = async id => {
+    handleChangeWidgetStatus = async (id) => {
         const { widgets, actions } = this.props;
 
         if (widgets.selected.id !== id) {
             let newWidgets = { ...widgets };
 
-            widgets.data.forEach(element => {
+            widgets.data.forEach((element) => {
                 if (element.id === id) {
                     newWidgets.selected = element;
                 }
@@ -138,7 +132,7 @@ class WidgetsManagement extends Component {
         const { widgetDeleted } = this.state;
 
         let newData = [];
-        widgets.data.forEach(element => {
+        widgets.data.forEach((element) => {
             if (element.id !== widgetDeleted) {
                 newData.push(element);
             }
@@ -178,7 +172,7 @@ class WidgetsManagement extends Component {
 
         return (
             <tbody>
-                {widgets.data.map(item => (
+                {widgets.data.map((item) => (
                     <tr key={item.id}>
                         <td>
                             <div className="widget-name">{item.name}</div>

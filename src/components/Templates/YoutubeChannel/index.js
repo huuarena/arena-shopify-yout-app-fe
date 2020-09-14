@@ -1,70 +1,18 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
-function mapStateToProps(state) {
-    return {
-        widgetSelected: state.widgets.selected,
-    };
-}
-
-// function mapDispatchToProps(dispatch) {
-//     return {};
-// }
+import Banner from '../common/Banner';
+import Header from '../common/Header';
+import VideosPlaylistHorizontal from '../common/VideosPlaylistHorizontal';
 
 class YoutubeChannel extends Component {
-    renderLogo = () => {
-        const { template } = this.props.widgetSelected;
-
-        return <div></div>;
-    };
-
-    renderBanner = () => {
-        const { template } = this.props.widgetSelected;
-
-        return template.layout.header.elements.banner.show ? (
-            <div className="banner">
-                <img alt="" src={template.layout.header.elements.banner.url} />
-            </div>
-        ) : (
-            <div></div>
-        );
-    };
-
-    renderChannelName = () => {
-        return <div></div>;
-    };
-
-    renderChannelDescription = () => {
-        return <div></div>;
-    };
-
-    renderVideosCounter = () => {
-        return <div></div>;
-    };
-
-    renderSubscribersCounter = () => {
-        return <div></div>;
-    };
-
-    renderViewsCounter = () => {
-        return <div></div>;
-    };
-
-    renderSubscribeButton = () => {
-        return <div></div>;
-    };
-
-    renderHeader = () => {
-        return <div></div>;
-    };
-
-    renderLayout = () => {
-        return <div></div>;
-    };
-
     render() {
-        return <div className="youtube-channel">{this.renderBanner()}</div>;
+        return (
+            <div className="youtube-channel">
+                <Banner />
+                <Header />
+                <VideosPlaylistHorizontal />
+            </div>
+        );
     }
 }
 
-export default connect(mapStateToProps)(YoutubeChannel);
+export default YoutubeChannel;

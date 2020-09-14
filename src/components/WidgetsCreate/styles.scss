@@ -140,6 +140,7 @@
         .right-content {
             flex: 1;
             background: url('./bg-none.png') repeat;
+            padding: 20px;
         }
     }
 
@@ -161,6 +162,10 @@
 
         .btn-icon {
             padding: 10px 20px;
+        }
+
+        .subtitle {
+            font-weight: 500;
         }
     }
 }

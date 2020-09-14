@@ -1,0 +1,61 @@
+.yout-app-templates {
+    .template-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 20px;
+        background-color: #fafafa;
+
+        .header-logo {
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .header-information {
+            flex: 1;
+            padding-right: 20px;
+            margin-bottom: 10px;
+
+            .information-counter {
+                display: flex;
+                margin-bottom: 10px;
+
+                .subscribers-counter,
+                .videos-counter,
+                .views-counter {
+                    display: flex;
+                    align-items: center;
+
+                    .divider {
+                        width: 3px;
+                        height: 3px;
+                        background-color: #575757;
+                        border-radius: 50%;
+                        margin: 0 10px;
+                    }
+                }
+            }
+        }
+
+        .header-subscribe-button {
+            margin-bottom: 10px;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        .template-header {
+            flex-direction: column;
+            align-items: center;
+
+            .header-logo {
+                margin-right: 20px;
+                margin-bottom: 10px;
+            }
+
+            .header-information {
+                padding-right: 20px;
+                text-align: center;
+            }
+        }
+    }
+}

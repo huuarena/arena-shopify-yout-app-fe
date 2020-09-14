@@ -1,0 +1,19 @@
+.yout-app-templates {
+    .template-logo {
+        img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        .template-logo {
+            img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    }
+}

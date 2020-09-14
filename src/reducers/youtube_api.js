@@ -1,10 +1,10 @@
 // @flow
 import type { Action } from '../types';
-import type { WidgetsData } from '../types/widget';
+import type { YoutubeApiData } from '../types/youtube_api';
 
-export default (state: WidgetsData = {}, action: Action): WidgetsData => {
+export default (state: YoutubeApiData = {}, action: Action): YoutubeApiData => {
     switch (action.type) {
-        case 'CHANGE_WIDGETS':
+        case 'CHANGE_YOUTUBE_API':
             return { ...state, ...action.payload };
         default:
             return state;

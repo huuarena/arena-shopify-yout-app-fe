@@ -1,0 +1,39 @@
+.yout-app-templates {
+    .template-subscribe-button {
+        display: flex;
+        align-items: stretch;
+        margin-bottom: 10px;
+
+        .youtube-logo {
+            background-color: #e62117;
+            color: #fff;
+            padding: 3px 6px;
+            display: flex;
+            align-items: center;
+            border-radius: 2px 0 0 2px;
+            cursor: pointer;
+
+            .youtube-icon {
+                width: 15px;
+                height: 15px;
+                background-image: url('./youtube.svg');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                margin-right: 6px;
+            }
+        }
+
+        .subscribers-counter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 6px;
+            border-top: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-radius: 0 2px 2px 0;
+            background-color: #fff;
+        }
+    }
+}

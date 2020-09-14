@@ -15,13 +15,7 @@ export const initState = {
             compare_product_number: 2,
             compare_add_class: '.add-to-compare, .add-product-compare',
             compare_show_class: '.show-compare',
-            compare_options: [
-                'vendor',
-                'collection',
-                'options',
-                'availability',
-                'rating',
-            ],
+            compare_options: ['vendor', 'collection', 'options', 'availability', 'rating'],
         },
     },
     pages: {
@@ -31,6 +25,12 @@ export const initState = {
                 content: 'Widgets',
                 accessibilityLabel: 'Widgets',
                 panelID: 'Widgets',
+            },
+            {
+                id: 'Youtube API Key',
+                content: 'Youtube API Key',
+                accessibilityLabel: 'Youtube API Key',
+                panelID: 'Youtube API Key',
             },
             {
                 id: 'Preferences',
@@ -49,7 +49,10 @@ export const initState = {
     },
     widgets: {
         data: [],
-        selected: '',
+        selected: {},
     },
-    templates: [],
+    youtube_channel: {},
+    youtube_api: {
+        key: '',
+    },
 };

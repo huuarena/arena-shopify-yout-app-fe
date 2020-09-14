@@ -35,7 +35,6 @@ const INITIAL_STATE = {
 function mapStateToProps(state) {
     return {
         widgets: state.widgets,
-        templates: state.templates,
     };
 }
 
@@ -51,32 +50,41 @@ class TemplateCustom extends Component {
         this.state = { ...INITIAL_STATE };
     }
 
-    handleChange = (name, value) => {
+    componentWillUnmount() {
+        this.setState({ ...INITIAL_STATE });
+    }
+
+    handleChange = async (name, value) => {
         const { widgets, actions } = this.props;
         let newWidgets = { ...widgets };
 
         switch (name) {
             case 'source_url':
                 newWidgets.selected.template.source.url = value;
-                actions.changeTemplatesAction(newWidgets);
+                await actions.changeWidgetsAction(newWidgets);
                 break;
 
-            case 'custom_channel_name':
-                newWidgets.selected.template.layout.header.custom_channel_name.value = value;
-                actions.changeTemplatesAction(newWidgets);
+            case 'channel_name':
+                newWidgets.selected.template.layout.header.elements.channel_name.value = value;
+                await actions.changeWidgetsAction(newWidgets);
+                break;
+
+            case 'channel_description':
+                newWidgets.selected.template.layout.header.elements.channel_description.value = value;
+                await actions.changeWidgetsAction(newWidgets);
                 break;
 
             case 'columns':
                 if (parseInt(value) > 0) {
                     newWidgets.selected.template.layout.columns_rows.columns = parseInt(value);
-                    actions.changeTemplatesAction(newWidgets);
+                    await actions.changeWidgetsAction(newWidgets);
                 }
                 break;
 
             case 'rows':
                 if (parseInt(value) > 0) {
                     newWidgets.selected.template.layout.columns_rows.rows = parseInt(value);
-                    actions.changeTemplatesAction(newWidgets);
+                    await actions.changeWidgetsAction(newWidgets);
                 }
                 break;
 
@@ -85,7 +93,7 @@ class TemplateCustom extends Component {
                     newWidgets.selected.template.layout.slider_settings.silde_switch_speed = parseInt(
                         value,
                     );
-                    actions.changeTemplatesAction(newWidgets);
+                    await actions.changeWidgetsAction(newWidgets);
                 }
                 break;
 
@@ -94,7 +102,7 @@ class TemplateCustom extends Component {
                     newWidgets.selected.template.layout.slider_settings.autoplay_speed = parseInt(
                         value,
                     );
-                    actions.changeTemplatesAction(newWidgets);
+                    await actions.changeWidgetsAction(newWidgets);
                 }
                 break;
 
@@ -135,7 +143,7 @@ class TemplateCustom extends Component {
                         type="text"
                         placeholder="Youtube channel url"
                         value={widgets.selected.template.source.url}
-                        onChange={value => this.handleChange('source_url', value)}
+                        onChange={(value) => this.handleChange('source_url', value)}
                         autoFocus
                     />
                 </div>
@@ -151,7 +159,7 @@ class TemplateCustom extends Component {
         );
     };
 
-    rendenLayoutCollapse = index => {
+    rendenLayoutCollapse = (index) => {
         switch (index) {
             case 0:
                 return this.renderLayoutHeader();
@@ -187,7 +195,7 @@ class TemplateCustom extends Component {
                             let newWidgets = { ...widgets };
                             newWidgets.selected.template.layout.header.show = !widgets.selected
                                 .template.layout.header.show;
-                            actions.changeTemplatesAction(newWidgets);
+                            actions.changeWidgetsAction(newWidgets);
                         }}
                         checked={widgets.selected.template.layout.header.show}
                     />
@@ -212,7 +220,7 @@ class TemplateCustom extends Component {
                                     ) {
                                         let newWidgets = { ...widgets };
                                         newWidgets.selected.template.layout.header.layout.selected = index;
-                                        actions.changeTemplatesAction(newWidgets);
+                                        actions.changeWidgetsAction(newWidgets);
                                     }
                                 }}
                             >
@@ -237,7 +245,7 @@ class TemplateCustom extends Component {
                                         ].show = !widgets.selected.template.layout.header.elements[
                                             objKey
                                         ].show;
-                                        actions.changeTemplatesAction(newWidgets);
+                                        actions.changeWidgetsAction(newWidgets);
                                     }}
                                 >
                                     <input
@@ -265,8 +273,8 @@ class TemplateCustom extends Component {
                     <TextField
                         type="text"
                         placeholder=""
-                        value={widgets.selected.template.layout.header.custom_channel_name.value}
-                        onChange={value => this.handleChange('custom_channel_name', value)}
+                        value={widgets.selected.template.layout.header.elements.channel_name.value}
+                        onChange={(value) => this.handleChange('channel_name', value)}
                     />
                 </div>
 
@@ -276,8 +284,11 @@ class TemplateCustom extends Component {
                         type="text"
                         multiline={4}
                         placeholder=""
-                        value={widgets.selected.template.layout.header.custom_channel_name.value}
-                        onChange={value => this.handleChange('custom_channel_name', value)}
+                        value={
+                            widgets.selected.template.layout.header.elements.channel_description
+                                .value
+                        }
+                        onChange={(value) => this.handleChange('channel_description', value)}
                     />
                 </div>
 
@@ -311,7 +322,7 @@ class TemplateCustom extends Component {
                         type="number"
                         placeholder=""
                         value={`${widgets.selected.template.layout.columns_rows.columns}`}
-                        onChange={value => this.handleChange('columns', value)}
+                        onChange={(value) => this.handleChange('columns', value)}
                     />
                 </div>
 
@@ -321,7 +332,7 @@ class TemplateCustom extends Component {
                         type="number"
                         placeholder=""
                         value={`${widgets.selected.template.layout.columns_rows.rows}`}
-                        onChange={value => this.handleChange('rows', value)}
+                        onChange={(value) => this.handleChange('rows', value)}
                     />
                 </div>
             </div>
@@ -351,7 +362,7 @@ class TemplateCustom extends Component {
                                     ) {
                                         let newWidgets = { ...widgets };
                                         newWidgets.selected.template.layout.video.layout.selected = index;
-                                        actions.changeTemplatesAction(newWidgets);
+                                        actions.changeWidgetsAction(newWidgets);
                                     }
                                 }}
                             >
@@ -376,7 +387,7 @@ class TemplateCustom extends Component {
                                         ].show = !widgets.selected.template.layout.video.elements[
                                             objKey
                                         ].show;
-                                        actions.changeTemplatesAction(newWidgets);
+                                        actions.changeWidgetsAction(newWidgets);
                                     }}
                                 >
                                     <input
@@ -417,7 +428,7 @@ class TemplateCustom extends Component {
                                     ) {
                                         let newWidgets = { ...widgets };
                                         newWidgets.selected.template.layout.video.mode.selected = index;
-                                        actions.changeTemplatesAction(newWidgets);
+                                        actions.changeWidgetsAction(newWidgets);
                                     }
                                 }}
                             >
@@ -450,7 +461,7 @@ class TemplateCustom extends Component {
                                         ].show = !widgets.selected.template.layout.popup.elements[
                                             objKey
                                         ].show;
-                                        actions.changeTemplatesAction(newWidgets);
+                                        actions.changeWidgetsAction(newWidgets);
                                     }}
                                 >
                                     <input
@@ -482,7 +493,7 @@ class TemplateCustom extends Component {
                             let newWidgets = { ...widgets };
                             newWidgets.selected.template.layout.popup.auto_play = !widgets.selected
                                 .template.layout.popup.auto_play;
-                            actions.changeTemplatesAction(newWidgets);
+                            actions.changeWidgetsAction(newWidgets);
                         }}
                         checked={widgets.selected.template.layout.popup.auto_play}
                     />
@@ -516,7 +527,7 @@ class TemplateCustom extends Component {
                                         ) {
                                             let newWidgets = { ...widgets };
                                             newWidgets.selected.template.layout.slider_settings.direction.selected = index;
-                                            actions.changeTemplatesAction(newWidgets);
+                                            actions.changeWidgetsAction(newWidgets);
                                         }
                                     }}
                                 >
@@ -528,7 +539,7 @@ class TemplateCustom extends Component {
                 </div>
 
                 {Object.keys(widgets.selected.template.layout.slider_settings.elements).map(
-                    objKey => (
+                    (objKey) => (
                         <div className="form-group" key={objKey}>
                             <div className="label">
                                 {
@@ -546,7 +557,7 @@ class TemplateCustom extends Component {
                                         objKey
                                     ].show = !widgets.selected.template.layout.slider_settings
                                         .elements[objKey].show;
-                                    actions.changeTemplatesAction(newWidgets);
+                                    actions.changeWidgetsAction(newWidgets);
                                 }}
                                 checked={
                                     widgets.selected.template.layout.slider_settings.elements[
@@ -566,7 +577,7 @@ class TemplateCustom extends Component {
                         type="number"
                         placeholder=""
                         value={`${widgets.selected.template.layout.slider_settings.silde_switch_speed}`}
-                        onChange={value => this.handleChange('silde_switch_speed', value)}
+                        onChange={(value) => this.handleChange('silde_switch_speed', value)}
                     />
                 </div>
 
@@ -577,7 +588,7 @@ class TemplateCustom extends Component {
                             widgets.selected.template.layout.slider_settings.slide_switch_effect
                                 .selected
                         }
-                        onChange={e => {
+                        onChange={(e) => {
                             if (
                                 parseInt(e.target.value) !==
                                 widgets.selected.template.layout.slider_settings.slide_switch_effect
@@ -587,7 +598,7 @@ class TemplateCustom extends Component {
                                 newWidgets.selected.template.layout.slider_settings.slide_switch_effect.selected = parseInt(
                                     e.target.value,
                                 );
-                                actions.changeTemplatesAction(newWidgets);
+                                actions.changeWidgetsAction(newWidgets);
                             }
                         }}
                     >
@@ -610,7 +621,7 @@ class TemplateCustom extends Component {
                             let newWidgets = { ...widgets };
                             newWidgets.selected.template.layout.slider_settings.free_mode = !widgets
                                 .selected.template.layout.slider_settings.free_mode;
-                            actions.changeTemplatesAction(newWidgets);
+                            actions.changeWidgetsAction(newWidgets);
                         }}
                         checked={widgets.selected.template.layout.slider_settings.free_mode}
                     />
@@ -624,7 +635,7 @@ class TemplateCustom extends Component {
                         type="number"
                         placeholder=""
                         value={`${widgets.selected.template.layout.slider_settings.autoplay_speed}`}
-                        onChange={value => this.handleChange('autoplay_speed', value)}
+                        onChange={(value) => this.handleChange('autoplay_speed', value)}
                     />
                 </div>
 
@@ -637,7 +648,7 @@ class TemplateCustom extends Component {
                             let newWidgets = { ...widgets };
                             newWidgets.selected.template.layout.slider_settings.pause_autoplay_on_hover = !widgets
                                 .selected.template.layout.slider_settings.pause_autoplay_on_hover;
-                            actions.changeTemplatesAction(newWidgets);
+                            actions.changeWidgetsAction(newWidgets);
                         }}
                         checked={
                             widgets.selected.template.layout.slider_settings.pause_autoplay_on_hover
@@ -685,7 +696,7 @@ class TemplateCustom extends Component {
                     <div className="label">SLIDE SWITCH EFFECT</div>
                     <select
                         value={widgets.selected.template.colors.scheme.selected}
-                        onChange={e => {
+                        onChange={(e) => {
                             if (
                                 parseInt(e.target.value) !==
                                 widgets.selected.template.colors.scheme.selected
@@ -694,7 +705,7 @@ class TemplateCustom extends Component {
                                 newWidgets.selected.template.colors.scheme.selected = parseInt(
                                     e.target.value,
                                 );
-                                actions.changeTemplatesAction(newWidgets);
+                                actions.changeWidgetsAction(newWidgets);
                             }
                         }}
                     >
@@ -739,4 +750,4 @@ class TemplateCustom extends Component {
     }
 }
 
-export default connect(mapStateToProps)(TemplateCustom);
+export default connect(mapStateToProps, mapDispatchToProps)(TemplateCustom);

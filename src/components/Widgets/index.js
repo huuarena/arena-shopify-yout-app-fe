@@ -11,7 +11,6 @@ class Widgets extends Component {
     }
 
     _redirectToPage = page => {
-        console.log('_redirectToPage ' + page);
         this.setState({ page });
     };
 

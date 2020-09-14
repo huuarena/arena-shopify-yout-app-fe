@@ -3,7 +3,8 @@ import * as AppDataAction from './app_data';
 import * as AppSettingAction from './app_settings';
 import * as PagesActions from './pages';
 import * as WidgetsActions from './widgets';
-import * as TemplatesActions from './templates';
+import * as YoutubeChannelActions from './youtube_channel';
+import * as YoutubeApiActions from './youtube_api';
 
 const AppNotify = (notifyObject: Object): Object => {
     return {
@@ -18,7 +19,8 @@ const Actions = {
     AppNotify,
     ...PagesActions,
     ...WidgetsActions,
-    ...TemplatesActions,
+    ...YoutubeChannelActions,
+    ...YoutubeApiActions,
     //...AnotherAction,
 };
 

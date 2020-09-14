@@ -1,14 +1,10 @@
-.youtube-channel {
-    width: 100%;
+@import './common/Banner/styles.scss';
+@import './common/Logo/styles.scss';
+@import './common/ChannelName/styles.scss';
+@import './common/ChannelDescription/styles.scss';
+@import './common/SubscribeButton/styles.scss';
+@import './common/Header/styles.scss';
+@import './common/VideosPlaylistHorizontal/styles.scss';
+@import './common/VideoCardVertical/styles.scss';
 
-    .banner {
-        width: 100%;
-        height: 175px;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    }
-}
+@import './YoutubeChannel/styles.scss';

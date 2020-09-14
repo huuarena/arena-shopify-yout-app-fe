@@ -13,9 +13,9 @@ import {
 } from '@shopify/polaris-icons';
 import TemplateCustom from '../TemplateCustom';
 import Templates from '../Templates';
-import { getTemplates } from './../../apis/templates';
 import Preloader from '../common/Preloader';
 import { updateWidgets } from '../../apis/widgets';
+import { templates } from '../../utils/variables';
 
 const INITIAL_WIDGET = {
     id: `widget-${new Date().getTime()}`,
@@ -41,7 +41,6 @@ const INITIAL_STATE = {
 function mapStateToProps(state) {
     return {
         widgets: state.widgets,
-        templates: state.templates,
     };
 }
 
@@ -58,29 +57,16 @@ class WidgetsCreate extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (Object.keys(props.widgets.selected).length > 0 && props.templates.length > 0) {
+        if (Object.keys(props.widgets.selected).length > 0) {
             return { isReady: true };
         }
 
         return null;
     }
 
-    _getTemplates = async () => {
-        const { actions } = this.props;
-
-        const res = await getTemplates();
-        if (res.success) {
-            actions.changeTemplatesAction(res.payload);
-        }
-    };
-
     componentDidMount() {
         const { widgets, actions } = this.props;
         const { isReady } = this.state;
-
-        if (!isReady) {
-            this._getTemplates();
-        }
 
         if (JSON.stringify(widgets.selected) === '{}') {
             let newWidgets = { ...widgets };
@@ -89,8 +75,12 @@ class WidgetsCreate extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.setState({ ...INITIAL_STATE });
+    }
+
     renderLeftContent = () => {
-        const { widgets, templates, actions } = this.props;
+        const { widgets, actions } = this.props;
         const { openTemplateCustom } = this.state;
 
         return openTemplateCustom ? (
@@ -103,29 +93,28 @@ class WidgetsCreate extends Component {
                     </div>
 
                     <div className="cards-block">
-                        {templates.length > 0 &&
-                            templates.map(item => (
-                                <div
-                                    key={item.id}
-                                    className={`widget-card${
-                                        widgets.selected.template.id === item.id
-                                            ? ` widget-card-selected`
-                                            : ``
-                                    }`}
-                                    onClick={() => {
-                                        if (widgets.selected.template.id !== item.id) {
-                                            let newWidgets = { ...widgets };
-                                            newWidgets.selected.template = item;
-                                            actions.changeWidgetsAction(newWidgets);
-                                        }
-                                    }}
-                                >
-                                    <div className="widget-card-body">
-                                        <img alt={item.label} src={item.avatar} />
-                                        <div className="widget-card-label">{item.label}</div>
-                                    </div>
+                        {templates.map((item) => (
+                            <div
+                                key={item.id}
+                                className={`widget-card${
+                                    widgets.selected.template.id === item.id
+                                        ? ` widget-card-selected`
+                                        : ``
+                                }`}
+                                onClick={() => {
+                                    if (widgets.selected.template.id !== item.id) {
+                                        let newWidgets = { ...widgets };
+                                        newWidgets.selected.template = item;
+                                        actions.changeWidgetsAction(newWidgets);
+                                    }
+                                }}
+                            >
+                                <div className="widget-card-body">
+                                    <img alt={item.label} src={item.avatar} />
+                                    <div className="widget-card-label">{item.label}</div>
                                 </div>
-                            ))}
+                            </div>
+                        ))}
                     </div>
                 </div>
 
@@ -172,6 +161,18 @@ class WidgetsCreate extends Component {
 
         const { actions, widgets, redirectToPage } = this.props;
 
+        if (!Object.keys(widgets.selected.template).length) {
+            this.setState({
+                toast: {
+                    show: true,
+                    content: 'You need to select template first',
+                    error: true,
+                },
+                isLoading: false,
+            });
+            return;
+        }
+
         let newWidgets = { ...widgets };
 
         let index = this.indexOfWidgetExists(widgets.data, widgets.selected);
@@ -180,6 +181,8 @@ class WidgetsCreate extends Component {
         } else {
             newWidgets.data.push(widgets.selected);
         }
+
+        console.log('newWidgets :>> ', newWidgets);
 
         const data_stringfy = JSON.stringify(newWidgets);
         const res = await updateWidgets(data_stringfy);
@@ -193,9 +196,10 @@ class WidgetsCreate extends Component {
                 },
             });
             await actions.changeWidgetsAction(newWidgets);
-            setTimeout(() => {
-                redirectToPage('WidgetsManagement');
-            }, 1000);
+
+            // setTimeout(() => {
+            //     redirectToPage('WidgetsManagement');
+            // }, 1000);
         } else {
             this.setState({
                 toast: {
@@ -249,7 +253,7 @@ class WidgetsCreate extends Component {
                         placeholder="Widget name"
                         type="Text"
                         value={widgets.selected.name}
-                        onChange={value => {
+                        onChange={(value) => {
                             let newWidgets = { ...widgets };
                             newWidgets.selected.name = value;
                             actions.changeWidgetsAction(newWidgets);
@@ -271,19 +275,27 @@ class WidgetsCreate extends Component {
                     >
                         <div className="title">
                             <div className="btn-icon">
-                                <Icon source={SettingsMajorMonotone} color="white" />
+                                {openSidebar ? (
+                                    <Icon source={ChevronLeftMinor} color="white" />
+                                ) : (
+                                    <Icon source={SettingsMajorMonotone} color="white" />
+                                )}
                             </div>
-                            <div>Wiget Setting</div>
+                            <div className="subtitle">
+                                {openSidebar ? 'Back to preview' : 'Wiget Settings'}
+                            </div>
                         </div>
                         <div className="btn-icon">
-                            <Icon source={ChevronRightMinor} color="white" />
+                            {!openSidebar && <Icon source={ChevronRightMinor} color="white" />}
                         </div>
                     </div>
 
                     {/* Desktop section */}
                     <div className="widget-create-body">
                         <div className="left-content">{this.renderLeftContent()}</div>
-                        <div className="right-content">{/* <Templates /> */}</div>
+                        <div className="right-content">
+                            {/* <Templates /> */}
+                        </div>
 
                         <div className="sidebar">
                             <Sidebar
