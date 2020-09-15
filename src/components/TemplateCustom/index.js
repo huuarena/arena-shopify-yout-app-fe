@@ -312,7 +312,7 @@ class TemplateCustom extends Component {
     };
 
     renderLayoutColumnAndRows = () => {
-        const { widgets, actions } = this.props;
+        const { widgets } = this.props;
 
         return (
             <div>

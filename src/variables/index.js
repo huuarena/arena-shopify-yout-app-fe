@@ -11,7 +11,7 @@ export const templates = [
             header: {
                 show: true,
                 layout: {
-                    data: ['Classic', 'Accecent', 'Minimal'],
+                    data: ['Classic', 'Accent', 'Minimal'],
                     selected: 0,
                 },
                 elements: {

@@ -15,13 +15,14 @@ import TemplateCustom from '../TemplateCustom';
 import Templates from '../Templates';
 import Preloader from '../common/Preloader';
 import { updateWidgets } from '../../apis/widgets';
-import { templates } from '../../utils/variables';
+import { templates } from '../../variables';
+import { CONFIG } from '../../config';
 
-const INITIAL_WIDGET = {
-    id: `widget-${new Date().getTime()}`,
-    name: `Widget-${new Date().getTime()}`,
-    created_at: new Date().getTime(),
-    updated_at: new Date().getTime(),
+let INITIAL_WIDGET = {
+    id: '',
+    name: '',
+    created_at: '',
+    updated_at: '',
     enabled: false,
     template: {},
 };
@@ -66,11 +67,17 @@ class WidgetsCreate extends Component {
 
     componentDidMount() {
         const { widgets, actions } = this.props;
-        const { isReady } = this.state;
 
         if (JSON.stringify(widgets.selected) === '{}') {
             let newWidgets = { ...widgets };
+
+            // init new widget
             newWidgets.selected = { ...INITIAL_WIDGET };
+            newWidgets.selected.id = `widget-${new Date().getTime()}`;
+            newWidgets.selected.name = `Widget-${new Date().getTime()}`;
+            newWidgets.selected.created_at = new Date().getTime();
+            newWidgets.selected.update = new Date().getTime();
+
             actions.changeWidgetsAction(newWidgets);
         }
     }
@@ -185,7 +192,7 @@ class WidgetsCreate extends Component {
         console.log('newWidgets :>> ', newWidgets);
 
         const data_stringfy = JSON.stringify(newWidgets);
-        const res = await updateWidgets(data_stringfy);
+        const res = await updateWidgets(CONFIG.STORE_NAME, data_stringfy);
         if (res.success) {
             this.setState({
                 toast: {
@@ -197,9 +204,9 @@ class WidgetsCreate extends Component {
             });
             await actions.changeWidgetsAction(newWidgets);
 
-            // setTimeout(() => {
-            //     redirectToPage('WidgetsManagement');
-            // }, 1000);
+            setTimeout(() => {
+                redirectToPage('WidgetsManagement');
+            }, 1000);
         } else {
             this.setState({
                 toast: {
@@ -294,7 +301,9 @@ class WidgetsCreate extends Component {
                     <div className="widget-create-body">
                         <div className="left-content">{this.renderLeftContent()}</div>
                         <div className="right-content">
-                            {/* <Templates /> */}
+                            <div className="preview-block">
+                                <Templates />
+                            </div>
                         </div>
 
                         <div className="sidebar">

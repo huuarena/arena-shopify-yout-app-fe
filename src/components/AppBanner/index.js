@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import { Page, Stack, Card, Button } from '@shopify/polaris'
-import './styles.scss'
-import ApproveChargeModal from '../ApproveChargeModal'
+import React, { Component } from 'react';
+import { Page, Stack, Card, Button } from '@shopify/polaris';
+import './styles.scss';
+import ApproveChargeModal from '../ApproveChargeModal';
 
 class AppBanner extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
-            isShowApproveCharge: false,
-        }
+            showApproveCharge: false,
+        };
     }
 
     render() {
-        const { isShowApproveCharge } = this.state
+        const { showApproveCharge } = this.state;
 
         return (
             <div className="app-banner">
@@ -21,9 +21,8 @@ class AppBanner extends Component {
                         <Stack distribution="equalSpacing" alignment="center">
                             <Stack.Item>
                                 <span>
-                                    Approve charge to continue using the app
-                                    after the trial ends. <b>0</b> days of trial
-                                    left.
+                                    Approve charge to continue using the app after the trial ends.{' '}
+                                    <b>0</b> days of trial left.
                                 </span>
                             </Stack.Item>
                             <Stack.Item>
@@ -31,7 +30,7 @@ class AppBanner extends Component {
                                     primary
                                     onClick={() =>
                                         this.setState({
-                                            isShowApproveCharge: true,
+                                            showApproveCharge: true,
                                         })
                                     }
                                 >
@@ -47,16 +46,14 @@ class AppBanner extends Component {
                     </Card>
                 </Page>
 
-                {isShowApproveCharge && (
+                {showApproveCharge && (
                     <ApproveChargeModal
-                        onClose={() =>
-                            this.setState({ isShowApproveCharge: false })
-                        }
+                        onClose={() => this.setState({ showApproveCharge: false })}
                     />
                 )}
             </div>
-        )
+        );
     }
 }
 
-export default AppBanner
+export default AppBanner;

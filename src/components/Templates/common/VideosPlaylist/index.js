@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import VideoCard from '../VideoCard';
 import FooterPagination from '../FooterPagination';
 import PagiButton from '../PagiButton';
-import VideoCard from '../VideoCard';
+
+VideosPlaylist.propTypes = {
+    videos: PropTypes.object.isRequired,
+    variant: PropTypes.oneOf(['vertical', 'horizontal']),
+};
+
+VideosPlaylist.defaultProps = {
+    variant: 'vertical',
+};
 
 const INITIAL_STATE = {
     page: 1,
     limit: 3,
 };
 
-function mapStateToProps(state) {
-    return {
-        videos: state.videos,
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {};
-}
-
-class VideosPlaylistHorizontal extends Component {
+class VideosPlaylist extends Component {
     constructor(props) {
         super(props);
         this.state = { ...INITIAL_STATE };
@@ -93,4 +92,4 @@ class VideosPlaylistHorizontal extends Component {
     }
 }
 
-export default connect(mapStateToProps)(VideosPlaylistHorizontal);
+export default VideosPlaylist;

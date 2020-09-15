@@ -8,13 +8,18 @@ import AppBanner from '../AppBanner';
 import Widgets from '../Widgets';
 import Preferences from '../Preferences';
 import Support from '../Support';
-import { Page, Card, Frame } from '@shopify/polaris';
+import { Card, Frame } from '@shopify/polaris';
 import './styles.scss';
+import { getYoutubeApi } from '../../apis/youtubeApi';
+import { CONFIG } from '../../config';
+import YoutubeAPIKey from '../YoutubeAPIKey';
+import Templates from '../Templates';
 
 function mapStateToProps(state) {
     return {
         store: state,
         pages: state.pages,
+        youtube_api: state.youtube_api,
     };
 }
 
@@ -25,15 +30,51 @@ function mapDispatchToProps(dispatch) {
 }
 
 class App extends Component {
-    renderComponent = index => {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isReady: false,
+        };
+    }
+    _getYoutubeApi = async () => {
+        const { actions } = this.props;
+
+        const res = await getYoutubeApi(CONFIG.STORE_NAME);
+        if (res.success) {
+            if (res.payload.key) {
+                await actions.changeYoutubeApiAction(res.payload);
+                await actions.switchPagesAction(0);
+            } else {
+                await actions.changeYoutubeApiAction(res.payload);
+                await actions.switchPagesAction(1);
+            }
+        }
+
+        this.setState({ isReady: true });
+    };
+
+    componentDidMount() {
+        const { youtube_api } = this.props;
+
+        if (!youtube_api.key) {
+            this._getYoutubeApi();
+        } else {
+            this.setState({ isReady: true });
+        }
+    }
+
+    renderComponent = (index) => {
         switch (index) {
             case 0:
                 return <Widgets />;
 
             case 1:
-                return <Preferences />;
+                return <YoutubeAPIKey />;
 
             case 2:
+                return <Preferences />;
+
+            case 3:
                 return <Support />;
 
             default:
@@ -43,23 +84,28 @@ class App extends Component {
 
     render() {
         const { pages, store } = this.props;
+        const { isReady } = this.state;
 
         console.log('App store :>> ', store);
-        console.log('widgets.selected :>> ', store.widgets.selected);
-        console.log('widgets.selected.template :>> ', store.widgets.selected.template);
+
+        // return (
+        //     <div className="app-main">
+        //         <AppBanner />
+        //         <AppHeader />
+
+        //         <div className="app-body">
+        //             <Frame>
+        //                 {/* <Page> */}
+        //                 {isReady && <Card>{this.renderComponent(pages.selected)}</Card>}
+        //                 {/* </Page> */}
+        //             </Frame>
+        //         </div>
+        //     </div>
+        // );
 
         return (
             <div className="app-main">
-                <AppBanner />
-                <AppHeader />
-
-                <div className="app-body">
-                    <Frame>
-                        <Page>
-                            <Card>{this.renderComponent(pages.selected)}</Card>
-                        </Page>
-                    </Frame>
-                </div>
+                <Templates />
             </div>
         );
     }

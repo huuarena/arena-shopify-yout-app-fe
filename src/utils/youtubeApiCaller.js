@@ -24,20 +24,11 @@ export const callYoutubeApi = async (endpoint, method = 'GET', data) => {
             payload: res.data,
         };
     } catch (error) {
-        let _error = {
-            message: error.message,
-        };
-
-        if (error?.response) {
-            _error = error.response;
-        }
-        if (error?.response?.data) {
-            _error = error.response.data;
-        }
-
         return {
             success: false,
-            error: _error,
+            error: {
+                message: error.message,
+            },
         };
     }
 };

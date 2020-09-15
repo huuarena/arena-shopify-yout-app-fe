@@ -8,6 +8,7 @@ import type { WidgetsState, WidgetsAction } from './widgets';
 import type { TemplatesState, TemplatesAction } from './templates';
 import type { YoutubeChannelState, YoutubeChannelAction } from './youtube_channel';
 import type { YoutubeApiState, YoutubeApiAction } from './youtube_api';
+import type { VideosState, VideosAction } from './videos';
 
 export type ReduxInitAction = { type: '@@INIT' };
 
@@ -17,8 +18,9 @@ export type State = AppState &
     PagesState &
     WidgetsState &
     TemplatesState &
-    YoutubeChannelState &
-    YoutubeApiState; // & AnotherStateData
+    YoutubeApiState &
+    VideosState &
+    YoutubeChannelState; // & AnotherStateData
 
 // APP ACTION TYPE
 export type Action =
@@ -28,6 +30,7 @@ export type Action =
     | WidgetsAction
     | TemplatesAction
     | YoutubeApiAction
+    | VideosAction
     | YoutubeChannelAction; // | AnotherAction
 
 // APP STORE

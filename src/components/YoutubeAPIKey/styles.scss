@@ -1,0 +1,30 @@
+.youtube-api-key {
+    max-width: 600px;
+    margin: auto;
+    padding: 80px 40px;
+
+    .title {
+        font-size: 28px;
+        line-height: calc(28px * 1.2);
+        font-weight: 500;
+        color: #333;
+    }
+
+    .create-youtube-api a {
+        font-weight: 500;
+        color: royalblue;
+        text-decoration: none;
+    }
+
+    .create-youtube-api a:hover {
+        text-decoration: underline;
+    }
+
+    .form-control {
+        margin-bottom: 20px;
+    }
+
+    .form-submit {
+        text-align: center;
+    }
+}

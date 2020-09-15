@@ -1,8 +1,8 @@
 import { callYoutubeApi } from '../utils/youtubeApiCaller';
 
-export const getYoutubeChannelData = async (data) => {
+export const getYoutubeChannelInformation = async (data) => {
     return await callYoutubeApi(
-        `search?key=${data.youtubeApiKey}&channelId=${data.channelId}&part=${
+        `search?key=${data.key}&channelId=${data.channelId}&part=${
             data.part ? data.part : 'snippet'
         }&fields=${data.fields ? data.fields : '*'}&maxResults=${
             data.maxResults ? data.maxResults : '20'
@@ -12,7 +12,7 @@ export const getYoutubeChannelData = async (data) => {
 
 export const getVideosByVideoIds = async (data) => {
     return await callYoutubeApi(
-        `videos?key=${data.youtubeApiKey}&id=${data.videoIds}&part=${
+        `videos?key=${data.key}&id=${data.videoIds}&part=${
             data.part ? data.part : 'snippet'
         }&fields=${data.fields ? data.fields : '*'}&maxResults=${
             data.maxResults ? data.maxResults : '20'
@@ -22,7 +22,7 @@ export const getVideosByVideoIds = async (data) => {
 
 export const getCommentsByVideoIds = async (data) => {
     return await callYoutubeApi(
-        `commentThreads?key=${data.youtubeApiKey}&videoId=${data.videoId}&part=${
+        `commentThreads?key=${data.key}&videoId=${data.videoId}&part=${
             data.part ? data.part : 'snippet'
         }&textFormat=${data.textFormat ? data.textFormat : 'html'}&maxResults=${
             data.maxResults ? data.maxResults : '20'

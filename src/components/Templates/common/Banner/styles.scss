@@ -10,6 +10,15 @@
         }
     }
 
+    .template-banner-classic {
+        display: block;
+    }
+
+    .template-banner-accent,
+    .template-banner-minimal {
+        display: none;
+    }
+
     // @media only screen and (max-width: 600px) {
     //     .template-banner {
     //         display: none;

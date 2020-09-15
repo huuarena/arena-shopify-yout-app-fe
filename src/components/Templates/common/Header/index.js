@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { formatLongNumber } from '../../../../utils/formatLongNumber';
+import formatLongNumber from '../../../../utils/formatLongNumber';
 import ChannelDescription from '../ChannelDescription';
 import ChannelName from '../ChannelName';
 import Logo from '../Logo';
@@ -13,66 +13,63 @@ function mapStateToProps(state) {
 }
 
 class Header extends Component {
-    renderSubscribersCounter = () => {
+    renderStatistics = () => {
         const { widgets } = this.props;
-
         return (
-            widgets.selected.template.layout.header.elements.subscribers_counter.show && (
-                <div className="subscribers-counter">
-                    {formatLongNumber(
-                        widgets.selected.template.layout.header.elements.subscribers_counter.value,
-                    )}{' '}
-                    Subscribers
-                </div>
-            )
-        );
-    };
+            <div className="information-counter">
+                {widgets.selected.template.layout.header.elements.subscribers_counter.show && (
+                    <div>
+                        {formatLongNumber(
+                            widgets.selected.template.layout.header.elements.subscribers_counter
+                                .value,
+                        )}{' '}
+                        Subscribers
+                    </div>
+                )}
 
-    renderVideosCounter = () => {
-        const { widgets } = this.props;
-
-        return (
-            widgets.selected.template.layout.header.elements.videos_counter.show && (
-                <div className="videos-counter">
+                {widgets.selected.template.layout.header.elements.videos_counter.show && (
                     <div className="divider" />
-                    {formatLongNumber(
-                        widgets.selected.template.layout.header.elements.videos_counter.value,
-                    )}{' '}
-                    Videos
-                </div>
-            )
-        );
-    };
+                )}
 
-    renderViewsCounter = () => {
-        const { widgets } = this.props;
+                {widgets.selected.template.layout.header.elements.videos_counter.show && (
+                    <div>
+                        {formatLongNumber(
+                            widgets.selected.template.layout.header.elements.videos_counter.value,
+                        )}{' '}
+                        Videos
+                    </div>
+                )}
 
-        return (
-            widgets.selected.template.layout.header.elements.views_counter.show && (
-                <div className="views-counter">
+                {widgets.selected.template.layout.header.elements.views_counter.show && (
                     <div className="divider" />
-                    {formatLongNumber(
-                        widgets.selected.template.layout.header.elements.views_counter.value,
-                    )}{' '}
-                    Views
-                </div>
-            )
+                )}
+
+                {widgets.selected.template.layout.header.elements.views_counter.show && (
+                    <div className="views-counter">
+                        {formatLongNumber(
+                            widgets.selected.template.layout.header.elements.views_counter.value,
+                        )}{' '}
+                        Views
+                    </div>
+                )}
+            </div>
         );
     };
 
     render() {
+        const { widgets } = this.props;
+
+        const layoutIndex = widgets.selected.template.layout.header.layout.selected;
+        const layoutName = widgets.selected.template.layout.header.layout.data[
+            layoutIndex
+        ].toLowerCase();
+
         return (
-            <div className="template-header">
-                <div className="header-logo">
-                    <Logo />
-                </div>
+            <div className={`template-header  template-header-${layoutName}`}>
+                <Logo />
                 <div className="header-information">
                     <ChannelName />
-                    <div className="information-counter">
-                        {this.renderSubscribersCounter()}
-                        {this.renderVideosCounter()}
-                        {this.renderViewsCounter()}
-                    </div>
+                    {this.renderStatistics()}
                     <ChannelDescription />
                 </div>
                 <div className="header-subscribe-button">

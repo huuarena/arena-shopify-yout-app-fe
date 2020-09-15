@@ -10,6 +10,7 @@ import Switch from 'react-switch';
 import { getWidgets, updateWidgets } from '../../apis/widgets';
 import Preloader from '../common/Preloader';
 import ConfirmModal from '../common/ConfirmModal';
+import { CONFIG } from '../../config';
 
 const INITIAL_STATE = {
     isReady: false,
@@ -43,7 +44,7 @@ class WidgetsManagement extends Component {
     _getWidgets = async () => {
         const { actions } = this.props;
 
-        const res = await getWidgets();
+        const res = await getWidgets(CONFIG.STORE_NAME);
         if (res.success) {
             await actions.changeWidgetsAction(res.payload);
         }
@@ -103,7 +104,7 @@ class WidgetsManagement extends Component {
             });
 
             const data_stringfy = JSON.stringify(newWidgets);
-            const res = await updateWidgets(data_stringfy);
+            const res = await updateWidgets(CONFIG.STORE_NAME, data_stringfy);
             if (res.success) {
                 this.setState({
                     toast: {
@@ -144,7 +145,7 @@ class WidgetsManagement extends Component {
         };
 
         const data_stringfy = JSON.stringify(newWidgets);
-        const res = await updateWidgets(data_stringfy);
+        const res = await updateWidgets(CONFIG.STORE_NAME, data_stringfy);
         if (res.success) {
             this.setState({
                 toast: {

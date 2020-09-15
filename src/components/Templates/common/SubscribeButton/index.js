@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { formatLongNumber } from '../../../../utils/formatLongNumber';
+import formatLongNumber from '../../../../utils/formatLongNumber';
 
 function mapStateToProps(state) {
     return {

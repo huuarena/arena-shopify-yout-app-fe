@@ -1,14 +1,12 @@
 // @flow
 import { callApi } from '../utils/apiCaller';
-import { CONFIG } from '../config';
 
-export const getWidgets = async (data: object): object => {
-    return await callApi(`http://localhost:3002/admin/widgets?store_name=${CONFIG.STORE_NAME}`);
+export const getWidgets = async (store_name: string): object => {
+    return await callApi(`http://localhost:3002/admin/widgets?store_name=${store_name}`);
 };
 
-export const updateWidgets = async (data_stringfy: string): object => {
-    return await callApi(`http://localhost:3002/admin/widgets`, 'POST', {
-        store_name: CONFIG.STORE_NAME,
+export const updateWidgets = async (store_name: string, data_stringfy: string): object => {
+    return await callApi(`http://localhost:3002/admin/widgets?store_name=${store_name}`, 'POST', {
         data_stringfy,
     });
 };

@@ -4,10 +4,12 @@ import { bindActionCreators } from 'redux';
 import Actions from './../../actions';
 import YoutubeChannel from './YoutubeChannel';
 import VideoGrid from './VideoGrid';
-import { getWidgets } from '../../apis/widgets';
 import './styles.scss';
-// import { getYoutubeChannelData } from '../../apis/youtube';
-import { templates } from './../../utils/variables';
+import { templates } from '../../variables';
+import { CONFIG } from '../../config';
+import { getWidgets } from '../../apis/widgets';
+import { getYoutubeChannel } from '../../apis/youtubeChannel';
+import { getVideos } from '../../apis/videos';
 
 const INITIAL_STATE = {
     isReady: false,
@@ -16,6 +18,8 @@ const INITIAL_STATE = {
 function mapStateToProps(state) {
     return {
         widgets: state.widgets,
+        youtube_channel: state.youtube_channel,
+        videos: state.videos,
     };
 }
 
@@ -32,7 +36,11 @@ class Templates extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (Object.keys(props.widgets.selected).length > 0) {
+        if (
+            JSON.stringify(props.widgets.selected.template) !== '{}' &&
+            JSON.stringify(props.videos) !== '{}' &&
+            JSON.stringify(props.youtube_channel) !== '{}'
+        ) {
             return { isReady: true };
         }
 
@@ -42,36 +50,53 @@ class Templates extends Component {
     _getWidgets = async () => {
         const { actions } = this.props;
 
-        const res = await getWidgets();
+        const res = await getWidgets(CONFIG.STORE_NAME);
         if (res.success) {
-            await actions.changeWidgetsAction(res.payload);
+            actions.changeWidgetsAction(res.payload);
+        }
+    };
 
-            // // get youtube channel data
-            // const startIndexChannelId = res.payload.selected.template.source.url.indexOf('channel/');
-            // const channelId = res.payload.selected.template.source.url.slice(
-            //     startIndexChannelId + 8,
-            //     res.payload.selected.template.source.url.length,
-            // );
-            // const data = { channelId };
-            // const _res = await getYoutubeChannelData(data);
-            // if (_res.success) {
-            //     await actions.changeYoutubeChannelAction(_res.payload);
-            // }
+    _getYoutubeChannel = async () => {
+        const { actions } = this.props;
+
+        const res = await getYoutubeChannel(CONFIG.STORE_NAME);
+        if (res.success) {
+            actions.changeYoutubeChannelAction(res.payload);
+        }
+    };
+
+    _getVideos = async () => {
+        const { actions } = this.props;
+
+        const res = await getVideos(CONFIG.STORE_NAME);
+        if (res.success) {
+            actions.changeVideosAction(res.payload);
         }
     };
 
     componentDidMount() {
         const { isReady } = this.state;
+        const { widgets, youtube_channel, videos } = this.props;
 
         if (!isReady) {
-            this._getWidgets();
+            if (JSON.stringify(widgets.selected) === '{}') {
+                this._getWidgets();
+            }
+
+            if (JSON.stringify(youtube_channel) === '{}') {
+                this._getYoutubeChannel();
+            }
+
+            if (JSON.stringify(videos) === '{}') {
+                this._getVideos();
+            }
         }
     }
 
     renderComponent = () => {
         const { widgets } = this.props;
 
-        if (Object.keys(widgets.selected).length > 0) {
+        if (JSON.stringify(widgets.selected.selected) !== '{}') {
             switch (widgets.selected.id) {
                 case templates[0].id:
                     return <YoutubeChannel widget={widgets.selected} />;

@@ -8,6 +8,7 @@ import { Page, Tabs, DisplayText } from '@shopify/polaris';
 function mapStateToProps(state) {
     return {
         pages: state.pages,
+        youtube_api: state.youtube_api,
     };
 }
 
@@ -18,8 +19,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 class AppHeader extends Component {
-    handleTabChange = index => {
-        const { pages, actions } = this.props;
+    handleTabChange = (index) => {
+        const { pages, actions, youtube_api } = this.props;
+
+        if (!youtube_api.key) {
+            return actions.switchPagesAction(1);
+        }
 
         if (index !== pages.selected) {
             actions.switchPagesAction(index);
@@ -46,7 +51,7 @@ class AppHeader extends Component {
                         <Tabs
                             tabs={pages.data}
                             selected={pages.selected}
-                            onSelect={index => this.handleTabChange(index)}
+                            onSelect={(index) => this.handleTabChange(index)}
                         />
                     </div>
                 </Page>

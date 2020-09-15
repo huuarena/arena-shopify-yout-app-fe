@@ -45,7 +45,7 @@ export const initState = {
                 panelID: 'Support',
             },
         ],
-        selected: 0,
+        selected: 1,
     },
     widgets: {
         data: [],
@@ -55,4 +55,5 @@ export const initState = {
     youtube_api: {
         key: '',
     },
+    videos: {},
 };

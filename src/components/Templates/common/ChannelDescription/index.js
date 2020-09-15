@@ -14,13 +14,7 @@ class ChannelDescription extends Component {
         return (
             widgets.selected.template.layout.header.elements.channel_description.show && (
                 <div className="template-channel-description">
-                    {widgets.selected.template.layout.header.elements.channel_description.value
-                        .length < 200
-                        ? widgets.selected.template.layout.header.elements.channel_description.value
-                        : widgets.selected.template.layout.header.elements.channel_description.value.substring(
-                              0,
-                              200,
-                          ) + '...'}
+                    {widgets.selected.template.layout.header.elements.channel_description.value}
                 </div>
             )
         );

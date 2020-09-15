@@ -1,6 +1,6 @@
 // @flow
 
-export const formatLongNumber = (value: number): string => {
+const formatLongNumber = (value: number): string => {
     // billion
     if (value > 1000000000) {
         return `${(value / 1000000000).toFixed(1)}B`;
@@ -14,3 +14,5 @@ export const formatLongNumber = (value: number): string => {
         return `${(value / 1000).toFixed(1)}K`;
     }
 };
+
+export default formatLongNumber;
