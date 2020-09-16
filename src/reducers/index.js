@@ -6,7 +6,9 @@ import pages from './pages';
 import widgets from './widgets';
 import youtube_channel from './youtube_channel';
 import youtube_api from './youtube_api';
-import videos from './videos';
+import youtube_videos from './youtube_videos';
+import video_play from './video_play';
+import youtube_comments from './youtube_comments';
 
 // Notification Reducer
 const notification = (
@@ -29,6 +31,8 @@ export default combineReducers({
     widgets,
     youtube_channel,
     youtube_api,
-    videos,
+    youtube_videos,
+    video_play,
+    youtube_comments,
     //another_state_prop,
 });

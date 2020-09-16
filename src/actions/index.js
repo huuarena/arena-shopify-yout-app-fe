@@ -5,7 +5,9 @@ import * as PagesActions from './pages';
 import * as WidgetsActions from './widgets';
 import * as YoutubeChannelActions from './youtube_channel';
 import * as YoutubeApiActions from './youtube_api';
-import * as VideosActions from './videos';
+import * as YoutubeVideosActions from './youtube_videos';
+import * as VideoPlayActions from './video_play';
+import * as YoutubeCommentsActions from './video_play';
 
 const AppNotify = (notifyObject: Object): Object => {
     return {
@@ -22,7 +24,9 @@ const Actions = {
     ...WidgetsActions,
     ...YoutubeChannelActions,
     ...YoutubeApiActions,
-    ...VideosActions,
+    ...YoutubeVideosActions,
+    ...VideoPlayActions,
+    ...YoutubeCommentsActions,
     //...AnotherAction,
 };
 

@@ -9,7 +9,11 @@ import { templates } from '../../variables';
 import { CONFIG } from '../../config';
 import { getWidgets } from '../../apis/widgets';
 import { getYoutubeChannel } from '../../apis/youtubeChannel';
-import { getVideos } from '../../apis/videos';
+import { getYoutubeVideos } from '../../apis/youtubeVideos';
+import { getYoutubeApi } from '../../apis/youtubeApi';
+import PlayVideoPopup from './common/PlayVideoPopup';
+import { getCommentsByVideoIds, getYoutubeVideosByVideoIds } from '../../apis/youtube';
+import { updateYoutubeComments } from '../../apis/youtubeComments';
 
 const INITIAL_STATE = {
     isReady: false,
@@ -19,7 +23,9 @@ function mapStateToProps(state) {
     return {
         widgets: state.widgets,
         youtube_channel: state.youtube_channel,
-        videos: state.videos,
+        youtube_videos: state.youtube_videos,
+        youtube_api: state.youtube_api,
+        youtube_comments: state.youtube_comments,
     };
 }
 
@@ -37,9 +43,11 @@ class Templates extends Component {
 
     static getDerivedStateFromProps(props, state) {
         if (
+            JSON.stringify(props.widgets.selected) !== '{}' &&
             JSON.stringify(props.widgets.selected.template) !== '{}' &&
-            JSON.stringify(props.videos) !== '{}' &&
-            JSON.stringify(props.youtube_channel) !== '{}'
+            JSON.stringify(props.youtube_channel) !== '{}' &&
+            props.youtube_api.key &&
+            JSON.stringify(props.youtube_videos) !== '{}'
         ) {
             return { isReady: true };
         }
@@ -65,21 +73,49 @@ class Templates extends Component {
         }
     };
 
-    _getVideos = async () => {
-        const { actions } = this.props;
+    _getYoutubeVideos = async () => {
+        const { actions, youtube_videos } = this.props;
 
-        const res = await getVideos(CONFIG.STORE_NAME);
+        const res = await getYoutubeVideos(CONFIG.STORE_NAME);
         if (res.success) {
-            actions.changeVideosAction(res.payload);
+            actions.changeYoutubeVideosAction(res.payload);
+
+            let videoId = [];
+            res.payload.items.forEach((element) => {
+                videoId.push(element.id);
+            });
+            console.log('videoId :>> ', videoId);
+
+            let comments = [];
+            for (let i = 0; i < videoId.length; i++) {
+                const data = {
+                    key: 'AIzaSyDV8KcZPB1I6E9FvGe_IRQcuUTBsMfQFu4',
+                    videoId: videoId[i],
+                };
+                const _res = await getCommentsByVideoIds(data);
+                if (_res.success) {
+                    let newComment = { ..._res.payload };
+                    newComment.videoId = videoId[i];
+                    comments.push(newComment);
+                }
+            }
+            console.log('comments :>> ', comments);
+
+            const data_stringfy = JSON.stringify(comments);
+            const __res = await updateYoutubeComments(CONFIG.STORE_NAME, data_stringfy);
+            console.log('__res :>> ', __res);
         }
     };
 
     componentDidMount() {
         const { isReady } = this.state;
-        const { widgets, youtube_channel, videos } = this.props;
+        const { widgets, youtube_channel, youtube_videos } = this.props;
 
         if (!isReady) {
-            if (JSON.stringify(widgets.selected) === '{}') {
+            if (
+                JSON.stringify(widgets.selected) === '{}' ||
+                JSON.stringify(widgets.selected.template) === '{}'
+            ) {
                 this._getWidgets();
             }
 
@@ -87,34 +123,45 @@ class Templates extends Component {
                 this._getYoutubeChannel();
             }
 
-            if (JSON.stringify(videos) === '{}') {
-                this._getVideos();
+            if (JSON.stringify(youtube_videos) === '{}') {
+                this._getYoutubeVideos();
             }
         }
     }
 
     renderComponent = () => {
-        const { widgets } = this.props;
+        const { widgets, youtube_videos } = this.props;
 
-        if (JSON.stringify(widgets.selected.selected) !== '{}') {
+        if (
+            JSON.stringify(widgets.selected) !== '{}' &&
+            JSON.stringify(widgets.selected.template) !== '{}'
+        ) {
             switch (widgets.selected.id) {
                 case templates[0].id:
-                    return <YoutubeChannel widget={widgets.selected} />;
+                    return <YoutubeChannel />;
 
                 // case templates[1].id:
-                //     return <VideoGrid widget={widgets.selected} />;
+                //     return <VideoGrid />;
 
                 default:
-                    return <YoutubeChannel widget={widgets.selected} />;
+                    return <YoutubeChannel />;
             }
         }
     };
+
     render() {
         const { isReady } = this.state;
 
-        console.log('Template this.props :>> ', this.props);
+        if (isReady) {
+            console.log('Template this.props :>> ', this.props);
+        }
 
-        return <div className="yout-app-templates">{isReady && this.renderComponent()}</div>;
+        return (
+            <div className="yout-app-templates">
+                {isReady && this.renderComponent()}
+                <PlayVideoPopup />
+            </div>
+        );
     }
 }
 

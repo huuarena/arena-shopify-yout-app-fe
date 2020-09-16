@@ -13,12 +13,12 @@ function FooterPagination(props) {
     return (
         <div className="templates-footer-pagination">
             {page > 1 && <div className="item previous" onClick={() => onChange(page - 1)}></div>}
-            {page > 2 && (
+            {/* {page > 2 && (
                 <div className="item" onClick={() => onChange(1)}>
                     1
                 </div>
             )}
-            {page > 3 && <div className="item more">...</div>}
+            {page > 3 && <div className="item more">...</div>} */}
             {page > 1 && (
                 <div className="item" onClick={() => onChange(page - 1)}>
                     {page - 1}
@@ -32,12 +32,12 @@ function FooterPagination(props) {
                     {page + 1}
                 </div>
             )}
-            {page < totalPages - 2 && <div className="item more">...</div>}
+            {/* {page < totalPages - 2 && <div className="item more">...</div>}
             {page < totalPages - 1 && (
                 <div className="item" onClick={() => onChange(totalPages - 1)}>
                     {totalPages}
                 </div>
-            )}
+            )} */}
             {page < totalPages && (
                 <div className="item next" onClick={() => onChange(page + 1)}></div>
             )}

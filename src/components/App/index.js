@@ -8,7 +8,7 @@ import AppBanner from '../AppBanner';
 import Widgets from '../Widgets';
 import Preferences from '../Preferences';
 import Support from '../Support';
-import { Card, Frame } from '@shopify/polaris';
+import { Card, Frame, Page } from '@shopify/polaris';
 import './styles.scss';
 import { getYoutubeApi } from '../../apis/youtubeApi';
 import { CONFIG } from '../../config';
@@ -86,7 +86,7 @@ class App extends Component {
         const { pages, store } = this.props;
         const { isReady } = this.state;
 
-        console.log('App store :>> ', store);
+        // console.log('App store :>> ', store);
 
         // return (
         //     <div className="app-main">
@@ -95,9 +95,9 @@ class App extends Component {
 
         //         <div className="app-body">
         //             <Frame>
-        //                 {/* <Page> */}
-        //                 {isReady && <Card>{this.renderComponent(pages.selected)}</Card>}
-        //                 {/* </Page> */}
+        //                 <Page>
+        //                     {isReady && <Card>{this.renderComponent(pages.selected)}</Card>}
+        //                 </Page>
         //             </Frame>
         //         </div>
         //     </div>

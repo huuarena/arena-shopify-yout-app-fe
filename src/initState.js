@@ -55,5 +55,7 @@ export const initState = {
     youtube_api: {
         key: '',
     },
-    videos: {},
+    youtube_videos: {},
+    video_play: {},
+    youtube_comments: [],
 };

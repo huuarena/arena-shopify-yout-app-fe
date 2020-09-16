@@ -76,7 +76,7 @@ class WidgetsCreate extends Component {
             newWidgets.selected.id = `widget-${new Date().getTime()}`;
             newWidgets.selected.name = `Widget-${new Date().getTime()}`;
             newWidgets.selected.created_at = new Date().getTime();
-            newWidgets.selected.update = new Date().getTime();
+            newWidgets.selected.updated_at = new Date().getTime();
 
             actions.changeWidgetsAction(newWidgets);
         }
@@ -204,9 +204,9 @@ class WidgetsCreate extends Component {
             });
             await actions.changeWidgetsAction(newWidgets);
 
-            setTimeout(() => {
-                redirectToPage('WidgetsManagement');
-            }, 1000);
+            // setTimeout(() => {
+            //     redirectToPage('WidgetsManagement');
+            // }, 1000);
         } else {
             this.setState({
                 toast: {

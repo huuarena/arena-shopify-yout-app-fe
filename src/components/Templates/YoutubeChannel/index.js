@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import Actions from './../../../actions';
 import Banner from '../common/Banner';
 import Header from '../common/Header';
-import VideosPlaylistHorizontal from '../common/VideosPlaylistHorizontal';
+import VideosPlaylist from '../common/VideosPlaylist';
 
 function mapStateToProps(state) {
     return {
@@ -12,24 +10,26 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators(Actions, dispatch),
-    };
-}
-
 class YoutubeChannel extends Component {
     render() {
         const { widgets } = this.props;
+
+        const layoutIndex = widgets.selected.template.layout.video.layout.selected;
+        const layoutName = widgets.selected.template.layout.video.layout.data[
+            layoutIndex
+        ].toLowerCase();
 
         return (
             <div className="youtube-channel">
                 {widgets.selected.template.layout.header.show && <Banner />}
                 {widgets.selected.template.layout.header.show && <Header />}
-                <VideosPlaylistHorizontal />
+                <VideosPlaylist
+                    playlistVariant="horizontal"
+                    cardVariant={layoutName !== 'horizontal' ? layoutName : 'classic'}
+                />
             </div>
         );
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(YoutubeChannel);
+export default connect(mapStateToProps)(YoutubeChannel);

@@ -1,12 +1,23 @@
 .yout-app-templates {
-    .template-videos-playlist-horizontal {
-        background-color: #ffffff;
+    .template-videos-playlist {
+        background-color: #fff;
+        padding: 20px;
+        position: relative;
+    }
 
+    .template-videos-playlist-horizontal {
         .video-list {
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
-            padding: 20px;
-            position: relative;
+        }
+    }
+
+    .template-videos-playlist-vertical {
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
     }
 
