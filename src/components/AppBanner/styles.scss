@@ -1,23 +1,38 @@
-.app-banner {
-    .Polaris-Card {
-        border-top: solid 3px #ff4734;
-        background-image: linear-gradient(to right, #fffefe, #f1e4e5);
+.yout-app-banner {
+    margin: 20px 0;
+
+    .banner-text {
+        margin-bottom: 20px;
     }
 
-    .banner-icon {
+    .icon-banner-block {
         width: 60px;
         height: 60px;
         padding: 10px;
         border-radius: 50%;
         background-color: #f5c6c2;
 
-        .icon {
+        .icon-banner {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             background-color: #fff;
             background-image: url('./alert.svg');
             background-size: 40px;
+        }
+    }
+}
+
+.yout-app-banner > .Polaris-Card {
+    border-top: solid 3px #ff4734;
+    background-image: linear-gradient(to right, #fffefe, #f1e4e5);
+    padding: 10px;
+}
+
+@media only screen and (max-width: 900px) {
+    .yout-app-banner {
+        .icon-banner-block {
+            display: none;
         }
     }
 }

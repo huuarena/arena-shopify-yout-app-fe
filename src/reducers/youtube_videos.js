@@ -5,7 +5,7 @@ import type { YoutubeVideosData } from '../types/youtube_videos';
 export default (state: YoutubeVideosData = {}, action: Action): YoutubeVideosData => {
     switch (action.type) {
         case 'CHANGE_YOUTUBE_VIDEOS':
-            return action.payload;
+            return { ...state, ...action.payload };
         default:
             return state;
     }

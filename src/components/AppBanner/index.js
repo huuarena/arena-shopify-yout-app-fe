@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
-import { Page, Stack, Card, Button } from '@shopify/polaris';
+import { Stack, Card, Button } from '@shopify/polaris';
 import './styles.scss';
 import ApproveChargeModal from '../ApproveChargeModal';
+
+const INITIAL_STATE = {
+    showApproveCharge: false,
+};
 
 class AppBanner extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            showApproveCharge: false,
-        };
+        this.state = { ...INITIAL_STATE };
     }
 
     render() {
         const { showApproveCharge } = this.state;
 
         return (
-            <div className="app-banner">
-                <Page>
+            <div className="page-wrapper">
+                <div className="yout-app-banner">
                     <Card sectioned>
                         <Stack distribution="equalSpacing" alignment="center">
                             <Stack.Item>
-                                <span>
+                                <div className="banner-text">
                                     Approve charge to continue using the app after the trial ends.{' '}
                                     <b>0</b> days of trial left.
-                                </span>
-                            </Stack.Item>
-                            <Stack.Item>
+                                </div>
                                 <Button
                                     primary
                                     onClick={() =>
@@ -38,19 +38,19 @@ class AppBanner extends Component {
                                 </Button>
                             </Stack.Item>
                             <Stack.Item>
-                                <div className="banner-icon">
-                                    <div className="icon" />
+                                <div className="icon-banner-block">
+                                    <div className="icon-banner" />
                                 </div>
                             </Stack.Item>
                         </Stack>
                     </Card>
-                </Page>
 
-                {showApproveCharge && (
-                    <ApproveChargeModal
-                        onClose={() => this.setState({ showApproveCharge: false })}
-                    />
-                )}
+                    {showApproveCharge && (
+                        <ApproveChargeModal
+                            onClose={() => this.setState({ showApproveCharge: false })}
+                        />
+                    )}
+                </div>
             </div>
         );
     }

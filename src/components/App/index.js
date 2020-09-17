@@ -5,14 +5,14 @@ import { bindActionCreators } from 'redux';
 import Actions from './../../actions';
 import AppHeader from '../AppHeader';
 import AppBanner from '../AppBanner';
-import Widgets from '../Widgets';
-import Preferences from '../Preferences';
-import Support from '../Support';
-import { Card, Frame, Page } from '@shopify/polaris';
+import Widgets from '../../pages/Widgets';
+import Preferences from '../../pages/Preferences';
+import Support from '../../pages/Support';
+import { Card, Frame } from '@shopify/polaris';
 import './styles.scss';
 import { getYoutubeApi } from '../../apis/youtubeApi';
 import { CONFIG } from '../../config';
-import YoutubeAPIKey from '../YoutubeAPIKey';
+import YoutubeAPIKey from '../../pages/YoutubeAPIKey';
 import Templates from '../Templates';
 
 function mapStateToProps(state) {
@@ -20,6 +20,7 @@ function mapStateToProps(state) {
         store: state,
         pages: state.pages,
         youtube_api: state.youtube_api,
+        app_mode: state.app_mode,
     };
 }
 
@@ -83,31 +84,51 @@ class App extends Component {
     };
 
     render() {
-        const { pages, store } = this.props;
+        const { pages, store, app_mode } = this.props;
         const { isReady } = this.state;
 
-        // console.log('App store :>> ', store);
+        console.log('App store :>> ', store);
 
-        // return (
-        //     <div className="app-main">
-        //         <AppBanner />
-        //         <AppHeader />
+        switch (app_mode.mode) {
+            case 'preview':
+                return (
+                    <div className="yout-app-main">
+                        <div className="yout-app-body">
+                            <AppBanner />
+                            <AppHeader />
 
-        //         <div className="app-body">
-        //             <Frame>
-        //                 <Page>
-        //                     {isReady && <Card>{this.renderComponent(pages.selected)}</Card>}
-        //                 </Page>
-        //             </Frame>
-        //         </div>
-        //     </div>
-        // );
+                            <div className="page-wrapper">
+                                <Frame>
+                                    {isReady && <Card>{this.renderComponent(pages.selected)}</Card>}
+                                </Frame>
+                            </div>
+                        </div>
+                    </div>
+                );
 
-        return (
-            <div className="app-main">
-                <Templates />
-            </div>
-        );
+            case 'live':
+                return (
+                    <div className="yout-app-main">
+                        <Templates />
+                    </div>
+                );
+
+            default:
+                return (
+                    <div className="yout-app-main">
+                        <div className="yout-app-body">
+                            <AppBanner />
+                            <AppHeader />
+
+                            <div className="page-wrapper">
+                                <Frame>
+                                    {isReady && <Card>{this.renderComponent(pages.selected)}</Card>}
+                                </Frame>
+                            </div>
+                        </div>
+                    </div>
+                );
+        }
     }
 }
 

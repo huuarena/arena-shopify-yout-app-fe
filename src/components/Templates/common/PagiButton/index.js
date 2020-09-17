@@ -2,27 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 PagiButton.propTypes = {
-    previous: PropTypes.bool,
-    size: PropTypes.oneOf(['small', 'medium', 'large']),
+    variant: PropTypes.oneOf(['previous', 'next', 'down', 'up']),
     onClick: PropTypes.func,
 };
 
-PagiButton.defaultProps = {
-    previous: true,
-    size: 'medium',
-};
-
 function PagiButton(props) {
-    const { previous, size, onClick } = props;
+    const { variant, onClick } = props;
 
     return (
-        <div
-            className={`pagi-button pagi-button-${
-                previous ? 'previous' : 'next'
-            } pagi-button-${size}`}
-            onClick={() => onClick()}
-        >
-            <div className={previous ? 'icon icon-prev' : 'icon icon-next'} />
+        <div className={`pagi-button pagi-button-${variant}`} onClick={() => onClick()}>
+            <div className={`icon icon-${variant}`} />
         </div>
     );
 }

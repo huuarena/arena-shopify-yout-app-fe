@@ -22,10 +22,11 @@ const INITIAL_STATE = {
 function mapStateToProps(state) {
     return {
         widgets: state.widgets,
+        youtube_api: state.youtube_api,
         youtube_channel: state.youtube_channel,
         youtube_videos: state.youtube_videos,
-        youtube_api: state.youtube_api,
-        youtube_comments: state.youtube_comments,
+        video_play: state.video_play,
+        app_mode: state.app_mode,
     };
 }
 
@@ -45,8 +46,8 @@ class Templates extends Component {
         if (
             JSON.stringify(props.widgets.selected) !== '{}' &&
             JSON.stringify(props.widgets.selected.template) !== '{}' &&
+            JSON.stringify(props.youtube_api) !== '{}' &&
             JSON.stringify(props.youtube_channel) !== '{}' &&
-            props.youtube_api.key &&
             JSON.stringify(props.youtube_videos) !== '{}'
         ) {
             return { isReady: true };
@@ -80,41 +81,42 @@ class Templates extends Component {
         if (res.success) {
             actions.changeYoutubeVideosAction(res.payload);
 
-            let videoId = [];
-            res.payload.items.forEach((element) => {
-                videoId.push(element.id);
-            });
-            console.log('videoId :>> ', videoId);
+            // let videoId = [];
+            // res.payload.items.forEach((element) => {
+            //     videoId.push(element.id);
+            // });
+            // console.log('videoId :>> ', videoId);
 
-            let comments = [];
-            for (let i = 0; i < videoId.length; i++) {
-                const data = {
-                    key: 'AIzaSyDV8KcZPB1I6E9FvGe_IRQcuUTBsMfQFu4',
-                    videoId: videoId[i],
-                };
-                const _res = await getCommentsByVideoIds(data);
-                if (_res.success) {
-                    let newComment = { ..._res.payload };
-                    newComment.videoId = videoId[i];
-                    comments.push(newComment);
-                }
-            }
-            console.log('comments :>> ', comments);
+            // let comments = [];
+            // for (let i = 0; i < videoId.length; i++) {
+            //     const data = {
+            //         key: 'AIzaSyDV8KcZPB1I6E9FvGe_IRQcuUTBsMfQFu4',
+            //         videoId: videoId[i],
+            //     };
+            //     const _res = await getCommentsByVideoIds(data);
+            //     if (_res.success) {
+            //         let newComment = { ..._res.payload };
+            //         newComment.videoId = videoId[i];
+            //         comments.push(newComment);
+            //     }
+            // }
+            // console.log('comments :>> ', comments);
 
-            const data_stringfy = JSON.stringify(comments);
-            const __res = await updateYoutubeComments(CONFIG.STORE_NAME, data_stringfy);
-            console.log('__res :>> ', __res);
+            // const data_stringfy = JSON.stringify(comments);
+            // const __res = await updateYoutubeComments(CONFIG.STORE_NAME, data_stringfy);
+            // console.log('__res :>> ', __res);
         }
     };
 
     componentDidMount() {
         const { isReady } = this.state;
-        const { widgets, youtube_channel, youtube_videos } = this.props;
+        const { widgets, youtube_channel, youtube_videos, app_mode } = this.props;
 
         if (!isReady) {
             if (
-                JSON.stringify(widgets.selected) === '{}' ||
-                JSON.stringify(widgets.selected.template) === '{}'
+                app_mode.mode === 'live' &&
+                (JSON.stringify(widgets.selected) === '{}' ||
+                    JSON.stringify(widgets.selected.template) === '{}')
             ) {
                 this._getWidgets();
             }
@@ -132,24 +134,20 @@ class Templates extends Component {
     renderComponent = () => {
         const { widgets, youtube_videos } = this.props;
 
-        if (
-            JSON.stringify(widgets.selected) !== '{}' &&
-            JSON.stringify(widgets.selected.template) !== '{}'
-        ) {
-            switch (widgets.selected.id) {
-                case templates[0].id:
-                    return <YoutubeChannel />;
+        switch (widgets.selected.id) {
+            case templates[0].id:
+                return <YoutubeChannel />;
 
-                // case templates[1].id:
-                //     return <VideoGrid />;
+            // case templates[1].id:
+            //     return <VideoGrid />;
 
-                default:
-                    return <YoutubeChannel />;
-            }
+            default:
+                return <YoutubeChannel />;
         }
     };
 
     render() {
+        const { widgets, video_play } = this.props;
         const { isReady } = this.state;
 
         if (isReady) {
@@ -157,9 +155,13 @@ class Templates extends Component {
         }
 
         return (
-            <div className="yout-app-templates">
+            <div className="yout-app-templates-preview">
                 {isReady && this.renderComponent()}
-                <PlayVideoPopup />
+
+                {JSON.stringify(widgets.selected) !== '{}' &&
+                    JSON.stringify(widgets.selected.template) !== '{}' &&
+                    widgets.selected.template.layout.video.mode.selected === 0 &&
+                    JSON.stringify(video_play) !== '{}' && <PlayVideoPopup />}
             </div>
         );
     }

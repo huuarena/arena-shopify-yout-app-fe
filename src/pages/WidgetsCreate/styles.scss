@@ -134,7 +134,6 @@
             min-height: 600px;
             display: flex;
             justify-content: stretch;
-            overflow-y: scroll;
             background-color: #38393a;
         }
 
@@ -144,6 +143,7 @@
             padding: 20px;
             min-height: 600px;
             position: relative;
+            overflow-x: auto;
 
             .preview-block {
                 border-radius: 10px;
@@ -152,10 +152,19 @@
             }
         }
 
-        // .sidebar {
-        //     position: relative;
-        //     width: 100%;
-        // }
+        .sidebar-hidden > div {
+            width: 0;
+            transition: width 1s;
+        }
+
+        .sidebar-open > div {
+            width: 100%;
+            z-index: 100;
+        }
+
+        .sidebar > div > div {
+            display: flex;
+        }
     }
 
     .mobile-section-title {

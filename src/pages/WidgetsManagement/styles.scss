@@ -1,0 +1,125 @@
+.widgets-management {
+    padding-bottom: 40px;
+
+    .widget-welcome {
+        padding-top: 80px;
+        padding-bottom: 120px;
+        padding-left: 40px;
+        padding-right: 40px;
+        text-align: center;
+
+        p {
+            margin-bottom: 5px;
+        }
+
+        .Polaris-DisplayText--sizeExtraLarge {
+            margin-bottom: 20px;
+        }
+
+        .action {
+            margin-bottom: 20px;
+
+            p {
+                font-weight: 500;
+            }
+        }
+    }
+
+    .title,
+    .subtitle {
+        margin: 20px 0;
+    }
+
+    .table-block {
+        width: 100%;
+        overflow-x: scroll;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        thead {
+            background-color: #f1f4f7;
+            color: #777;
+            text-transform: uppercase;
+
+            th {
+                text-align: left;
+                font-weight: 500;
+                padding: 15px 20px;
+            }
+        }
+
+        tbody {
+            tr {
+                border-bottom: 1px solid #efefef;
+
+                td {
+                    padding: 20px;
+                }
+            }
+
+            tr:hover {
+                background-color: #fafafa;
+            }
+        }
+
+        .btn-icon-group {
+            display: flex;
+            align-items: center;
+
+            .btn-icon {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                cursor: pointer;
+                color: #666;
+                font-size: 13px;
+
+                .icon {
+                    width: 15px;
+                    height: 15px;
+                    margin-right: 8px;
+                    background-size: 15px;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+
+                .icon-edit {
+                    background-image: url('./pen.svg');
+                }
+
+                .icon-copy {
+                    background-image: url('./copy.svg');
+                }
+
+                .icon-delete {
+                    background-image: url('./delete.svg');
+                }
+            }
+
+            .btn-icon:hover {
+                text-decoration: underline;
+                color: #171717;
+
+                .icon-edit {
+                    background-image: url('./pen-active.svg');
+                }
+
+                .icon-copy {
+                    background-image: url('./copy-active.svg');
+                }
+
+                .icon-delete {
+                    background-image: url('./delete-active.svg');
+                }
+            }
+        }
+    }
+
+    .widget-name,
+    .widget-status {
+        font-weight: 500;
+    }
+}

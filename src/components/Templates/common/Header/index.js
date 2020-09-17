@@ -27,9 +27,10 @@ class Header extends Component {
                     </div>
                 )}
 
-                {widgets.selected.template.layout.header.elements.videos_counter.show && (
-                    <div className="divider" />
-                )}
+                {widgets.selected.template.layout.header.elements.subscribers_counter.show &&
+                    widgets.selected.template.layout.header.elements.videos_counter.show && (
+                        <div className="divider" />
+                    )}
 
                 {widgets.selected.template.layout.header.elements.videos_counter.show && (
                     <div>
@@ -40,7 +41,10 @@ class Header extends Component {
                     </div>
                 )}
 
-                {widgets.selected.template.layout.header.elements.views_counter.show && (
+                {((widgets.selected.template.layout.header.elements.videos_counter.show &&
+                    widgets.selected.template.layout.header.elements.views_counter.show) ||
+                    (widgets.selected.template.layout.header.elements.subscribers_counter.show &&
+                        widgets.selected.template.layout.header.elements.views_counter.show)) && (
                     <div className="divider" />
                 )}
 

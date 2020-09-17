@@ -19,6 +19,7 @@ VideoCard.defaultProps = {
 function mapStateToProps(state) {
     return {
         widgets: state.widgets,
+        video_play: state.video_play,
     };
 }
 
@@ -29,12 +30,16 @@ function mapDispatchToProps(dispatch) {
 }
 
 function VideoCard(props) {
-    const { variant, video, widgets, actions } = props;
+    const { variant, video, widgets, actions, video_play } = props;
 
     return (
         <div
             className={`template-video-card template-video-card-${variant}`}
-            onClick={() => actions.changeVideoPlayAction(video)}
+            onClick={() =>
+                widgets.selected.template.layout.video.mode.selected === 2
+                    ? window.open(`https://www.youtube.com/watch?v=${video.id}`, '_blank')
+                    : actions.changeVideoPlayAction(video)
+            }
         >
             <div className="thumbnail">
                 <img alt="" src={video.snippet.thumbnails.standard.url} />
@@ -46,6 +51,21 @@ function VideoCard(props) {
                         {formatYoutubeVideoDuration(video.contentDetails.duration)}
                     </div>
                 )}
+                {JSON.stringify(video_play) !== '{}' &&
+                    video_play.id === video.id &&
+                    widgets.selected.template.layout.video.mode.selected === 1 && (
+                        <div className="video-play">
+                            <iframe
+                                title="youtube video"
+                                width="100%"
+                                height="100%"
+                                src={`https://www.youtube.com/embed/${video_play.id}?autoplay=1`}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+                    )}
             </div>
             <div className="video-infomation">
                 {widgets.selected.template.layout.video.elements.title.show && (

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import Actions from './../../actions';
 import { Button, TextField, Toast } from '@shopify/polaris';
 import './styles.scss';
-import Preloader from '../common/Preloader';
+import Preloader from '../../components/Preloader';
 import { updateYoutubeApi } from '../../apis/youtubeApi';
 import { CONFIG } from '../../config';
 
@@ -40,7 +40,11 @@ class YoutubeAPIKey extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.youtube_api.key && !state.youtubeApiKey.value) {
+        if (
+            JSON.stringify(props.youtube_api) !== '{}' &&
+            props.youtube_api.key &&
+            !state.youtubeApiKey.value
+        ) {
             return { youtubeApiKey: { value: props.youtube_api.key, errMsg: '' } };
         }
 
@@ -116,7 +120,7 @@ class YoutubeAPIKey extends Component {
                 </div>
 
                 <div className="form-control create-youtube-api">
-                    <a href="/#" target="_blank" ref="">
+                    <a href="/#" target="_blank" rel="noopener noreferrer">
                         How to get Youtube API Key
                     </a>
                 </div>
@@ -125,10 +129,9 @@ class YoutubeAPIKey extends Component {
                     <TextField
                         autoFocus
                         value={youtubeApiKey.value}
-                        onChange={(value) => {
-                            console.log('value :>> ', value);
-                            this.setState({ youtubeApiKey: { value, errMsg: '' } });
-                        }}
+                        onChange={(value) =>
+                            this.setState({ youtubeApiKey: { value, errMsg: '' } })
+                        }
                         error={youtubeApiKey.errMsg}
                     />
                 </div>

@@ -1,15 +1,58 @@
 @import './../Templates/styles.scss';
 
-.app-main {
-    font-size: 15px !important;
-    color: #555555 !important;
+.yout-app-main {
+    font-size: 15px;
+    line-height: calc(15px * 1.4);
+    color: #171717;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    position: relative;
 
-    .app-body .Polaris-Frame__Content > .Polaris-Page > .Polaris-Page__Content {
-        margin-top: 0px;
+    .yout-app-body {
+        width: 100%;
+        position: relative;
+
+        .page-wrapper {
+            width: 100%;
+            position: relative;
+        }
+
+        .page-wrapper
+            > .Polaris-Frame
+            > .Polaris-Frame__Main
+            > .Polaris-Frame__Content
+            > .Polaris-Card {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
     }
 
-    .app-body .Polaris-Frame__Content > .Polaris-Page > .Polaris-Page__Content > .Polaris-Card {
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
+    a {
+        text-decoration: none;
+    }
+
+    a:hover,
+    a:active {
+        color: #171717;
+        text-decoration: underline;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .page-wrapper {
+            padding: 0;
+        }
+    }
+
+    @media only screen and (min-width: 601px) and (max-width: 1000px) {
+        .page-wrapper {
+            padding: 0 40px;
+        }
+    }
+
+    @media only screen and (min-width: 1001px) {
+        .page-wrapper {
+            padding: 0 80px;
+        }
     }
 }

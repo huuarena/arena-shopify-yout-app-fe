@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Actions from './../../actions';
 import './styles.scss';
-import { Page, Tabs, DisplayText } from '@shopify/polaris';
+import { Tabs, Card } from '@shopify/polaris';
 
 function mapStateToProps(state) {
     return {
@@ -22,7 +22,7 @@ class AppHeader extends Component {
     handleTabChange = (index) => {
         const { pages, actions, youtube_api } = this.props;
 
-        if (!youtube_api.key) {
+        if (JSON.stringify(youtube_api) === '{}' || !youtube_api.key) {
             return actions.switchPagesAction(1);
         }
 
@@ -36,11 +36,9 @@ class AppHeader extends Component {
 
         return (
             <div className="app-header">
-                <Page>
+                <div className="page-wrapper">
                     <div className="header-logo">
-                        <div className="app-name">
-                            <DisplayText size="small">YouTube Gallery App</DisplayText>
-                        </div>
+                        <div className="app-name">YouTube Gallery App</div>
                         <div className="logo" />
                         <div className="actions">
                             <a href="/#">Request free installation</a>
@@ -48,13 +46,15 @@ class AppHeader extends Component {
                         </div>
                     </div>
                     <div className="header-tabs-block">
-                        <Tabs
-                            tabs={pages.data}
-                            selected={pages.selected}
-                            onSelect={(index) => this.handleTabChange(index)}
-                        />
+                        <Card>
+                            <Tabs
+                                tabs={pages.data}
+                                selected={pages.selected}
+                                onSelect={(index) => this.handleTabChange(index)}
+                            />
+                        </Card>
                     </div>
-                </Page>
+                </div>
             </div>
         );
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Actions from './../../actions';
+import Actions from '../../actions';
 import './styles.scss';
 import Sidebar from 'react-sidebar';
 import { Button, DisplayText, Card, TextField, Icon, Stack, Toast } from '@shopify/polaris';
@@ -11,12 +11,14 @@ import {
     SettingsMajorMonotone,
     ChevronRightMinor,
 } from '@shopify/polaris-icons';
-import TemplateCustom from '../TemplateCustom';
-import Templates from '../Templates';
-import Preloader from '../common/Preloader';
+import TemplateCustom from '../../components/TemplateCustom';
+import Templates from '../../components/Templates';
+import Preloader from '../../components/Preloader';
 import { updateWidgets } from '../../apis/widgets';
 import { templates } from '../../variables';
 import { CONFIG } from '../../config';
+import { getYoutubeChannel } from '../../apis/youtubeChannel';
+import { getYoutubeVideos } from '../../apis/youtubeVideos';
 
 let INITIAL_WIDGET = {
     id: '',
@@ -42,6 +44,8 @@ const INITIAL_STATE = {
 function mapStateToProps(state) {
     return {
         widgets: state.widgets,
+        youtube_channel: state.youtube_channel,
+        youtube_videos: state.youtube_videos,
     };
 }
 
@@ -58,27 +62,65 @@ class WidgetsCreate extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (Object.keys(props.widgets.selected).length > 0) {
+        if (
+            JSON.stringify(props.widgets.selected) !== '{}' &&
+            JSON.stringify(props.youtube_channel) !== '{}'
+        ) {
             return { isReady: true };
         }
 
         return null;
     }
 
-    componentDidMount() {
+    initWidgetSelected = () => {
         const { widgets, actions } = this.props;
 
-        if (JSON.stringify(widgets.selected) === '{}') {
-            let newWidgets = { ...widgets };
+        let newWidgets = { ...widgets };
 
-            // init new widget
-            newWidgets.selected = { ...INITIAL_WIDGET };
-            newWidgets.selected.id = `widget-${new Date().getTime()}`;
-            newWidgets.selected.name = `Widget-${new Date().getTime()}`;
-            newWidgets.selected.created_at = new Date().getTime();
-            newWidgets.selected.updated_at = new Date().getTime();
+        // init new widget
+        newWidgets.selected = { ...INITIAL_WIDGET };
+        newWidgets.selected.id = `widget-${new Date().getTime()}`;
+        newWidgets.selected.name = `Widget-${new Date().getTime()}`;
+        newWidgets.selected.created_at = new Date().getTime();
+        newWidgets.selected.updated_at = new Date().getTime();
 
-            actions.changeWidgetsAction(newWidgets);
+        actions.changeWidgetsAction(newWidgets);
+    };
+
+    _getYoutubeChannel = async () => {
+        const { actions } = this.props;
+
+        const res = await getYoutubeChannel(CONFIG.STORE_NAME);
+        if (res.success) {
+            actions.changeYoutubeChannelAction(res.payload);
+        }
+    };
+
+    _getYoutubeVideos = async () => {
+        const { actions } = this.props;
+
+        const res = await getYoutubeVideos(CONFIG.STORE_NAME);
+        if (res.success) {
+            actions.changeYoutubeVideosAction(res.payload);
+        }
+    };
+
+    componentDidMount() {
+        const { widgets, youtube_channel, youtube_videos } = this.props;
+        const { isReady } = this.state;
+
+        if (!isReady) {
+            if (JSON.stringify(widgets.selected) === '{}') {
+                this.initWidgetSelected();
+            }
+
+            if (JSON.stringify(youtube_channel) === '{}') {
+                this._getYoutubeChannel();
+            }
+
+            if (JSON.stringify(youtube_videos) === '{}') {
+                this._getYoutubeVideos();
+            }
         }
     }
 
@@ -166,7 +208,7 @@ class WidgetsCreate extends Component {
     handleSaveWidgets = async () => {
         this.setState({ isLoading: true });
 
-        const { actions, widgets, redirectToPage } = this.props;
+        const { actions, widgets } = this.props;
 
         if (!Object.keys(widgets.selected.template).length) {
             this.setState({
@@ -188,8 +230,6 @@ class WidgetsCreate extends Component {
         } else {
             newWidgets.data.push(widgets.selected);
         }
-
-        console.log('newWidgets :>> ', newWidgets);
 
         const data_stringfy = JSON.stringify(newWidgets);
         const res = await updateWidgets(CONFIG.STORE_NAME, data_stringfy);
@@ -306,9 +346,9 @@ class WidgetsCreate extends Component {
                             </div>
                         </div>
 
-                        <div className="sidebar">
+                        <div className={`sidebar sidebar-${openSidebar ? 'open' : 'hidden'}`}>
                             <Sidebar
-                                sidebar={<div>{this.renderLeftContent()}</div>}
+                                sidebar={this.renderLeftContent()}
                                 open={openSidebar}
                                 onSetOpen={() => this.setState({ openSidebar: !openSidebar })}
                             >

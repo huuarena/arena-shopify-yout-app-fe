@@ -9,6 +9,7 @@ import youtube_api from './youtube_api';
 import youtube_videos from './youtube_videos';
 import video_play from './video_play';
 import youtube_comments from './youtube_comments';
+import app_mode from './app_mode';
 
 // Notification Reducer
 const notification = (
@@ -34,5 +35,6 @@ export default combineReducers({
     youtube_videos,
     video_play,
     youtube_comments,
+    app_mode,
     //another_state_prop,
 });

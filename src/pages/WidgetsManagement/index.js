@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Actions from './../../actions';
+import Actions from '../../actions';
 import { DisplayText, Stack, Button, Card, Toast } from '@shopify/polaris';
 import './styles.scss';
 import formatDateTime from '../../utils/formatDateTime';
 import { EditMajorMonotone, DuplicateMinor, DeleteMajorMonotone } from '@shopify/polaris-icons';
 import Switch from 'react-switch';
 import { getWidgets, updateWidgets } from '../../apis/widgets';
-import Preloader from '../common/Preloader';
-import ConfirmModal from '../common/ConfirmModal';
+import Preloader from '../../components/Preloader';
+import ConfirmModal from '../../components/ConfirmModal';
 import { CONFIG } from '../../config';
 
 const INITIAL_STATE = {
@@ -185,10 +185,9 @@ class WidgetsManagement extends Component {
                         </td>
                         <td>{formatDateTime(item.updated_at, 'Month DD, YYYY')}</td>
                         <td>
-                            <Stack>
-                                <Button
-                                    plain
-                                    icon={EditMajorMonotone}
+                            <div className="btn-icon-group">
+                                <div
+                                    className="btn-icon"
                                     onClick={async () => {
                                         let newWidgets = { ...widgets };
                                         newWidgets.selected = item;
@@ -196,19 +195,21 @@ class WidgetsManagement extends Component {
                                         redirectToPage('WidgetsCreate');
                                     }}
                                 >
-                                    Edit
-                                </Button>
-                                <Button plain icon={DuplicateMinor}>
-                                    Duplicate
-                                </Button>
-                                <Button
-                                    plain
-                                    icon={DeleteMajorMonotone}
+                                    <div className="icon icon-edit" />
+                                    <div>Edit</div>
+                                </div>
+                                <div className="btn-icon">
+                                    <div className="icon icon-copy" />
+                                    <div>Duplicate</div>
+                                </div>
+                                <div
+                                    className="btn-icon"
                                     onClick={() => this.setState({ widgetDeleted: item.id })}
                                 >
-                                    Remove
-                                </Button>
-                            </Stack>
+                                    <div className="icon icon-delete" />
+                                    <div>Remove</div>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <Stack wrap={false}>

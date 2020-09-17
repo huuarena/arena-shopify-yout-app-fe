@@ -52,10 +52,11 @@ export const initState = {
         selected: {},
     },
     youtube_channel: {},
-    youtube_api: {
-        key: '',
-    },
+    youtube_api: {},
     youtube_videos: {},
     video_play: {},
     youtube_comments: [],
+    app_mode: {
+        mode: 'preview',
+    },
 };

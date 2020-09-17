@@ -10,6 +10,7 @@ import type { YoutubeChannelState, YoutubeChannelAction } from './youtube_channe
 import type { VideoPlayState, VideoPlayAction } from './video_play';
 import type { YoutubeVideosState, YoutubeVideosAction } from './youtube_videos';
 import type { YoutubeCommentsState, YoutubeCommentsAction } from './youtube_comments';
+import type { AppModeState, AppModeAction } from './app_mode';
 
 export type ReduxInitAction = { type: '@@INIT' };
 
@@ -22,6 +23,7 @@ export type State = AppState &
     YoutubeVideosState &
     VideoPlayState &
     YoutubeCommentsState &
+    AppModeState &
     YoutubeChannelState; // & AnotherStateData
 
 // APP ACTION TYPE
@@ -34,6 +36,7 @@ export type Action =
     | YoutubeVideosAction
     | VideoPlayAction
     | YoutubeCommentsAction
+    | AppModeAction
     | YoutubeChannelAction; // | AnotherAction
 
 // APP STORE

@@ -14,7 +14,9 @@ const INITIAL_STATE = {
 
 function mapStateToProps(state) {
     return {
+        widgets: state.widgets,
         youtube_videos: state.youtube_videos,
+        app_mode: state.app_mode,
     };
 }
 
@@ -25,15 +27,29 @@ class VideosPlaylist extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.playlistVariant === 'horizontal') {
-            if (window.innerWidth < 600) {
-                return { limit: 1 };
+        if (props.app_mode.mode === 'preview') {
+            if (props.playlistVariant === 'horizontal') {
+                if (window.innerWidth < 600 + 380) {
+                    return { limit: 1 };
+                }
+                if (window.innerWidth < 900 + 380) {
+                    return { limit: 2 };
+                }
+                if (window.innerWidth >= 900 + 380) {
+                    return { limit: 3 };
+                }
             }
-            if (window.innerWidth < 900) {
-                return { limit: 2 };
-            }
-            if (window.innerWidth >= 900) {
-                return { limit: 3 };
+        } else {
+            if (props.playlistVariant === 'horizontal') {
+                if (window.innerWidth < 600) {
+                    return { limit: 1 };
+                }
+                if (window.innerWidth < 900) {
+                    return { limit: 2 };
+                }
+                if (window.innerWidth >= 900) {
+                    return { limit: 3 };
+                }
             }
         }
 
@@ -41,17 +57,31 @@ class VideosPlaylist extends Component {
     }
 
     updateWindowDimensions() {
-        const { playlistVariant } = this.props;
+        const { playlistVariant, app_mode } = this.props;
 
-        if (playlistVariant === 'horizontal') {
-            if (window.innerWidth < 600) {
-                return this.setState({ limit: 1 });
+        if (app_mode.mode === 'preview') {
+            if (playlistVariant === 'horizontal') {
+                if (window.innerWidth < 600 + 380) {
+                    return this.setState({ limit: 1 });
+                }
+                if (window.innerWidth < 900 + 380) {
+                    return this.setState({ limit: 2 });
+                }
+                if (window.innerWidth >= 900 + 380) {
+                    return this.setState({ limit: 3 });
+                }
             }
-            if (window.innerWidth < 900) {
-                return this.setState({ limit: 2 });
-            }
-            if (window.innerWidth >= 900) {
-                return this.setState({ limit: 3 });
+        } else {
+            if (playlistVariant === 'horizontal') {
+                if (window.innerWidth < 600) {
+                    return this.setState({ limit: 1 });
+                }
+                if (window.innerWidth < 900) {
+                    return this.setState({ limit: 2 });
+                }
+                if (window.innerWidth >= 900) {
+                    return this.setState({ limit: 3 });
+                }
             }
         }
     }
@@ -64,38 +94,56 @@ class VideosPlaylist extends Component {
     }
 
     render() {
-        const { playlistVariant, cardVariant, youtube_videos } = this.props;
+        const { playlistVariant, cardVariant, youtube_videos, app_mode, widgets } = this.props;
         const { page, limit } = this.state;
 
         return (
             <div className={`template-videos-playlist template-videos-playlist-${playlistVariant}`}>
-                <div className="video-list">
+                <div className={`video-list video-list-${app_mode.mode}`}>
                     {youtube_videos.items.length > 0 &&
-                        youtube_videos.items.slice((page - 1) * limit, page * limit).map((item, index) => (
-                            <div key={index} className="video-list-item">
-                                <VideoCard variant={cardVariant} video={item} />
-                            </div>
-                        ))}
+                        youtube_videos.items
+                            .slice((page - 1) * limit, page * limit)
+                            .map((item, index) => (
+                                <div key={index} className="video-list-item">
+                                    <VideoCard variant={cardVariant} video={item} />
+                                </div>
+                            ))}
 
-                    {page > 1 && (
-                        <PagiButton
-                            previous={true}
-                            onClick={() => this.setState({ page: page - 1 })}
-                        />
-                    )}
-                    {page < parseInt(youtube_videos.items.length / limit) + 1 && (
-                        <PagiButton
-                            previous={false}
-                            onClick={() => this.setState({ page: page + 1 })}
-                        />
-                    )}
+                    {widgets.selected.template.layout.slider_settings.elements
+                        .show_navigation_arrows.show &&
+                        page > 1 && (
+                            <PagiButton
+                                variant={
+                                    widgets.selected.template.layout.slider_settings.direction
+                                        .selected === 0
+                                        ? 'previous'
+                                        : 'up'
+                                }
+                                onClick={() => this.setState({ page: page - 1 })}
+                            />
+                        )}
+                    {widgets.selected.template.layout.slider_settings.elements
+                        .show_navigation_arrows.show &&
+                        page < parseInt(youtube_videos.items.length / limit) && (
+                            <PagiButton
+                                variant={
+                                    widgets.selected.template.layout.slider_settings.direction
+                                        .selected === 0
+                                        ? 'next'
+                                        : 'down'
+                                }
+                                onClick={() => this.setState({ page: page + 1 })}
+                            />
+                        )}
                 </div>
 
-                <FooterPagination
-                    page={page}
-                    totalPages={parseInt(youtube_videos.items.length / limit) + 1}
-                    onChange={(value) => this.setState({ page: value })}
-                />
+                {widgets.selected.template.layout.slider_settings.elements.show_pagination.show && (
+                    <FooterPagination
+                        page={page}
+                        totalPages={parseInt(youtube_videos.items.length / limit)}
+                        onChange={(value) => this.setState({ page: value })}
+                    />
+                )}
             </div>
         );
     }

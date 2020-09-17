@@ -7,7 +7,7 @@ import * as YoutubeChannelActions from './youtube_channel';
 import * as YoutubeApiActions from './youtube_api';
 import * as YoutubeVideosActions from './youtube_videos';
 import * as VideoPlayActions from './video_play';
-import * as YoutubeCommentsActions from './video_play';
+import * as YoutubeCommentsActions from './youtube_comments';
 
 const AppNotify = (notifyObject: Object): Object => {
     return {
