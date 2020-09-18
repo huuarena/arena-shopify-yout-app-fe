@@ -5,7 +5,8 @@ export const templates = [
         avatar:
             'https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/37974025/original/9582843fc29c6eafa6be71f4a75bfbdd713eac8e/design-youtube-banner-art.jpg',
         source: {
-            url: 'https://www.youtube.com/user/user-channel',
+            url: 'https://www.youtube.com/channel/UCNwwzAlMbHAJUNoJe0h3nBw',
+            channelId: 'UCNwwzAlMbHAJUNoJe0h3nBw',
         },
         layout: {
             header: {
@@ -306,7 +307,8 @@ export const templates = [
         avatar:
             'https://images.creativemarket.com/0.1.0/ps/6369445/1820/1214/m1/fpnw/wm0/f1-.png?1557495615&s=e516666b9e58eef0f617e2f644f26e22',
         source: {
-            url: 'https://www.youtube.com/user/user-channel',
+            url: 'https://www.youtube.com/channel/UCNwwzAlMbHAJUNoJe0h3nBw',
+            channelId: 'UCNwwzAlMbHAJUNoJe0h3nBw',
         },
         layout: {
             header: {
@@ -610,7 +612,8 @@ export const templates = [
         avatar:
             'https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/98875797/original/604817e97f46b49b63f1539ef403835b831291fd/design-awesome-gaming-youtube-banner.png',
         source: {
-            url: 'https://www.youtube.com/user/user-channel',
+            url: 'https://www.youtube.com/channel/UCNwwzAlMbHAJUNoJe0h3nBw',
+            channelId: 'UCNwwzAlMbHAJUNoJe0h3nBw',
         },
         layout: {
             header: {

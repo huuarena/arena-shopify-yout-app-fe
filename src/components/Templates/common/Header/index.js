@@ -49,7 +49,7 @@ class Header extends Component {
                 )}
 
                 {widgets.selected.template.layout.header.elements.views_counter.show && (
-                    <div className="views-counter">
+                    <div>
                         {formatLongNumber(
                             widgets.selected.template.layout.header.elements.views_counter.value,
                         )}{' '}

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Actions from './../../actions';
+import Actions from '../../actions';
 import AppHeader from '../AppHeader';
 import AppBanner from '../AppBanner';
 import Widgets from '../../pages/Widgets';
@@ -30,7 +30,7 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-class App extends Component {
+class AppMain extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -132,4 +132,4 @@ class App extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(AppMain);

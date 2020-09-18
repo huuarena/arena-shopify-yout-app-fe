@@ -5,12 +5,19 @@ import Actions from '../../actions';
 import { DisplayText, Stack, Button, Card, Toast } from '@shopify/polaris';
 import './styles.scss';
 import formatDateTime from '../../utils/formatDateTime';
-import { EditMajorMonotone, DuplicateMinor, DeleteMajorMonotone } from '@shopify/polaris-icons';
 import Switch from 'react-switch';
 import { getWidgets, updateWidgets } from '../../apis/widgets';
 import Preloader from '../../components/Preloader';
 import ConfirmModal from '../../components/ConfirmModal';
 import { CONFIG } from '../../config';
+import {
+    getCommentsByVideoIds,
+    getYoutubeChannelInfo,
+    getYoutubeVideosByIds,
+} from '../../apis/youtube';
+import { getYoutubeChannel, updateYoutubeChannel } from '../../apis/youtubeChannel';
+import { getYoutubeVideos, updateYoutubeVideos } from '../../apis/youtubeVideos';
+import { getYoutubeComments, updateYoutubeComments } from '../../apis/youtubeComments';
 
 const INITIAL_STATE = {
     isReady: false,
@@ -26,6 +33,7 @@ const INITIAL_STATE = {
 function mapStateToProps(state) {
     return {
         widgets: state.widgets,
+        youtube_api: state.youtube_api,
     };
 }
 
@@ -230,26 +238,176 @@ class WidgetsManagement extends Component {
         );
     };
 
+    _getYoutubeChannel = async () => {
+        const { actions } = this.props;
+
+        const res = await getYoutubeChannel(CONFIG.STORE_NAME);
+        if (res.success) {
+            actions.changeYoutubeChannelAction(res.payload);
+        }
+    };
+
+    _getYoutubeVideos = async () => {
+        const { actions } = this.props;
+
+        const res = await getYoutubeVideos(CONFIG.STORE_NAME);
+        if (res.success) {
+            actions.changeYoutubeVideosAction(res.payload);
+        }
+    };
+
+    _getYoutubeComments = async () => {
+        const { actions } = this.props;
+
+        const res = await getYoutubeComments(CONFIG.STORE_NAME);
+        if (res.success) {
+            actions.changeYoutubeCommentsAction(res.payload);
+        }
+    };
+
+    handleRefreshYoutubeData = async () => {
+        this.setState({ isLoading: true });
+        const { youtube_api, widgets } = this.props;
+
+        // get youtube channel
+        const data = {
+            key: youtube_api.key,
+            channelId: widgets.selected.template.source.channelId,
+        };
+        const res = await getYoutubeChannelInfo(data);
+        if (res.success && res.payload.items.length) {
+            let videoIds = [];
+            res.payload.items.forEach((element) => {
+                if (element.id.videoId) {
+                    videoIds.push(element.id.videoId);
+                }
+            });
+
+            if (videoIds.length) {
+                // get youtube videos
+                const data2 = {
+                    key: youtube_api.key,
+                    videoIds,
+                };
+                const res2 = await getYoutubeVideosByIds(data2);
+                if (res2.success) {
+                    // get youtube videos comments
+                    let comments = [];
+                    for (let i = 0; i < videoIds.length; i++) {
+                        const data3 = {
+                            key: youtube_api.key,
+                            videoId: videoIds[i],
+                        };
+                        const res3 = await getCommentsByVideoIds(data3);
+                        if (res3.success) {
+                            let newComment = res3.payload;
+                            newComment.videoId = videoIds[i];
+                            comments.push(newComment);
+                        }
+                    }
+
+                    // update db
+                    const data_stringfy_channel = JSON.stringify(res.payload)
+                        .replaceAll("'", '')
+                        .replaceAll('--', '__');
+                    const res4 = await updateYoutubeChannel(
+                        CONFIG.STORE_NAME,
+                        data_stringfy_channel,
+                    );
+                    if (res4.success) {
+                        const data_stringfy_videos = JSON.stringify(res2.payload)
+                            .replaceAll("'", '')
+                            .replaceAll('--', '__');
+                        const res5 = await updateYoutubeVideos(
+                            CONFIG.STORE_NAME,
+                            data_stringfy_videos,
+                        );
+                        if (res5.success) {
+                            const data_stringfy_comments = JSON.stringify(comments)
+                                .replaceAll("'", '')
+                                .replaceAll('--', '__');
+                            const res6 = await updateYoutubeComments(
+                                CONFIG.STORE_NAME,
+                                data_stringfy_comments,
+                            );
+                            if (res6.success) {
+                                // refresh store
+                                this._getYoutubeChannel();
+                                this._getYoutubeVideos();
+                                this._getYoutubeComments();
+
+                                return this.setState({
+                                    toast: {
+                                        show: true,
+                                        content: 'Refresh youtube data successfully',
+                                        error: false,
+                                    },
+                                    isLoading: false,
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    return this.setState({
+                        toast: {
+                            show: true,
+                            content: 'Get youtube videos failed',
+                            error: true,
+                        },
+                        isLoading: false,
+                    });
+                }
+            }
+        } else {
+            return this.setState({
+                toast: {
+                    show: true,
+                    content: 'Get youtube channel failed',
+                    error: true,
+                },
+                isLoading: false,
+            });
+        }
+
+        return this.setState({
+            toast: {
+                show: true,
+                content: 'Refresh youtube data failed',
+                error: true,
+            },
+            isLoading: false,
+        });
+    };
+
     renderWidgetsTable = () => {
         const { widgets, actions, redirectToPage } = this.props;
 
         return (
             <Card.Section>
                 <div className="title">
-                    <Stack alignment="center">
-                        <DisplayText>Widgets</DisplayText>
-                        <Button
-                            primary
-                            size="slim"
-                            onClick={async () => {
-                                let newWidgets = { ...widgets };
-                                newWidgets.selected = {};
-                                await actions.changeWidgetsAction(newWidgets);
-                                redirectToPage('WidgetsCreate');
-                            }}
-                        >
-                            Create widget
-                        </Button>
+                    <Stack distribution="equalSpacing" alignment="center">
+                        <Stack.Item fill>
+                            <Stack alignment="center">
+                                <DisplayText>Widgets</DisplayText>
+                                <Button
+                                    primary
+                                    size="slim"
+                                    onClick={async () => {
+                                        let newWidgets = { ...widgets };
+                                        newWidgets.selected = {};
+                                        await actions.changeWidgetsAction(newWidgets);
+                                        redirectToPage('WidgetsCreate');
+                                    }}
+                                >
+                                    Create widget
+                                </Button>
+                            </Stack>
+                        </Stack.Item>
+                        <Stack.Item>
+                            <Button size="slim" onClick={() => this.handleRefreshYoutubeData()}>
+                                Refresh Youtube Videos
+                            </Button>
+                        </Stack.Item>
                     </Stack>
                 </div>
 

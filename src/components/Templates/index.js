@@ -10,10 +10,7 @@ import { CONFIG } from '../../config';
 import { getWidgets } from '../../apis/widgets';
 import { getYoutubeChannel } from '../../apis/youtubeChannel';
 import { getYoutubeVideos } from '../../apis/youtubeVideos';
-import { getYoutubeApi } from '../../apis/youtubeApi';
 import PlayVideoPopup from './common/PlayVideoPopup';
-import { getCommentsByVideoIds, getYoutubeVideosByVideoIds } from '../../apis/youtube';
-import { updateYoutubeComments } from '../../apis/youtubeComments';
 
 const INITIAL_STATE = {
     isReady: false,
@@ -75,36 +72,11 @@ class Templates extends Component {
     };
 
     _getYoutubeVideos = async () => {
-        const { actions, youtube_videos } = this.props;
+        const { actions } = this.props;
 
         const res = await getYoutubeVideos(CONFIG.STORE_NAME);
         if (res.success) {
             actions.changeYoutubeVideosAction(res.payload);
-
-            // let videoId = [];
-            // res.payload.items.forEach((element) => {
-            //     videoId.push(element.id);
-            // });
-            // console.log('videoId :>> ', videoId);
-
-            // let comments = [];
-            // for (let i = 0; i < videoId.length; i++) {
-            //     const data = {
-            //         key: 'AIzaSyDV8KcZPB1I6E9FvGe_IRQcuUTBsMfQFu4',
-            //         videoId: videoId[i],
-            //     };
-            //     const _res = await getCommentsByVideoIds(data);
-            //     if (_res.success) {
-            //         let newComment = { ..._res.payload };
-            //         newComment.videoId = videoId[i];
-            //         comments.push(newComment);
-            //     }
-            // }
-            // console.log('comments :>> ', comments);
-
-            // const data_stringfy = JSON.stringify(comments);
-            // const __res = await updateYoutubeComments(CONFIG.STORE_NAME, data_stringfy);
-            // console.log('__res :>> ', __res);
         }
     };
 
@@ -132,7 +104,7 @@ class Templates extends Component {
     }
 
     renderComponent = () => {
-        const { widgets, youtube_videos } = this.props;
+        const { widgets } = this.props;
 
         switch (widgets.selected.id) {
             case templates[0].id:

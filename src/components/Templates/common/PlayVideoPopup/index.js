@@ -106,6 +106,7 @@ class PlayVideoPopup extends Component {
 
         return JSON.stringify(video_play) !== '{}' ? (
             <div className="yout-popup-wrapper">
+                <div className="yout-popup-wrapper-padding" onClick={() => actions.changeVideoPlayAction({})} />
                 <div className="yout-popup-wrapper-body">
                     <div
                         className="yout-popup-header"
@@ -279,6 +280,7 @@ class PlayVideoPopup extends Component {
                         </div>
                     </div>
                 </div>
+                <div className="yout-popup-wrapper-padding" onClick={() => actions.changeVideoPlayAction({})} />
             </div>
         ) : (
             <div></div>

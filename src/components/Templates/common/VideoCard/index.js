@@ -42,7 +42,7 @@ function VideoCard(props) {
             }
         >
             <div className="thumbnail">
-                <img alt="" src={video.snippet.thumbnails.standard.url} />
+                <img alt="" src={video.snippet.thumbnails.high.url} />
                 {widgets.selected.template.layout.video.elements.play_icon.show && (
                     <div className="youtube-icon" />
                 )}
