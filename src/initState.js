@@ -47,16 +47,14 @@ export const initState = {
         ],
         selected: 1,
     },
-    widgets: {
-        data: [],
-        selected: {},
+    yout_app: {
+        store_name: '',
+        youtube_api: {},
+        widgets: [],
     },
-    youtube_channel: {},
-    youtube_api: {},
-    youtube_videos: {},
     video_play: {},
-    youtube_comments: [],
     app_mode: {
-        mode: 'preview',
+        data: ['preview', 'live'],
+        selected: 0,
     },
 };

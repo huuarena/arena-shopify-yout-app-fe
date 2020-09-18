@@ -1,14 +1,10 @@
+// @flow
 import axios from 'axios';
-import { CONFIG } from '../config';
 
-/**
- * Call API
- * @param {string} enpoint
- * @param {string} method
- * @param {object} data
- */
-export const callYoutubeApi = async (endpoint, method = 'GET', data) => {
-    console.log('url :>> ', CONFIG.YOUTUBE_API_BASE_URL + endpoint);
+const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3/';
+
+export const callYoutubeApi = async (endpoint: string, method?: string = 'GET', data?: object) => {
+    console.log('url :', YOUTUBE_API_BASE_URL + endpoint);
 
     try {
         const res = await axios({
@@ -16,7 +12,7 @@ export const callYoutubeApi = async (endpoint, method = 'GET', data) => {
             method,
             data,
             headers: {},
-            baseURL: CONFIG.YOUTUBE_API_BASE_URL,
+            baseURL: YOUTUBE_API_BASE_URL,
         });
 
         return {

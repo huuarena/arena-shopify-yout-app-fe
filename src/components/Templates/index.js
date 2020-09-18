@@ -7,7 +7,7 @@ import VideoGrid from './VideoGrid';
 import './styles.scss';
 import { templates } from '../../variables';
 import { CONFIG } from '../../config';
-import { getWidgets } from '../../apis/widgets';
+import { getWidgets } from '../../apis/yout_app';
 import { getYoutubeChannel } from '../../apis/youtubeChannel';
 import { getYoutubeVideos } from '../../apis/youtubeVideos';
 import PlayVideoPopup from './common/PlayVideoPopup';

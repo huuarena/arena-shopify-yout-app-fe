@@ -14,7 +14,7 @@ import {
 import TemplateCustom from '../../components/TemplateCustom';
 import Templates from '../../components/Templates';
 import Preloader from '../../components/Preloader';
-import { updateWidgets } from '../../apis/widgets';
+import { updateWidgets } from '../../apis/yout_app';
 import { templates } from '../../variables';
 import { CONFIG } from '../../config';
 import { getYoutubeChannel } from '../../apis/youtubeChannel';
@@ -231,8 +231,8 @@ class WidgetsCreate extends Component {
             newWidgets.data.push(widgets.selected);
         }
 
-        const data_stringfy = JSON.stringify(newWidgets);
-        const res = await updateWidgets(CONFIG.STORE_NAME, data_stringfy);
+        const data_stringify = JSON.stringify(newWidgets);
+        const res = await updateWidgets(CONFIG.STORE_NAME, data_stringify);
         if (res.success) {
             this.setState({
                 toast: {

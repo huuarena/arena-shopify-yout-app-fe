@@ -4,12 +4,8 @@ import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
 import type { AppState, AppDataAction } from './app_data';
 import type { AppSettingState, AppSettingAction } from './app_settings';
 import type { PagesState, PagesAction } from './pages';
-import type { WidgetsState, WidgetsAction } from './widgets';
-import type { YoutubeApiState, YoutubeApiAction } from './youtube_api';
-import type { YoutubeChannelState, YoutubeChannelAction } from './youtube_channel';
 import type { VideoPlayState, VideoPlayAction } from './video_play';
-import type { YoutubeVideosState, YoutubeVideosAction } from './youtube_videos';
-import type { YoutubeCommentsState, YoutubeCommentsAction } from './youtube_comments';
+import type { YoutAppState, YoutAppAction } from './yout_app';
 import type { AppModeState, AppModeAction } from './app_mode';
 
 export type ReduxInitAction = { type: '@@INIT' };
@@ -18,26 +14,18 @@ export type ReduxInitAction = { type: '@@INIT' };
 export type State = AppState &
     AppSettingState &
     PagesState &
-    WidgetsState &
-    YoutubeApiState &
-    YoutubeVideosState &
     VideoPlayState &
-    YoutubeCommentsState &
     AppModeState &
-    YoutubeChannelState; // & AnotherStateData
+    YoutAppState; // & AnotherStateData
 
 // APP ACTION TYPE
 export type Action =
     | AppDataAction
     | AppSettingAction
     | PagesAction
-    | WidgetsAction
-    | YoutubeApiAction
-    | YoutubeVideosAction
     | VideoPlayAction
-    | YoutubeCommentsAction
     | AppModeAction
-    | YoutubeChannelAction; // | AnotherAction
+    | YoutAppAction; // | AnotherAction
 
 // APP STORE
 export type Store = ReduxStore<State, Action>;

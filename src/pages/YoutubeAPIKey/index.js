@@ -74,8 +74,8 @@ class YoutubeAPIKey extends Component {
 
         // submit
         if (formValid) {
-            const data_stringfy = JSON.stringify(data);
-            const res = await updateYoutubeApi(CONFIG.STORE_NAME, data_stringfy);
+            const data_stringify = JSON.stringify(data);
+            const res = await updateYoutubeApi(CONFIG.STORE_NAME, data_stringify);
             if (res.success) {
                 actions.changeYoutubeApiAction(data);
                 this.setState({

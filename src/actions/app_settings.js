@@ -1,4 +1,5 @@
 // @flow
+
 import type { AppSettingAction } from '../types/app_data';
 // import type { ThunkAction } from '../types'
 

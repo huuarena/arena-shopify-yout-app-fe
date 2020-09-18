@@ -6,7 +6,7 @@ import { DisplayText, Stack, Button, Card, Toast } from '@shopify/polaris';
 import './styles.scss';
 import formatDateTime from '../../utils/formatDateTime';
 import Switch from 'react-switch';
-import { getWidgets, updateWidgets } from '../../apis/widgets';
+import { getWidgets, updateWidgets } from '../../apis/yout_app';
 import Preloader from '../../components/Preloader';
 import ConfirmModal from '../../components/ConfirmModal';
 import { CONFIG } from '../../config';
@@ -111,8 +111,8 @@ class WidgetsManagement extends Component {
                 }
             });
 
-            const data_stringfy = JSON.stringify(newWidgets);
-            const res = await updateWidgets(CONFIG.STORE_NAME, data_stringfy);
+            const data_stringify = JSON.stringify(newWidgets);
+            const res = await updateWidgets(CONFIG.STORE_NAME, data_stringify);
             if (res.success) {
                 this.setState({
                     toast: {
@@ -152,8 +152,8 @@ class WidgetsManagement extends Component {
             selected: widgets.selected.id !== widgetDeleted ? widgets.selected : {},
         };
 
-        const data_stringfy = JSON.stringify(newWidgets);
-        const res = await updateWidgets(CONFIG.STORE_NAME, data_stringfy);
+        const data_stringify = JSON.stringify(newWidgets);
+        const res = await updateWidgets(CONFIG.STORE_NAME, data_stringify);
         if (res.success) {
             this.setState({
                 toast: {
@@ -307,28 +307,28 @@ class WidgetsManagement extends Component {
                     }
 
                     // update db
-                    const data_stringfy_channel = JSON.stringify(res.payload)
+                    const data_stringify_channel = JSON.stringify(res.payload)
                         .replaceAll("'", '')
                         .replaceAll('--', '__');
                     const res4 = await updateYoutubeChannel(
                         CONFIG.STORE_NAME,
-                        data_stringfy_channel,
+                        data_stringify_channel,
                     );
                     if (res4.success) {
-                        const data_stringfy_videos = JSON.stringify(res2.payload)
+                        const data_stringify_videos = JSON.stringify(res2.payload)
                             .replaceAll("'", '')
                             .replaceAll('--', '__');
                         const res5 = await updateYoutubeVideos(
                             CONFIG.STORE_NAME,
-                            data_stringfy_videos,
+                            data_stringify_videos,
                         );
                         if (res5.success) {
-                            const data_stringfy_comments = JSON.stringify(comments)
+                            const data_stringify_comments = JSON.stringify(comments)
                                 .replaceAll("'", '')
                                 .replaceAll('--', '__');
                             const res6 = await updateYoutubeComments(
                                 CONFIG.STORE_NAME,
-                                data_stringfy_comments,
+                                data_stringify_comments,
                             );
                             if (res6.success) {
                                 // refresh store

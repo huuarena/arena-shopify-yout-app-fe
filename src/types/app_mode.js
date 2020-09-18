@@ -4,7 +4,8 @@ import app_mode from '../reducers/app_mode';
 
 // Data
 export type AppModeData = {
-    mode: string,
+    data: Array<object>,
+    selected: string,
 };
 
 // App Data State
@@ -13,4 +14,4 @@ export type AppModeState = {
 };
 
 // App Data Action
-export type AppModeAction = { type: 'CHANGE_APP_MODE', +payload: object }; // | Another Action
+export type AppModeAction = { type: 'CHANGE_APP_MODE', +payload: number }; // | Another Action
