@@ -4,29 +4,26 @@ import formatLongNumber from '../../../../utils/formatLongNumber';
 
 function mapStateToProps(state) {
     return {
-        widgets: state.widgets,
+        widget_selected: state.widget_selected,
     };
 }
 
 class SubscribeButton extends Component {
     render() {
-        const { widgets } = this.props;
+        const { widget_selected } = this.props;
 
         return (
-            widgets.selected.template.layout.header.elements.subcribe_button.show && (
-                <div className="template-subscribe-button">
-                    <div className="youtube-logo">
-                        <div className="youtube-icon" />
-                        <div>Youtube</div>
-                    </div>
-                    <div className="subscribers-counter">
-                        {formatLongNumber(
-                            widgets.selected.template.layout.header.elements.subscribers_counter
-                                .value,
-                        )}
-                    </div>
+            <div className="template-subscribe-button">
+                <div className="youtube-logo">
+                    <div className="youtube-icon" />
+                    <div>Youtube</div>
                 </div>
-            )
+                <div className="subscribers-counter">
+                    {formatLongNumber(
+                        widget_selected.youtube_channel.items[0].statistics.subscriberCount,
+                    )}
+                </div>
+            </div>
         );
     }
 }

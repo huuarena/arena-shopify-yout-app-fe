@@ -1,28 +1,35 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import WidgetsManagement from '../WidgetsManagement';
+import WidgetsCreate from '../WidgetsCreate';
 
-function mapStateToProps(state) {
-    return {
-
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-
-    };
-}
+const INITIAL_STATE = {
+    page: '',
+};
 
 class Widgets extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { ...INITIAL_STATE };
+    }
+
     render() {
-        return (
-            <div>
-                
-            </div>
-        );
+        const { page } = this.state;
+
+        switch (page) {
+            case 'WidgetsManagement':
+                return (
+                    <WidgetsManagement redirectToPage={(value) => this.setState({ page: value })} />
+                );
+
+            case 'WidgetsCreate':
+                return <WidgetsCreate redirectToPage={(value) => this.setState({ page: value })} />;
+
+            default:
+                return (
+                    <WidgetsManagement redirectToPage={(value) => this.setState({ page: value })} />
+                );
+        }
     }
 }
 
-export default connect(
-    mapStateToProps,
-)(Widgets);
+export default Widgets;

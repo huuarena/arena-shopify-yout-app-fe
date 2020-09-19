@@ -16,7 +16,7 @@ export const changeYoutAppYoutubeApiAction = (payload: object): YoutAppActions =
     };
 };
 
-export const changeYoutAppWidgetsAction = (payload: object): YoutAppActions => {
+export const changeYoutAppWidgetsAction = (payload: Array<object>): YoutAppActions => {
     return {
         type: 'CHANGE_YOUT_APP_WIDGETS',
         payload,

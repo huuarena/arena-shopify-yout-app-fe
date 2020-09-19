@@ -6,6 +6,7 @@ import pages from './pages';
 import video_play from './video_play';
 import yout_app from './yout_app';
 import app_mode from './app_mode';
+import widget_selected from './widget_selected';
 
 // Notification Reducer
 const notification = (
@@ -28,5 +29,6 @@ export default combineReducers({
     video_play,
     yout_app,
     app_mode,
+    widget_selected,
     //another_state_prop,
 });

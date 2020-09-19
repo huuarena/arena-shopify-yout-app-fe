@@ -2,10 +2,10 @@
 
 import { callYoutubeApi } from '../utils/youtubeApiCaller';
 
-// https://www.googleapis.com/youtube/v3/channels?key=AIzaSyDV8KcZPB1I6E9FvGe_IRQcuUTBsMfQFu4&id=UCh_zF2FsiCflCPgYDudtcqg&part=snippet,brandingSettings&field=*
+// https://www.googleapis.com/youtube/v3/channels?key=AIzaSyDV8KcZPB1I6E9FvGe_IRQcuUTBsMfQFu4&id=UCh_zF2FsiCflCPgYDudtcqg&part=snippet,brandingSettings,statistics&field=*
 export const getYoutubeChannel = async (data: object): object => {
     return await callYoutubeApi(
-        `channels?key=${data.key}&id=${data.id}&part=${data.part ? data.part : 'snippet,brandingSettings'}&fields=${data.fields ? data.fields : '*'}`,
+        `channels?key=${data.key}&id=${data.id}&part=${data.part ? data.part : 'snippet,brandingSettings,statistics'}&fields=${data.fields ? data.fields : '*'}`,
     );
 };
 

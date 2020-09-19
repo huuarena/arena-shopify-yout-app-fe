@@ -1,57 +1,56 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import formatLongNumber from '../../../../utils/formatLongNumber';
-import ChannelDescription from '../ChannelDescription';
-import ChannelName from '../ChannelName';
 import Logo from '../Logo';
 import SubscribeButton from '../SubscribeButton';
 
 function mapStateToProps(state) {
     return {
-        widgets: state.widgets,
+        widget_selected: state.widget_selected,
     };
 }
 
 class Header extends Component {
     renderStatistics = () => {
-        const { widgets } = this.props;
+        const { widget_selected } = this.props;
+
         return (
             <div className="information-counter">
-                {widgets.selected.template.layout.header.elements.subscribers_counter.show && (
+                {widget_selected.setting.layout.header.elements.subscribers_counter.show && (
                     <div>
                         {formatLongNumber(
-                            widgets.selected.template.layout.header.elements.subscribers_counter
+                            widget_selected.setting.layout.header.elements.subscribers_counter
                                 .value,
                         )}{' '}
                         Subscribers
                     </div>
                 )}
 
-                {widgets.selected.template.layout.header.elements.subscribers_counter.show &&
-                    widgets.selected.template.layout.header.elements.videos_counter.show && (
+                {widget_selected.setting.layout.header.elements.subscribers_counter.show &&
+                    widget_selected.setting.layout.header.elements.videos_counter.show && (
                         <div className="divider" />
                     )}
 
-                {widgets.selected.template.layout.header.elements.videos_counter.show && (
+                {widget_selected.setting.layout.header.elements.videos_counter.show && (
                     <div>
                         {formatLongNumber(
-                            widgets.selected.template.layout.header.elements.videos_counter.value,
+                            widget_selected.setting.layout.header.elements.videos_counter.value,
                         )}{' '}
                         Videos
                     </div>
                 )}
 
-                {((widgets.selected.template.layout.header.elements.videos_counter.show &&
-                    widgets.selected.template.layout.header.elements.views_counter.show) ||
-                    (widgets.selected.template.layout.header.elements.subscribers_counter.show &&
-                        widgets.selected.template.layout.header.elements.views_counter.show)) && (
+                {((widget_selected.setting.layout.header.elements.videos_counter.show &&
+                    widget_selected.setting.layout.header.elements.views_counter.show) ||
+                    (widget_selected.setting.layout.header.elements.subscribers_counter.show &&
+                        widget_selected.setting.layout.header.elements.views_counter.show)) && (
                     <div className="divider" />
                 )}
 
-                {widgets.selected.template.layout.header.elements.views_counter.show && (
+                {widget_selected.setting.layout.header.elements.views_counter.show && (
                     <div>
                         {formatLongNumber(
-                            widgets.selected.template.layout.header.elements.views_counter.value,
+                            widget_selected.setting.layout.header.elements.views_counter.value,
                         )}{' '}
                         Views
                     </div>
@@ -61,23 +60,41 @@ class Header extends Component {
     };
 
     render() {
-        const { widgets } = this.props;
+        const { widget_selected } = this.props;
 
-        const layoutIndex = widgets.selected.template.layout.header.layout.selected;
-        const layoutName = widgets.selected.template.layout.header.layout.data[
+        const layoutIndex = widget_selected.setting.layout.header.layout.selected;
+        const layoutName = widget_selected.setting.layout.header.layout.data[
             layoutIndex
         ].toLowerCase();
 
         return (
             <div className={`template-header  template-header-${layoutName}`}>
-                <Logo />
+                {widget_selected.setting.layout.header.elements.logo.show && <Logo />}
                 <div className="header-information">
-                    <ChannelName />
+                    {widget_selected.setting.layout.header.elements.channel_name.show && (
+                        <div className="template-channel-name">
+                            <a
+                                href={widget_selected.youtube_channel_source.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {widget_selected.youtube_channel_custom.channel_name ||
+                                    widget_selected.youtube_channel.items[0].snippet.title}
+                            </a>
+                        </div>
+                    )}
                     {this.renderStatistics()}
-                    <ChannelDescription />
+                    {widget_selected.setting.layout.header.elements.channel_description.show && (
+                        <div className="template-channel-description">
+                            {widget_selected.youtube_channel_custom.channel_description ||
+                                widget_selected.youtube_channel.items[0].snippet.description}
+                        </div>
+                    )}
                 </div>
                 <div className="header-subscribe-button">
-                    <SubscribeButton />
+                    {widget_selected.setting.layout.header.elements.subcribe_button.show && (
+                        <SubscribeButton />
+                    )}
                 </div>
             </div>
         );

@@ -6,27 +6,28 @@ import VideosPlaylist from '../common/VideosPlaylist';
 
 function mapStateToProps(state) {
     return {
-        widgets: state.widgets,
+        widget_selected: state.widget_selected,
     };
 }
 
 class YoutubeChannel extends Component {
     render() {
-        const { widgets } = this.props;
+        const { widget_selected } = this.props;
 
-        const layoutIndex = widgets.selected.template.layout.video.layout.selected;
-        const layoutName = widgets.selected.template.layout.video.layout.data[
+        const layoutIndex = widget_selected.setting.layout.video.layout.selected;
+        const layoutName = widget_selected.setting.layout.video.layout.data[
             layoutIndex
         ].toLowerCase();
 
         return (
             <div className="youtube-channel">
-                {widgets.selected.template.layout.header.show && <Banner />}
-                {widgets.selected.template.layout.header.show && <Header />}
-                <VideosPlaylist
+                {widget_selected.setting.layout.header.show &&
+                    widget_selected.setting.layout.header.elements.banner.show && <Banner />}
+                {widget_selected.setting.layout.header.show && <Header />}
+                {/* <VideosPlaylist
                     playlistVariant="horizontal"
                     cardVariant={layoutName !== 'horizontal' ? layoutName : 'classic'}
-                />
+                /> */}
             </div>
         );
     }

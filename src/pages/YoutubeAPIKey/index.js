@@ -76,7 +76,7 @@ class YoutubeAPIKey extends Component {
             const res = await updateYoutApp('youtube_api', data_stringify);
             console.log('updateYoutApp res :>> ', res);
             if (res.success) {
-                actions.changeYoutAppYoutubeApiAction(data);
+                await actions.changeYoutAppYoutubeApiAction(data);
                 this.setState({
                     toast: {
                         show: true,

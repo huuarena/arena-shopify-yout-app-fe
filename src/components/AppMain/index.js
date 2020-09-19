@@ -12,6 +12,9 @@ import YoutubeAPIKey from '../../pages/YoutubeAPIKey';
 import '@shopify/polaris/dist/styles.css';
 import { Card, Frame } from '@shopify/polaris';
 import Preloader from '../Preloader';
+import qs from 'qs';
+import Templates from '../Templates';
+import { getWidgetById } from '../../apis/widgets';
 
 const INITIAL_STATE = {
     isReady: false,
@@ -38,15 +41,15 @@ class AppMain extends Component {
         this.state = { ...INITIAL_STATE };
     }
 
-    static getDerivedStateFromProps(props, state) {
-        const { yout_app } = props;
+    // static getDerivedStateFromProps(props, state) {
+    //     const { yout_app } = props;
 
-        if (JSON.stringify(yout_app.youtube_api) !== '{}') {
-            return { isReady: true };
-        }
+    //     if (JSON.stringify(yout_app.youtube_api) !== '{}') {
+    //         return { isReady: true };
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
     _getYoutApp = async () => {
         const { actions } = this.props;
@@ -59,11 +62,31 @@ class AppMain extends Component {
         }
     };
 
+    _getWidgetById = async (id) => {
+        const { actions } = this.props;
+
+        const res = await getWidgetById(id);
+        console.log('res :>> ', res);
+        if (res.success && JSON.stringify(res.payload) !== '{}') {
+            actions.changeWidgetSelectedAction(res.payload);
+            this.setState({ isReady: true });
+        }
+    };
+
     componentDidMount() {
+        const { actions } = this.props;
         const { isReady } = this.state;
 
-        if (!isReady) {
-            this._getYoutApp();
+        const search = qs.parse(window.location.search.substring(1));
+        console.log('search :>> ', search);
+        if (search.embed) {
+            actions.changeAppModeAction(1); // live
+
+            this._getWidgetById(search.embed);
+        } else {
+            if (!isReady) {
+                this._getYoutApp();
+            }
         }
     }
 
@@ -71,7 +94,6 @@ class AppMain extends Component {
         const { pages, yout_app } = this.props;
 
         if (JSON.stringify(yout_app.youtube_api) === '{}') {
-            console.log('required youtube api');
             return <YoutubeAPIKey />;
         } else {
             switch (pages.selected) {
@@ -94,10 +116,11 @@ class AppMain extends Component {
     };
 
     render() {
-        const { pages, store, app_mode } = this.props;
+        const { store, app_mode } = this.props;
         const { isReady } = this.state;
 
         console.log('App store :>> ', store);
+        console.log('App widget_selected :>> ', store.widget_selected);
 
         const renderAppMain = isReady ? (
             <div className="yout-app-main">
@@ -119,13 +142,18 @@ class AppMain extends Component {
         );
 
         switch (app_mode.selected) {
-            case 0:
+            case 0: // preview
                 return renderAppMain;
 
-            case 1:
-                return <div className="yout-app-main">{/* <Templates /> */}</div>;
+            case 1: // live
+                return (
+                    <div className="yout-app-main">
+                        <Templates />
+                    </div>
+                );
 
             default:
+                // preview
                 return renderAppMain;
         }
     }

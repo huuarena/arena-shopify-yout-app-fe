@@ -1,4 +1,4 @@
-export const settings = [
+const settings = [
     {
         id: 'settings-1',
         label: 'Youtube Channel',
@@ -546,3 +546,5 @@ export const settings = [
         },
     },
 ];
+
+export default settings;

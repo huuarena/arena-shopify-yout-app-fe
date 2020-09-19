@@ -7,6 +7,7 @@ import type { PagesState, PagesAction } from './pages';
 import type { VideoPlayState, VideoPlayAction } from './video_play';
 import type { YoutAppState, YoutAppAction } from './yout_app';
 import type { AppModeState, AppModeAction } from './app_mode';
+import type { WidgetSelectedState, WidgetSelectedAction } from './widget_selected';
 
 export type ReduxInitAction = { type: '@@INIT' };
 
@@ -16,6 +17,7 @@ export type State = AppState &
     PagesState &
     VideoPlayState &
     AppModeState &
+    WidgetSelectedState &
     YoutAppState; // & AnotherStateData
 
 // APP ACTION TYPE
@@ -25,6 +27,7 @@ export type Action =
     | PagesAction
     | VideoPlayAction
     | AppModeAction
+    | WidgetSelectedAction
     | YoutAppAction; // | AnotherAction
 
 // APP STORE

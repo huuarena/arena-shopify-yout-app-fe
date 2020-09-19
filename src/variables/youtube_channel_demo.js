@@ -1,13 +1,13 @@
 const youtube_channel_demo = {
     kind: 'youtube#channelListResponse',
-    etag: '3k0hSpf_TcQ97CZqxpgtFtEdVL4',
+    etag: '0cM0Nr1Rw8ZTmU2NUJrk1jNlbSk',
     pageInfo: {
         resultsPerPage: 1,
     },
     items: [
         {
             kind: 'youtube#channel',
-            etag: 'hn9kAf1f1PAbJwQt-P_bKJPOBjM',
+            etag: 'ewrTbBOy8_kF5Y9qgeTtmVZIyzU',
             id: 'UCh_zF2FsiCflCPgYDudtcqg',
             snippet: {
                 title: 'YEAH1 SHOW',
@@ -41,6 +41,13 @@ const youtube_channel_demo = {
                         'Kênh YOUTUBE TIN TỨC chính thức của website YEAH1.COM thuộc hệ thống Yeah1 Network\nHãy SUBSCRIBE để cập nhật tin tức & thông tin giải trí mới nhất, hấp dẫn nhất\n___________________________________________\nFANPAGE: http://www.facebook.com/Yeah1News\nLiên hệ quảng cáo:\nEmail: edigital.booking@yeah1.vn\nPhone: 0933.188.144 (Ms. Huyền)',
                 },
                 country: 'VN',
+            },
+            statistics: {
+                viewCount: '71621170',
+                commentCount: '0',
+                subscriberCount: '153000',
+                hiddenSubscriberCount: false,
+                videoCount: '422',
             },
             brandingSettings: {
                 channel: {
@@ -97,10 +104,6 @@ const youtube_channel_demo = {
                 },
                 hints: [
                     {
-                        property: 'channel.modules.show_comments.bool',
-                        value: 'True',
-                    },
-                    {
                         property: 'channel.banner.mobile.medium.image.url',
                         value:
                             'https://yt3.ggpht.com/4fOLXXHAE8HIpYr8E9_zlCspMFtxRWt69_ynFbdgXdsKxPp0wPIl8tvxQ1sfk4wWCdScZTrdWA=w640-fcrop64=1,32b75a57cd48a5a8-k-c0xffffffff-no-nd-rj',
@@ -108,6 +111,10 @@ const youtube_channel_demo = {
                     {
                         property: 'channel.featured_tab.template.string',
                         value: 'Everything',
+                    },
+                    {
+                        property: 'channel.modules.show_comments.bool',
+                        value: 'True',
                     },
                 ],
             },

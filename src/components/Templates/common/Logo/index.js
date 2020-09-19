@@ -3,29 +3,27 @@ import { connect } from 'react-redux';
 
 function mapStateToProps(state) {
     return {
-        widgets: state.widgets,
+        widget_selected: state.widget_selected,
     };
 }
 
 class Logo extends Component {
     render() {
-        const { widgets } = this.props;
+        const { widget_selected } = this.props;
 
         return (
-            widgets.selected.template.layout.header.elements.logo.show && (
-                <div className="template-logo">
-                    <a
-                        href={widgets.selected.template.source.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            alt=""
-                            src={widgets.selected.template.layout.header.elements.logo.url}
-                        />
-                    </a>
-                </div>
-            )
+            <div className="template-logo">
+                <a
+                    href={widget_selected.youtube_channel_source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <img
+                        alt=""
+                        src={widget_selected.youtube_channel.items[0].snippet.thumbnails.medium.url}
+                    />
+                </a>
+            </div>
         );
     }
 }

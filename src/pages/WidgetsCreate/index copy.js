@@ -79,8 +79,10 @@ class WidgetsCreate extends Component {
 
         // init new widget
         newWidgets.selected = { ...INITIAL_WIDGET };
-        newWidgets.selected.id = `widget-${new Date().getTime()}`;
-        newWidgets.selected.name = `Widget-${new Date().getTime()}`;
+        newWidgets.selected.id = `${Math.random()
+            .toString(36)
+            .substring(2)}-${new Date().getTime()}`;
+        newWidgets.selected.name = `widget-${new Date().getTime()}`;
         newWidgets.selected.created_at = new Date().getTime();
         newWidgets.selected.updated_at = new Date().getTime();
 

@@ -5,6 +5,7 @@ import * as PagesActions from './pages';
 import * as YoutAppActions from './yout_app';
 import * as VideoPlayActions from './video_play';
 import * as AppModeActions from './app_mode';
+import * as WidgetSelectedActions from './widget_selected';
 
 const AppNotify = (notifyObject: Object): Object => {
     return {
@@ -21,6 +22,7 @@ const Actions = {
     ...VideoPlayActions,
     ...YoutAppActions,
     ...AppModeActions,
+    ...WidgetSelectedActions,
     //...AnotherAction,
 };
 

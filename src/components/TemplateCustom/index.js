@@ -34,7 +34,8 @@ const INITIAL_STATE = {
 
 function mapStateToProps(state) {
     return {
-        widgets: state.widgets,
+        yout_app: state.yout_app,
+        widget_selected: state.widget_selected,
     };
 }
 
@@ -50,59 +51,55 @@ class TemplateCustom extends Component {
         this.state = { ...INITIAL_STATE };
     }
 
-    componentWillUnmount() {
-        this.setState({ ...INITIAL_STATE });
-    }
+    handleChange = (name, value) => {
+        const { widget_selected, actions } = this.props;
 
-    handleChange = async (name, value) => {
-        const { widgets, actions } = this.props;
-        let newWidgets = { ...widgets };
+        let newWidget = { ...widget_selected };
 
         switch (name) {
             case 'source_url':
-                newWidgets.selected.template.source.url = value;
-                await actions.changeWidgetsAction(newWidgets);
+                newWidget.youtube_channel_source = {
+                    url: value,
+                    channelId: value.slice(value.indexOf('channel/') + 8, value.length),
+                };
+                actions.changeWidgetSelectedAction(newWidget);
                 break;
 
             case 'channel_name':
-                newWidgets.selected.template.layout.header.elements.channel_name.value = value;
-                await actions.changeWidgetsAction(newWidgets);
+                newWidget.youtube_channel_custom.channel_name = value;
+                actions.changeWidgetSelectedAction(newWidget);
                 break;
 
             case 'channel_description':
-                newWidgets.selected.template.layout.header.elements.channel_description.value = value;
-                await actions.changeWidgetsAction(newWidgets);
+                newWidget.youtube_channel_custom.channel_description = value;
+                actions.changeWidgetSelectedAction(newWidget);
                 break;
 
             case 'columns':
                 if (parseInt(value) > 0) {
-                    newWidgets.selected.template.layout.columns_rows.columns = parseInt(value);
-                    await actions.changeWidgetsAction(newWidgets);
+                    newWidget.setting.layout.columns_rows.columns = parseInt(value);
+                    actions.changeWidgetSelectedAction(newWidget);
                 }
                 break;
 
             case 'rows':
                 if (parseInt(value) > 0) {
-                    newWidgets.selected.template.layout.columns_rows.rows = parseInt(value);
-                    await actions.changeWidgetsAction(newWidgets);
+                    newWidget.setting.layout.columns_rows.rows = parseInt(value);
+                    actions.changeWidgetSelectedAction(newWidget);
                 }
                 break;
 
             case 'silde_switch_speed':
                 if (parseInt(value) > 0) {
-                    newWidgets.selected.template.layout.slider_settings.silde_switch_speed = parseInt(
-                        value,
-                    );
-                    await actions.changeWidgetsAction(newWidgets);
+                    newWidget.setting.layout.slider_settings.silde_switch_speed = parseInt(value);
+                    actions.changeWidgetSelectedAction(newWidget);
                 }
                 break;
 
             case 'autoplay_speed':
                 if (parseInt(value) > 0) {
-                    newWidgets.selected.template.layout.slider_settings.autoplay_speed = parseInt(
-                        value,
-                    );
-                    await actions.changeWidgetsAction(newWidgets);
+                    newWidget.setting.layout.slider_settings.autoplay_speed = parseInt(value);
+                    actions.changeWidgetSelectedAction(newWidget);
                 }
                 break;
 
@@ -133,7 +130,7 @@ class TemplateCustom extends Component {
     };
 
     renderSource = () => {
-        const { widgets } = this.props;
+        const { widget_selected } = this.props;
 
         return (
             <div className="source">
@@ -142,7 +139,7 @@ class TemplateCustom extends Component {
                     <TextField
                         type="text"
                         placeholder="Youtube channel url"
-                        value={widgets.selected.template.source.url}
+                        value={widget_selected.youtube_channel_source.url}
                         onChange={(value) => this.handleChange('source_url', value)}
                         autoFocus
                     />
@@ -182,7 +179,7 @@ class TemplateCustom extends Component {
     };
 
     renderLayoutHeader = () => {
-        const { widgets, actions } = this.props;
+        const { widget_selected, actions } = this.props;
 
         return (
             <div>
@@ -192,35 +189,34 @@ class TemplateCustom extends Component {
                         height={20}
                         width={46}
                         onChange={() => {
-                            let newWidgets = { ...widgets };
-                            newWidgets.selected.template.layout.header.show = !widgets.selected
-                                .template.layout.header.show;
-                            actions.changeWidgetsAction(newWidgets);
+                            let newWidget = { ...widget_selected };
+                            newWidget.setting.layout.header.show = !widget_selected.setting.layout
+                                .header.show;
+                            actions.changeWidgetSelectedAction(newWidget);
                         }}
-                        checked={widgets.selected.template.layout.header.show}
+                        checked={widget_selected.setting.layout.header.show}
                     />
                 </div>
 
                 <div className="form-group">
                     <div className="label">HEADER LAYOUT</div>
                     <div className="btn-group">
-                        {widgets.selected.template.layout.header.layout.data.map((item, index) => (
+                        {widget_selected.setting.layout.header.layout.data.map((item, index) => (
                             <div
                                 className={
-                                    widgets.selected.template.layout.header.layout.selected ===
-                                    index
+                                    widget_selected.setting.layout.header.layout.selected === index
                                         ? 'btn btn-selected'
                                         : 'btn'
                                 }
                                 key={index}
                                 onClick={() => {
                                     if (
-                                        widgets.selected.template.layout.header.layout.selected !==
+                                        widget_selected.setting.layout.header.layout.selected !==
                                         index
                                     ) {
-                                        let newWidgets = { ...widgets };
-                                        newWidgets.selected.template.layout.header.layout.selected = index;
-                                        actions.changeWidgetsAction(newWidgets);
+                                        let newWidget = { ...widget_selected };
+                                        newWidget.setting.layout.header.layout.selected = index;
+                                        actions.changeWidgetSelectedAction(newWidget);
                                     }
                                 }}
                             >
@@ -233,32 +229,32 @@ class TemplateCustom extends Component {
                 <div className="form-group">
                     <div className="label">HEADER ELEMENTS</div>
                     <div>
-                        {Object.keys(widgets.selected.template.layout.header.elements).map(
+                        {Object.keys(widget_selected.setting.layout.header.elements).map(
                             (objKey, index) => (
                                 <div
                                     key={index}
                                     className="form-control form-control-checkbox"
                                     onClick={() => {
-                                        let newWidgets = { ...widgets };
-                                        newWidgets.selected.template.layout.header.elements[
+                                        let newWidget = { ...widget_selected };
+                                        newWidget.setting.layout.header.elements[
                                             objKey
-                                        ].show = !widgets.selected.template.layout.header.elements[
+                                        ].show = !widget_selected.setting.layout.header.elements[
                                             objKey
                                         ].show;
-                                        actions.changeWidgetsAction(newWidgets);
+                                        actions.changeWidgetSelectedAction(newWidget);
                                     }}
                                 >
                                     <input
                                         readOnly
                                         type="checkbox"
                                         checked={
-                                            widgets.selected.template.layout.header.elements[objKey]
+                                            widget_selected.setting.layout.header.elements[objKey]
                                                 .show
                                         }
                                     />
                                     <div>
                                         {
-                                            widgets.selected.template.layout.header.elements[objKey]
+                                            widget_selected.setting.layout.header.elements[objKey]
                                                 .label
                                         }
                                     </div>
@@ -273,7 +269,7 @@ class TemplateCustom extends Component {
                     <TextField
                         type="text"
                         placeholder=""
-                        value={widgets.selected.template.layout.header.elements.channel_name.value}
+                        value={widget_selected.youtube_channel_custom.channel_name}
                         onChange={(value) => this.handleChange('channel_name', value)}
                     />
                 </div>
@@ -284,10 +280,7 @@ class TemplateCustom extends Component {
                         type="text"
                         multiline={4}
                         placeholder=""
-                        value={
-                            widgets.selected.template.layout.header.elements.channel_description
-                                .value
-                        }
+                        value={widget_selected.youtube_channel_custom.channel_description}
                         onChange={(value) => this.handleChange('channel_description', value)}
                     />
                 </div>
@@ -312,7 +305,7 @@ class TemplateCustom extends Component {
     };
 
     renderLayoutColumnAndRows = () => {
-        const { widgets } = this.props;
+        const { widget_selected } = this.props;
 
         return (
             <div>
@@ -321,7 +314,7 @@ class TemplateCustom extends Component {
                     <TextField
                         type="number"
                         placeholder=""
-                        value={`${widgets.selected.template.layout.columns_rows.columns}`}
+                        value={`${widget_selected.setting.layout.columns_rows.columns}`}
                         onChange={(value) => this.handleChange('columns', value)}
                     />
                 </div>
@@ -331,7 +324,7 @@ class TemplateCustom extends Component {
                     <TextField
                         type="number"
                         placeholder=""
-                        value={`${widgets.selected.template.layout.columns_rows.rows}`}
+                        value={`${widget_selected.setting.layout.columns_rows.rows}`}
                         onChange={(value) => this.handleChange('rows', value)}
                     />
                 </div>
@@ -340,29 +333,29 @@ class TemplateCustom extends Component {
     };
 
     renderLayoutVideo = () => {
-        const { widgets, actions } = this.props;
+        const { widget_selected, actions } = this.props;
 
         return (
             <div>
                 <div className="form-group">
                     <div className="label">VIDEO LAYOUT</div>
                     <div className="btn-group">
-                        {widgets.selected.template.layout.video.layout.data.map((item, index) => (
+                        {widget_selected.setting.layout.video.layout.data.map((item, index) => (
                             <div
                                 className={
-                                    widgets.selected.template.layout.video.layout.selected === index
+                                    widget_selected.setting.layout.video.layout.selected === index
                                         ? 'btn btn-selected'
                                         : 'btn'
                                 }
                                 key={index}
                                 onClick={() => {
                                     if (
-                                        widgets.selected.template.layout.video.layout.selected !==
+                                        widget_selected.setting.layout.video.layout.selected !==
                                         index
                                     ) {
-                                        let newWidgets = { ...widgets };
-                                        newWidgets.selected.template.layout.video.layout.selected = index;
-                                        actions.changeWidgetsAction(newWidgets);
+                                        let newWidget = { ...widget_selected };
+                                        newWidget.setting.layout.video.layout.selected = index;
+                                        actions.changeWidgetSelectedAction(newWidget);
                                     }
                                 }}
                             >
@@ -375,32 +368,32 @@ class TemplateCustom extends Component {
                 <div className="form-group">
                     <div className="label">VIDEO ELEMENTS</div>
                     <div>
-                        {Object.keys(widgets.selected.template.layout.video.elements).map(
+                        {Object.keys(widget_selected.setting.layout.video.elements).map(
                             (objKey, index) => (
                                 <div
                                     key={index}
                                     className="form-control form-control-checkbox"
                                     onClick={() => {
-                                        let newWidgets = { ...widgets };
-                                        newWidgets.selected.template.layout.video.elements[
+                                        let newWidget = { ...widget_selected };
+                                        newWidget.setting.layout.video.elements[
                                             objKey
-                                        ].show = !widgets.selected.template.layout.video.elements[
+                                        ].show = !widget_selected.setting.layout.video.elements[
                                             objKey
                                         ].show;
-                                        actions.changeWidgetsAction(newWidgets);
+                                        actions.changeWidgetSelectedAction(newWidget);
                                     }}
                                 >
                                     <input
                                         readOnly
                                         type="checkbox"
                                         checked={
-                                            widgets.selected.template.layout.video.elements[objKey]
+                                            widget_selected.setting.layout.video.elements[objKey]
                                                 .show
                                         }
                                     />
                                     <div>
                                         {
-                                            widgets.selected.template.layout.video.elements[objKey]
+                                            widget_selected.setting.layout.video.elements[objKey]
                                                 .label
                                         }
                                     </div>
@@ -413,22 +406,21 @@ class TemplateCustom extends Component {
                 <div className="form-group">
                     <div className="label">PLAY MODE</div>
                     <div className="btn-group">
-                        {widgets.selected.template.layout.video.mode.data.map((item, index) => (
+                        {widget_selected.setting.layout.video.mode.data.map((item, index) => (
                             <div
                                 className={
-                                    widgets.selected.template.layout.video.mode.selected === index
+                                    widget_selected.setting.layout.video.mode.selected === index
                                         ? 'btn btn-selected'
                                         : 'btn'
                                 }
                                 key={index}
                                 onClick={() => {
                                     if (
-                                        widgets.selected.template.layout.video.mode.selected !==
-                                        index
+                                        widget_selected.setting.layout.video.mode.selected !== index
                                     ) {
-                                        let newWidgets = { ...widgets };
-                                        newWidgets.selected.template.layout.video.mode.selected = index;
-                                        actions.changeWidgetsAction(newWidgets);
+                                        let newWidget = { ...widget_selected };
+                                        widget_selected.setting.layout.video.mode.selected = index;
+                                        actions.changeWidgetSelectedAction(newWidget);
                                     }
                                 }}
                             >
@@ -442,39 +434,39 @@ class TemplateCustom extends Component {
     };
 
     renderLayoutPopup = () => {
-        const { widgets, actions } = this.props;
+        const { widget_selected, actions } = this.props;
 
         return (
             <div>
                 <div className="form-group">
                     <div className="label">POPUP ELEMENTS</div>
                     <div>
-                        {Object.keys(widgets.selected.template.layout.popup.elements).map(
+                        {Object.keys(widget_selected.setting.layout.popup.elements).map(
                             (objKey, index) => (
                                 <div
                                     key={index}
                                     className="form-control form-control-checkbox"
                                     onClick={() => {
-                                        let newWidgets = { ...widgets };
-                                        newWidgets.selected.template.layout.popup.elements[
+                                        let newWidget = { ...widget_selected };
+                                        newWidget.setting.layout.popup.elements[
                                             objKey
-                                        ].show = !widgets.selected.template.layout.popup.elements[
+                                        ].show = !widget_selected.setting.layout.popup.elements[
                                             objKey
                                         ].show;
-                                        actions.changeWidgetsAction(newWidgets);
+                                        actions.changeWidgetSelectedAction(newWidget);
                                     }}
                                 >
                                     <input
                                         readOnly
                                         type="checkbox"
                                         checked={
-                                            widgets.selected.template.layout.popup.elements[objKey]
+                                            widget_selected.setting.layout.popup.elements[objKey]
                                                 .show
                                         }
                                     />
                                     <div>
                                         {
-                                            widgets.selected.template.layout.popup.elements[objKey]
+                                            widget_selected.setting.layout.popup.elements[objKey]
                                                 .label
                                         }
                                     </div>
@@ -490,12 +482,12 @@ class TemplateCustom extends Component {
                         height={20}
                         width={46}
                         onChange={() => {
-                            let newWidgets = { ...widgets };
-                            newWidgets.selected.template.layout.popup.auto_play = !widgets.selected
-                                .template.layout.popup.auto_play;
-                            actions.changeWidgetsAction(newWidgets);
+                            let newWidget = { ...widget_selected };
+                            newWidget.setting.layout.popup.auto_play = !widget_selected.setting
+                                .layout.popup.auto_play;
+                            actions.changeWidgetSelectedAction(newWidget);
                         }}
-                        checked={widgets.selected.template.layout.popup.auto_play}
+                        checked={widget_selected.setting.layout.popup.auto_play}
                     />
                 </div>
             </div>
@@ -503,18 +495,18 @@ class TemplateCustom extends Component {
     };
 
     renderLayoutSliderSettings = () => {
-        const { widgets, actions } = this.props;
+        const { widget_selected, actions } = this.props;
 
         return (
             <div>
                 <div className="form-group">
                     <div className="label">DIRECTION</div>
                     <div className="btn-group">
-                        {widgets.selected.template.layout.slider_settings.direction.data.map(
+                        {widget_selected.setting.layout.slider_settings.direction.data.map(
                             (item, index) => (
                                 <div
                                     className={
-                                        widgets.selected.template.layout.slider_settings.direction
+                                        widget_selected.setting.layout.slider_settings.direction
                                             .selected === index
                                             ? 'btn btn-selected'
                                             : 'btn'
@@ -522,12 +514,12 @@ class TemplateCustom extends Component {
                                     key={index}
                                     onClick={() => {
                                         if (
-                                            widgets.selected.template.layout.slider_settings
-                                                .direction.selected !== index
+                                            widget_selected.setting.layout.slider_settings.direction
+                                                .selected !== index
                                         ) {
-                                            let newWidgets = { ...widgets };
-                                            newWidgets.selected.template.layout.slider_settings.direction.selected = index;
-                                            actions.changeWidgetsAction(newWidgets);
+                                            let newWidget = { ...widget_selected };
+                                            newWidget.setting.layout.slider_settings.direction.selected = index;
+                                            actions.changeWidgetSelectedAction(newWidget);
                                         }
                                     }}
                                 >
@@ -538,31 +530,29 @@ class TemplateCustom extends Component {
                     </div>
                 </div>
 
-                {Object.keys(widgets.selected.template.layout.slider_settings.elements).map(
+                {Object.keys(widget_selected.setting.layout.slider_settings.elements).map(
                     (objKey) => (
                         <div className="form-group" key={objKey}>
                             <div className="label">
                                 {
-                                    widgets.selected.template.layout.slider_settings.elements[
-                                        objKey
-                                    ].label
+                                    widget_selected.setting.layout.slider_settings.elements[objKey]
+                                        .label
                                 }
                             </div>
                             <Switch
                                 height={20}
                                 width={46}
                                 onChange={() => {
-                                    let newWidgets = { ...widgets };
-                                    newWidgets.selected.template.layout.slider_settings.elements[
+                                    let newWidget = { ...widget_selected };
+                                    newWidget.setting.layout.slider_settings.elements[
                                         objKey
-                                    ].show = !widgets.selected.template.layout.slider_settings
+                                    ].show = !widget_selected.setting.layout.slider_settings
                                         .elements[objKey].show;
-                                    actions.changeWidgetsAction(newWidgets);
+                                    actions.changeWidgetSelectedAction(newWidget);
                                 }}
                                 checked={
-                                    widgets.selected.template.layout.slider_settings.elements[
-                                        objKey
-                                    ].show
+                                    widget_selected.setting.layout.slider_settings.elements[objKey]
+                                        .show
                                 }
                             />
                         </div>
@@ -576,7 +566,7 @@ class TemplateCustom extends Component {
                     <TextField
                         type="number"
                         placeholder=""
-                        value={`${widgets.selected.template.layout.slider_settings.silde_switch_speed}`}
+                        value={`${widget_selected.setting.layout.slider_settings.silde_switch_speed}`}
                         onChange={(value) => this.handleChange('silde_switch_speed', value)}
                     />
                 </div>
@@ -585,24 +575,24 @@ class TemplateCustom extends Component {
                     <div className="label">SLIDE SWITCH EFFECT</div>
                     <select
                         value={
-                            widgets.selected.template.layout.slider_settings.slide_switch_effect
+                            widget_selected.setting.layout.slider_settings.slide_switch_effect
                                 .selected
                         }
                         onChange={(e) => {
                             if (
                                 parseInt(e.target.value) !==
-                                widgets.selected.template.layout.slider_settings.slide_switch_effect
+                                widget_selected.setting.layout.slider_settings.slide_switch_effect
                                     .selected
                             ) {
-                                let newWidgets = { ...widgets };
-                                newWidgets.selected.template.layout.slider_settings.slide_switch_effect.selected = parseInt(
+                                let newWidget = { ...widget_selected };
+                                newWidget.setting.layout.slider_settings.slide_switch_effect.selected = parseInt(
                                     e.target.value,
                                 );
-                                actions.changeWidgetsAction(newWidgets);
+                                actions.changeWidgetSelectedAction(newWidget);
                             }
                         }}
                     >
-                        {widgets.selected.template.layout.slider_settings.slide_switch_effect.data.map(
+                        {widget_selected.setting.layout.slider_settings.slide_switch_effect.data.map(
                             (item, index) => (
                                 <option key={index} value={index}>
                                     {item}
@@ -618,12 +608,12 @@ class TemplateCustom extends Component {
                         height={20}
                         width={46}
                         onChange={() => {
-                            let newWidgets = { ...widgets };
-                            newWidgets.selected.template.layout.slider_settings.free_mode = !widgets
-                                .selected.template.layout.slider_settings.free_mode;
-                            actions.changeWidgetsAction(newWidgets);
+                            let newWidget = { ...widget_selected };
+                            newWidget.setting.layout.slider_settings.free_mode = !widget_selected
+                                .setting.layout.slider_settings.free_mode;
+                            actions.changeWidgetSelectedAction(newWidget);
                         }}
-                        checked={widgets.selected.template.layout.slider_settings.free_mode}
+                        checked={widget_selected.setting.layout.slider_settings.free_mode}
                     />
                 </div>
 
@@ -634,7 +624,7 @@ class TemplateCustom extends Component {
                     <TextField
                         type="number"
                         placeholder=""
-                        value={`${widgets.selected.template.layout.slider_settings.autoplay_speed}`}
+                        value={`${widget_selected.setting.layout.slider_settings.autoplay_speed}`}
                         onChange={(value) => this.handleChange('autoplay_speed', value)}
                     />
                 </div>
@@ -645,13 +635,13 @@ class TemplateCustom extends Component {
                         height={20}
                         width={46}
                         onChange={() => {
-                            let newWidgets = { ...widgets };
-                            newWidgets.selected.template.layout.slider_settings.pause_autoplay_on_hover = !widgets
-                                .selected.template.layout.slider_settings.pause_autoplay_on_hover;
-                            actions.changeWidgetsAction(newWidgets);
+                            let newWidget = { ...widget_selected };
+                            newWidget.setting.layout.slider_settings.pause_autoplay_on_hover = !widget_selected
+                                .setting.layout.slider_settings.pause_autoplay_on_hover;
+                            actions.changeWidgetSelectedAction(newWidget);
                         }}
                         checked={
-                            widgets.selected.template.layout.slider_settings.pause_autoplay_on_hover
+                            widget_selected.setting.layout.slider_settings.pause_autoplay_on_hover
                         }
                     />
                 </div>
@@ -688,28 +678,26 @@ class TemplateCustom extends Component {
     };
 
     renderColors = () => {
-        const { widgets, actions } = this.props;
+        const { widget_selected, actions } = this.props;
 
         return (
             <div>
                 <div className="form-group">
                     <div className="label">SLIDE SWITCH EFFECT</div>
                     <select
-                        value={widgets.selected.template.colors.scheme.selected}
+                        value={widget_selected.setting.colors.scheme.selected}
                         onChange={(e) => {
                             if (
                                 parseInt(e.target.value) !==
-                                widgets.selected.template.colors.scheme.selected
+                                widget_selected.setting.colors.scheme.selected
                             ) {
-                                let newWidgets = { ...widgets };
-                                newWidgets.selected.template.colors.scheme.selected = parseInt(
-                                    e.target.value,
-                                );
-                                actions.changeWidgetsAction(newWidgets);
+                                let newWidget = { ...widget_selected };
+                                newWidget.setting.colors.scheme.selected = parseInt(e.target.value);
+                                actions.changeWidgetSelectedAction(newWidget);
                             }
                         }}
                     >
-                        {widgets.selected.template.colors.scheme.data.map((item, index) => (
+                        {widget_selected.setting.colors.scheme.data.map((item, index) => (
                             <option key={index} value={index}>
                                 {item}
                             </option>
