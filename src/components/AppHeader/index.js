@@ -8,7 +8,7 @@ import { Tabs, Card } from '@shopify/polaris';
 function mapStateToProps(state) {
     return {
         pages: state.pages,
-        youtube_api: state.youtube_api,
+        yout_app: state.yout_app,
     };
 }
 
@@ -20,13 +20,11 @@ function mapDispatchToProps(dispatch) {
 
 class AppHeader extends Component {
     handleTabChange = (index) => {
-        const { pages, actions, youtube_api } = this.props;
+        const { yout_app, actions } = this.props;
 
-        if (JSON.stringify(youtube_api) === '{}' || !youtube_api.key) {
+        if (JSON.stringify(yout_app.youtube_api) === '{}') {
             return actions.switchPagesAction(1);
-        }
-
-        if (index !== pages.selected) {
+        } else {
             actions.switchPagesAction(index);
         }
     };

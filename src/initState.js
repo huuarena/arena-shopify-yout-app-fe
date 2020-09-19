@@ -45,7 +45,7 @@ export const initState = {
                 panelID: 'Support',
             },
         ],
-        selected: 1,
+        selected: 0,
     },
     yout_app: {
         store_name: '',

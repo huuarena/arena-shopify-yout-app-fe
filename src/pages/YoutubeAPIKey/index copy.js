@@ -5,7 +5,8 @@ import Actions from './../../actions';
 import { Button, TextField, Toast } from '@shopify/polaris';
 import './styles.scss';
 import Preloader from '../../components/Preloader';
-import { updateYoutApp } from './../../apis/yout_app';
+import { updateYoutubeApi } from '../../apis/youtubeApi';
+import { CONFIG } from '../../config';
 
 const INITIAL_STATE = {
     isReady: true,
@@ -22,7 +23,7 @@ const INITIAL_STATE = {
 
 function mapStateToProps(state) {
     return {
-        yout_app: state.yout_app,
+        youtube_api: state.youtube_api,
     };
 }
 
@@ -39,10 +40,12 @@ class YoutubeAPIKey extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        const { yout_app } = props;
-
-        if (JSON.stringify(yout_app.youtube_api) !== '{}') {
-            return { youtubeApiKey: { value: yout_app.youtube_api.key, errMsg: '' } };
+        if (
+            JSON.stringify(props.youtube_api) !== '{}' &&
+            props.youtube_api.key &&
+            !state.youtubeApiKey.value
+        ) {
+            return { youtubeApiKey: { value: props.youtube_api.key, errMsg: '' } };
         }
 
         return null;
@@ -51,8 +54,7 @@ class YoutubeAPIKey extends Component {
     handleSubmit = async () => {
         this.setState({ isReady: false });
 
-        const { yout_app, actions } = this.props;
-
+        const { actions } = this.props;
         let formValid = true;
         let data = {};
 
@@ -73,10 +75,9 @@ class YoutubeAPIKey extends Component {
         // submit
         if (formValid) {
             const data_stringify = JSON.stringify(data);
-            const res = await updateYoutApp('youtube_api', data_stringify);
-            console.log('updateYoutApp res :>> ', res);
+            const res = await updateYoutubeApi(CONFIG.STORE_NAME, data_stringify);
             if (res.success) {
-                actions.changeYoutAppYoutubeApiAction(data);
+                actions.changeYoutubeApiAction(data);
                 this.setState({
                     toast: {
                         show: true,
