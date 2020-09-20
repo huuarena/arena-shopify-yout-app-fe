@@ -18,7 +18,7 @@ VideoCard.defaultProps = {
 
 function mapStateToProps(state) {
     return {
-        widgets: state.widgets,
+        widget_selected: state.widget_selected,
         video_play: state.video_play,
     };
 }
@@ -30,30 +30,30 @@ function mapDispatchToProps(dispatch) {
 }
 
 function VideoCard(props) {
-    const { variant, video, widgets, actions, video_play } = props;
+    const { variant, video, widget_selected, actions, video_play } = props;
 
     return (
         <div
             className={`template-video-card template-video-card-${variant}`}
             onClick={() =>
-                widgets.selected.template.layout.video.mode.selected === 2
+                widget_selected.setting.layout.video.mode.selected === 2
                     ? window.open(`https://www.youtube.com/watch?v=${video.id}`, '_blank')
                     : actions.changeVideoPlayAction(video)
             }
         >
             <div className="thumbnail">
                 <img alt="" src={video.snippet.thumbnails.high.url} />
-                {widgets.selected.template.layout.video.elements.play_icon.show && (
+                {widget_selected.setting.layout.video.elements.play_icon.show && (
                     <div className="youtube-icon" />
                 )}
-                {widgets.selected.template.layout.video.elements.duration.show && (
+                {widget_selected.setting.layout.video.elements.duration.show && (
                     <div className="duration">
                         {formatYoutubeVideoDuration(video.contentDetails.duration)}
                     </div>
                 )}
                 {JSON.stringify(video_play) !== '{}' &&
                     video_play.id === video.id &&
-                    widgets.selected.template.layout.video.mode.selected === 1 && (
+                    widget_selected.setting.layout.video.mode.selected === 1 && (
                         <div className="video-play">
                             <iframe
                                 title="youtube video"
@@ -68,26 +68,26 @@ function VideoCard(props) {
                     )}
             </div>
             <div className="video-infomation">
-                {widgets.selected.template.layout.video.elements.title.show && (
+                {widget_selected.setting.layout.video.elements.title.show && (
                     <div className="title">{video.snippet.title}</div>
                 )}
-                {widgets.selected.template.layout.video.elements.date.show && (
+                {widget_selected.setting.layout.video.elements.date.show && (
                     <div className="publish-time">
                         {formatDateTime(video.snippet.publishedAt, 'MM/DD/YYYY')}
                     </div>
                 )}
-                {widgets.selected.template.layout.video.elements.description.show && (
+                {widget_selected.setting.layout.video.elements.description.show && (
                     <div className="description">{video.snippet.description}</div>
                 )}
                 <div className="statistics">
-                    {widgets.selected.template.layout.video.elements.views_counter.show && (
+                    {widget_selected.setting.layout.video.elements.views_counter.show && (
                         <div>{formatLongNumber(video.statistics.viewCount)} Views</div>
                     )}
-                    {widgets.selected.template.layout.video.elements.views_counter.show &&
-                        widgets.selected.template.layout.video.elements.likes_counter.show && (
+                    {widget_selected.setting.layout.video.elements.views_counter.show &&
+                        widget_selected.setting.layout.video.elements.likes_counter.show && (
                             <div className="divider" />
                         )}
-                    {widgets.selected.template.layout.video.elements.likes_counter.show && (
+                    {widget_selected.setting.layout.video.elements.likes_counter.show && (
                         <div>{formatLongNumber(video.statistics.likeCount)} Likes</div>
                     )}
                 </div>

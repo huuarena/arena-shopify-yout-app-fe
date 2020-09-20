@@ -13,7 +13,7 @@ import {
 } from '@shopify/polaris-icons';
 import TemplateCustom from '../../components/TemplateCustom';
 import Preloader from '../../components/Preloader';
-import { updateWidgets, updateYoutApp } from '../../apis/yout_app';
+import { updateYoutApp } from '../../apis/yout_app';
 import widget_demo from '../../variables/widget_demo';
 import settings from '../../variables/settings';
 import Templates from '../../components/Templates';
@@ -87,7 +87,7 @@ class WidgetsCreate extends Component {
     }
 
     renderLeftContent = () => {
-        const { yout_app, widget_selected, actions } = this.props;
+        const { widget_selected, actions } = this.props;
         const { openTemplateCustom } = this.state;
 
         return openTemplateCustom ? (
@@ -187,6 +187,9 @@ class WidgetsCreate extends Component {
         let newWidgets = [...yout_app.widgets];
 
         const index = this.indexOfWidgetExists(yout_app.widgets, widget_selected);
+
+        // const div = document.getElementById(widget_selected.id);
+
         if (index >= 0) {
             newWidgets[index] = widget_selected;
         } else {
@@ -227,7 +230,7 @@ class WidgetsCreate extends Component {
     };
 
     render() {
-        const { redirectToPage, actions, yout_app, widget_selected } = this.props;
+        const { redirectToPage, actions, widget_selected } = this.props;
         const { openSidebar, toast, isReady, isLoading } = this.state;
 
         return isReady ? (

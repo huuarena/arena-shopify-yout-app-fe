@@ -23,11 +23,13 @@ class YoutubeChannel extends Component {
             <div className="youtube-channel">
                 {widget_selected.setting.layout.header.show &&
                     widget_selected.setting.layout.header.elements.banner.show && <Banner />}
+
                 {widget_selected.setting.layout.header.show && <Header />}
-                {/* <VideosPlaylist
+
+                <VideosPlaylist
                     playlistVariant="horizontal"
                     cardVariant={layoutName !== 'horizontal' ? layoutName : 'classic'}
-                /> */}
+                />
             </div>
         );
     }

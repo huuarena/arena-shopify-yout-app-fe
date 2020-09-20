@@ -51,7 +51,7 @@ class YoutubeAPIKey extends Component {
     handleSubmit = async () => {
         this.setState({ isReady: false });
 
-        const { yout_app, actions } = this.props;
+        const { actions } = this.props;
 
         let formValid = true;
         let data = {};

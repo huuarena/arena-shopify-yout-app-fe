@@ -7,7 +7,6 @@ import './styles.scss';
 import formatDateTime from '../../utils/formatDateTime';
 import Switch from 'react-switch';
 import { updateYoutApp } from '../../apis/yout_app';
-import Preloader from '../../components/Preloader';
 import ConfirmModal from '../../components/ConfirmModal';
 
 const INITIAL_STATE = {
@@ -46,7 +45,7 @@ class WidgetsManagement extends Component {
     }
 
     renderWidgetWelcome = () => {
-        const { redirectToPage, actions, widgets } = this.props;
+        const { redirectToPage, actions } = this.props;
 
         return (
             <Card.Section>
@@ -217,7 +216,7 @@ class WidgetsManagement extends Component {
     };
 
     renderWidgetsManagement = () => {
-        const { yout_app, actions, redirectToPage } = this.props;
+        const { actions, redirectToPage } = this.props;
 
         return (
             <div className="widgets-management-body">
@@ -270,7 +269,7 @@ class WidgetsManagement extends Component {
 
     render() {
         const { yout_app } = this.props;
-        const { toast, isLoading, widgetDeleted } = this.state;
+        const { toast, widgetDeleted } = this.state;
 
         return (
             <div className="widgets-management">

@@ -14,9 +14,8 @@ const INITIAL_STATE = {
 
 function mapStateToProps(state) {
     return {
-        widgets: state.widgets,
-        youtube_videos: state.youtube_videos,
         app_mode: state.app_mode,
+        widget_selected: state.widget_selected,
     };
 }
 
@@ -27,7 +26,10 @@ class VideosPlaylist extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.app_mode.mode === 'preview') {
+        const { app_mode } = props;
+
+        if (app_mode.selected === 0) {
+            // preview
             if (props.playlistVariant === 'horizontal') {
                 if (window.innerWidth < 600 + 380) {
                     return { limit: 1 };
@@ -40,6 +42,7 @@ class VideosPlaylist extends Component {
                 }
             }
         } else {
+            // live
             if (props.playlistVariant === 'horizontal') {
                 if (window.innerWidth < 600) {
                     return { limit: 1 };
@@ -59,7 +62,8 @@ class VideosPlaylist extends Component {
     updateWindowDimensions() {
         const { playlistVariant, app_mode } = this.props;
 
-        if (app_mode.mode === 'preview') {
+        if (app_mode.selected === 0) {
+            // preview
             if (playlistVariant === 'horizontal') {
                 if (window.innerWidth < 600 + 380) {
                     return this.setState({ limit: 1 });
@@ -72,6 +76,7 @@ class VideosPlaylist extends Component {
                 }
             }
         } else {
+            // live
             if (playlistVariant === 'horizontal') {
                 if (window.innerWidth < 600) {
                     return this.setState({ limit: 1 });
@@ -94,12 +99,13 @@ class VideosPlaylist extends Component {
     }
 
     render() {
-        const { playlistVariant, cardVariant, youtube_videos, app_mode, widgets } = this.props;
+        const { playlistVariant, cardVariant, app_mode, widget_selected } = this.props;
         const { page, limit } = this.state;
+        const { youtube_videos } = widget_selected;
 
         return (
             <div className={`template-videos-playlist template-videos-playlist-${playlistVariant}`}>
-                <div className={`video-list video-list-${app_mode.mode}`}>
+                <div className={`video-list video-list-${app_mode.data[app_mode.selected]}`}>
                     {youtube_videos.items.length > 0 &&
                         youtube_videos.items
                             .slice((page - 1) * limit, page * limit)
@@ -109,12 +115,12 @@ class VideosPlaylist extends Component {
                                 </div>
                             ))}
 
-                    {widgets.selected.template.layout.slider_settings.elements
-                        .show_navigation_arrows.show &&
+                    {widget_selected.setting.layout.slider_settings.elements.show_navigation_arrows
+                        .show &&
                         page > 1 && (
                             <PagiButton
                                 variant={
-                                    widgets.selected.template.layout.slider_settings.direction
+                                    widget_selected.setting.layout.slider_settings.direction
                                         .selected === 0
                                         ? 'previous'
                                         : 'up'
@@ -122,12 +128,12 @@ class VideosPlaylist extends Component {
                                 onClick={() => this.setState({ page: page - 1 })}
                             />
                         )}
-                    {widgets.selected.template.layout.slider_settings.elements
-                        .show_navigation_arrows.show &&
+                    {widget_selected.setting.layout.slider_settings.elements.show_navigation_arrows
+                        .show &&
                         page < parseInt(youtube_videos.items.length / limit) && (
                             <PagiButton
                                 variant={
-                                    widgets.selected.template.layout.slider_settings.direction
+                                    widget_selected.setting.layout.slider_settings.direction
                                         .selected === 0
                                         ? 'next'
                                         : 'down'
@@ -137,7 +143,7 @@ class VideosPlaylist extends Component {
                         )}
                 </div>
 
-                {widgets.selected.template.layout.slider_settings.elements.show_pagination.show && (
+                {widget_selected.setting.layout.slider_settings.elements.show_pagination.show && (
                     <FooterPagination
                         page={page}
                         totalPages={parseInt(youtube_videos.items.length / limit)}

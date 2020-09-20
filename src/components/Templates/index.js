@@ -5,7 +5,7 @@ import Actions from './../../actions';
 import YoutubeChannel from './YoutubeChannel';
 import VideoGrid from './VideoGrid';
 import './styles.scss';
-// import PlayVideoPopup from './common/PlayVideoPopup';
+import PlayVideoPopup from './common/PlayVideoPopup';
 import settings from './../../variables/settings';
 
 const INITIAL_STATE = {
@@ -68,10 +68,10 @@ class Templates extends Component {
             <div id={widget_selected.id} className="yout-app-templates-preview">
                 {isReady && this.renderComponent()}
 
-                {/* {JSON.stringify(widget_selected) !== '{}' &&
+                {JSON.stringify(widget_selected) !== '{}' &&
                     JSON.stringify(widget_selected.setting) !== '{}' &&
                     widget_selected.setting.layout.video.mode.selected === 0 &&
-                    JSON.stringify(video_play) !== '{}' && <PlayVideoPopup />} */}
+                    JSON.stringify(video_play) !== '{}' && <PlayVideoPopup />}
             </div>
         );
     }
