@@ -1,5 +1,4 @@
 // @flow
-
 import app_mode from '../reducers/app_mode';
 
 // Data

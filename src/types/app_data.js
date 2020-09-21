@@ -1,5 +1,4 @@
-// @flow
-export type AppData = {
+// @flowexport type AppData = {
     +shop_plan: string,
     +app_plan: string,
 };
@@ -10,4 +9,6 @@ export type AppState = {
 };
 
 // App Data Action
-export type AppDataAction = { type: 'CHANGE_SHOP_PLAN', +plan: string } | { type: 'CHANGE_APP_PLAN', +plan: string };
+export type AppDataAction =
+    | { type: 'CHANGE_SHOP_PLAN', +plan: string }
+    | { type: 'CHANGE_APP_PLAN', +plan: string };

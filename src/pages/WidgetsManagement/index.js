@@ -7,7 +7,7 @@ import './styles.scss';
 import formatDateTime from '../../utils/formatDateTime';
 import Switch from 'react-switch';
 import { updateYoutApp } from '../../apis/yout_app';
-import ConfirmModal from '../../components/ConfirmModal';
+import ConfirmModal from '../../components/YoutApp/ConfirmModal';
 
 const INITIAL_STATE = {
     isLoading: false,

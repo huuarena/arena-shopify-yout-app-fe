@@ -1,5 +1,4 @@
 // @flow
-
 // Data
 export type YoutAppData = {
     +store_name: string,

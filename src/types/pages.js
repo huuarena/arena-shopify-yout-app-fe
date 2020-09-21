@@ -1,5 +1,4 @@
 // @flow
-
 // Data
 export type PagesData = {
     +data: Array<object>,

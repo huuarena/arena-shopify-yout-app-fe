@@ -1,5 +1,4 @@
-// @flow
-export type AppSettings = {
+// @flowexport type AppSettings = {
     +wishlist_settings: {
         +wishlist_enable: Boolean,
         +wishlist_product_number: Number,
@@ -21,4 +20,8 @@ export type AppSettingState = {
 };
 
 // App Data Action
-export type AppSettingAction = { type: 'CHANGE_APP_SETTINGS', +setting_type: String, +setting_keys: Array<Object> };
+export type AppSettingAction = {
+    type: 'CHANGE_APP_SETTINGS',
+    +setting_type: String,
+    +setting_keys: Array<Object>,
+};

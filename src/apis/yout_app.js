@@ -1,5 +1,4 @@
 // @flow
-
 import { callApi } from '../utils/apiCaller';
 
 export const getYoutApp = async (): object => {

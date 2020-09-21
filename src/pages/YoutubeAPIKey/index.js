@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import Actions from './../../actions';
 import { Button, TextField, Toast } from '@shopify/polaris';
 import './styles.scss';
-import Preloader from '../../components/Preloader';
+import Preloader from '../../components/YoutApp/Preloader';
 import { updateYoutApp } from './../../apis/yout_app';
 
 const INITIAL_STATE = {

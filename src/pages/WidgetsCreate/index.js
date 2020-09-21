@@ -11,12 +11,12 @@ import {
     SettingsMajorMonotone,
     ChevronRightMinor,
 } from '@shopify/polaris-icons';
-import TemplateCustom from '../../components/TemplateCustom';
-import Preloader from '../../components/Preloader';
+import TemplateCustom from '../../components/YoutApp/TemplateCustom';
+import Preloader from '../../components/YoutApp/Preloader';
 import { updateYoutApp } from '../../apis/yout_app';
 import widget_demo from '../../variables/widget_demo';
 import settings from '../../variables/settings';
-import Templates from '../../components/Templates';
+import Templates from '../../components/YoutApp/Templates';
 
 const INITIAL_STATE = {
     isReady: false,

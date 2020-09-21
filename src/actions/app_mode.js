@@ -1,5 +1,4 @@
 // @flow
-
 import type { AppModeActions } from '../types/app_mode';
 
 export const changeAppModeAction = (payload: number): AppModeActions => {

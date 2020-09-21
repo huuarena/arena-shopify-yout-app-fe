@@ -1,5 +1,4 @@
 // @flow
-
 import type { YoutAppActions } from '../types/yout_app';
 
 export const changeYoutAppAction = (payload: object): YoutAppActions => {

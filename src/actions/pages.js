@@ -1,5 +1,4 @@
 // @flow
-
 import type { PagesAction } from '../types/pages';
 
 export const switchPagesAction = (payload: number): PagesAction => {

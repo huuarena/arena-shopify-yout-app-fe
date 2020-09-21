@@ -1,5 +1,4 @@
 // @flow
-
 const formatLongNumber = (value: number): string => {
     // billion
     if (value > 1000000000) {

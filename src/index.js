@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
-import AppMain from './components/AppMain';
+import AppMain from './components/YoutApp/AppMain';
+import '@shopify/polaris/dist/styles.css';
 
 // API from redux createStore(<reducer>)
 import { createStore, applyMiddleware } from 'redux';
